@@ -1,0 +1,488 @@
+# Délégable ou pas ? — manifeste Forge
+#
+# App Atlassian Forge (UI Kit 2 / React) installée sur Jira. Elle dit quel
+# ticket confier à un agent de code, lequel confier sous relecture renforcée et
+# lequel garder, et chaque recommandation cite les tickets passés qui la fondent
+# (SPEC §1, §8). Codegeist 2026, catégorie « Apps for Software Teams ».
+#
+# Renvois : `docs/CAHIER-DES-CHARGES.md` (le « SPEC ») pour chaque module,
+# `docs/ARCHITECTURE.md` pour le découpage et les chaînes de collecte,
+# `docs/research/R1-modules-forge.md` pour l'état de la recherche documentaire.
+#
+# Formes vérifiées le 11/11/2026 contre le schéma `@forge/manifest` 13.9.0
+# (celui qu'embarque la CLI Forge 15.1.0), validées hors ligne par Ajv sur ce
+# schéma. La CLI ne peut pas tourner ici : elle exige Node ^22.23.4 ||
+# ^24.22.1 || >=26.12.1 et la machine porte Node 26.9.0 (R1 §4).
+#
+# Limites plateforme respectées (SPEC §19) : un seul module `rovo:mcp` et 50
+# outils au plus ; `action` bornée à 55 s et à des entrées simples ;
+# `scheduledTrigger` borné à 900 s ; Forge SQL à 1 Gio et 5 s par SELECT.
+
+app:
+  # Identifiant de forme valide (UUID v4) : `forge lint` refuse un ARI dont
+  # l'appId n'a pas la forme d'un UUID v4. Valeur provisoire — `forge create`
+  # la remplace par l'identifiant réel à l'enregistrement de l'app.
+  id: ari:cloud:ecosystem::app/867d827f-8677-48e1-97d9-bdefc0ee0ff9
+  # Pas de clé `name` : le schéma `@forge/manifest` 13.9.0 l'interdit sur le
+  # bloc `app` (`additionalProperties: false`, propriétés admises : description,
+  # id, runtime, compatibility, access, licensing, features, connect, storage,
+  # package). Le nom affiché « Délégable ou pas ? » se saisit à la création de
+  # l'app et dans la console développeur (R1 §1.1).
+  description: >-
+    Tells a software team which Jira tickets can be handed to a coding agent,
+    which ones need reinforced review and which ones should stay with a human.
+    Every recommendation quotes its cohort, its sample size, its confidence
+    interval and the past tickets it is built on.
+  runtime:
+    name: nodejs22.x
+    architecture: x86_64
+    memoryMB: 512
+  compatibility:
+    jira:
+      required: true
+
+modules:
+  # ---------------------------------------------------------- fonctions Forge
+  # `src/index.ts` ne fait que câbler ces points d'entrée (lot L7) : aucune
+  # logique n'y vit. Une `action` est une fonction Forge ordinaire
+  # (payload, context), pas un resolver ; les écrans UI Kit 2 passent par le
+  # resolver unique. Les neuf fonctions `fn-*` partagent `index.dispatch`, qui
+  # aiguille sur `context.moduleKey` : `dispatch` est un export JavaScript, pas
+  # une clé de module — aucune fonction orpheline n'est déclarée ici.
+  function:
+    - { key: resolver, handler: index.handler }
+    - { key: onEvent, handler: index.onEvent }
+    # Recalcul nocturne (SPEC §17 « Statistiques »). 900 s est le plafond du
+    # module `function` et celui du déclencheur planifié (SPEC §19).
+    - { key: onScheduled, handler: index.onScheduled, timeoutSeconds: 900 }
+    - { key: jqlDelegable, handler: index.jqlDelegable }
+    - { key: fn-should-delegate, handler: index.dispatch }
+    - { key: fn-list-delegable-work, handler: index.dispatch }
+    - { key: fn-get-delegation-evidence, handler: index.dispatch }
+    - { key: fn-get-delegation-map, handler: index.dispatch }
+    - { key: fn-get-cohort, handler: index.dispatch }
+    - { key: fn-get-calibration, handler: index.dispatch }
+    - { key: fn-record-involvement, handler: index.dispatch }
+    - { key: fn-record-decision, handler: index.dispatch }
+    - { key: fn-report-takeover, handler: index.dispatch }
+
+  # ------------------------------------------------------------- stockage (§18)
+  # Forge SQL ne déclare aucune table dans le manifeste : le module `sql`
+  # n'accepte que `key`, `engine` et `dareCompliant` (`additionalProperties:
+  # false`, schéma 13.9.0). Le DDL vit dans `src/db/schema.ts` (lot L5) et
+  # s'exécute par `migrationRunner` (@forge/sql).
+  #
+  # Les tables du SPEC §18 et leurs colonnes principales, pour référence. Le
+  # tableau du §18 compte 14 lignes ; LOTS.md (lot L5) annonce « 13 tables » :
+  # l'écart est `graph_cursor`, le curseur de reprise de la collecte du graphe
+  # (§17, DP-18), que le §18 liste bien. Les 14 sont prévues.
+  #   involvement(issue_id, level, source, client, model, session_ref,
+  #               evidence_json, decided_at)
+  #   signature_pattern(id, expression, agent_name, enabled, seen_count)
+  #   commit_fact(issue_id, commit_ref, has_signature, agent_name,
+  #               author_is_bot, committed_at)
+  #   review_fact(issue_id, pr_ref, reviewer_count, changes_requested,
+  #               comment_count, commits_after_open, opened_at, merged_at)
+  #   outcome(issue_id, closed_at, lead_time_h, reopened, caused_bugs,
+  #           neighbor_bugs, incidents, takeover, abandoned, clean, mature_at)
+  #   issue_class(issue_id, nature, zone, size, classified_by, content_hash)
+  #   epoch(id, project_id, starts_at, label, client, model,
+  #         instructions_version)
+  #   cohort_stat(project_id, epoch_id, nature, zone, size, arm, n, clean_rate,
+  #               ci_low, ci_high, median_lead_h, review_load, people_count,
+  #               conclusion, computed_at)
+  #   recommendation(issue_id, value, cohort_key, confidence, reasons_json,
+  #                  refs_json, computed_at)
+  #   decision(issue_id, followed, actual_level, reason, at)
+  #   calibration(project_id, epoch_id, value, n, clean_rate, ci_low, ci_high)
+  #   trial(id, project_id, cohort_key, starts_at, ends_at, state)
+  #   trial_assignment(trial_id, issue_id, arm, complied, excluded_reason)
+  #   graph_cursor(project_id, object_type, last_issue_id, last_run_at)
+  #
+  # Le contrat gelé (`src/types-persistence.ts`, `TABLE_NAMES`) ajoute deux
+  # tables aux 14 du §18 : `settings` (réglages du projet, §16.5) et `coverage`
+  # (implication connue, état de chaque droit sur le graphe, dernière collecte,
+  # §16.6) — soit 16 tables, toutes créées par le lot L5.
+  #
+  # Aucune table de statistiques ne contient d'identifiant de personne ;
+  # `people_count` ne sert qu'à masquer les cohortes trop étroites (§18, DP-17).
+  sql:
+    - key: main
+      engine: mysql
+
+  # --------------------------------------------------- modèle de texte (§17, §19)
+  # Classement de la nature des tickets à la création et lecture des causes
+  # d'échec. Forge LLMs ne traitent que du texte : aucun message de commit n'est
+  # envoyé au modèle, l'app ne garde qu'un fait (§17).
+  llm:
+    - key: issue-classifier
+      model:
+        - claude
+
+  # --------------------------------------------- ticket créé ou modifié (§17)
+  # Chaîne « Nature » : à la création, nature et taille classées puis conservées
+  # par empreinte du texte ; à la mise à jour, réexamen si le texte change.
+  trigger:
+    - key: issue-events
+      function: onEvent
+      events:
+        - avi:jira:created:issue
+        - avi:jira:updated:issue
+
+  # ------------------------------------------------ recalcul nocturne (§17, §7)
+  # Chaîne « Statistiques » : résultats arrivés à maturité (30 j pour la
+  # réouverture, 60 j pour la clôture propre), cohortes, fourchettes,
+  # conclusions, recommandations mises en cache. Intervalles autorisés :
+  # fiveMinute, hour, day, week.
+  scheduledTrigger:
+    - key: nightly-recompute
+      function: onScheduled
+      interval: day
+
+  # ---------------------------------------------------- outils pour agents (§15)
+  # Neuf outils exactement, tous listés par le module `rovo:mcp` plus bas. Les
+  # six outils de lecture sont des `GET` : une règle d'automatisation Jira
+  # n'appelle que des `GET` (SPEC §19), ce qui permet de faire calculer la
+  # répartition à l'ouverture du sprint. Les trois outils d'écriture sont
+  # `CREATE` / `UPDATE`. Chaque action est bornée à 55 s et n'accepte que des
+  # entrées simples (string, integer, number, boolean) : aucune liste ni objet,
+  # d'où les valeurs multiples en chaînes. Aucun outil n'accepte un nom de
+  # personne en entrée et aucun n'en renvoie (SPEC §15, DP-17, recette 12).
+  action:
+    - key: should-delegate
+      name: Should this ticket be delegated
+      function: fn-should-delegate
+      actionVerb: GET
+      description: >-
+        Returns the delegation recommendation for one Jira issue: delegate,
+        reinforced review or keep with a human, with the reasons, the
+        conditions, the cohort behind it and the confidence.
+      inputs:
+        issueKey: { title: Issue key, type: string, required: true,
+                    description: Key of the Jira issue, for example PROJ-412. }
+
+    - key: list-delegable-work
+      name: List delegable work
+      function: fn-list-delegable-work
+      actionVerb: GET
+      description: >-
+        Lists the tickets of a JQL search recommended for delegation, safest
+        first, each with its sample size and confidence interval. Only
+        delegable tickets are returned (SPEC §22 recette 13).
+      inputs:
+        jql: { title: JQL search, type: string, required: true,
+               description: 'JQL selecting the tickets to rank, for example
+                 "sprint in openSprints() AND project = PROJ".' }
+        limit: { title: Maximum results, type: integer, required: false,
+                 description: Maximum number of tickets to return, 25 by
+                   default. }
+
+    - key: get-delegation-evidence
+      name: Get delegation evidence
+      function: fn-get-delegation-evidence
+      actionVerb: GET
+      description: >-
+        Returns the evidence behind the recommendation of one Jira issue: its
+        cohort, both arms with sample sizes and confidence intervals, and the
+        past reference tickets the numbers rest on.
+      inputs:
+        issueKey: { title: Issue key, type: string, required: true,
+                    description: Key of the Jira issue, for example PROJ-412. }
+
+    - key: get-delegation-map
+      name: Get delegation map
+      function: fn-get-delegation-map
+      actionVerb: GET
+      description: >-
+        Returns the delegation map of one Jira project: the summarised matrix by
+        nature, zone and size, the share of delegable work and the share of
+        tickets whose involvement is still unknown.
+      inputs:
+        projectKey: { title: Project key, type: string, required: true,
+                      description: Key of the Jira project, for example PROJ. }
+
+    - key: get-cohort
+      name: Get one cohort
+      function: fn-get-cohort
+      actionVerb: GET
+      description: >-
+        Returns one cohort of a Jira project in detail: both arms, their sample
+        sizes, confidence intervals and composition, epoch by epoch, and
+        "not enough data" below the threshold.
+      inputs:
+        projectKey: { title: Project key, type: string, required: true,
+                      description: Key of the Jira project, for example PROJ. }
+        nature: { title: Nature of the work, type: string, required: false,
+                  description: Nature of the cohort, for example bugfix,
+                    ui-change or data-migration. }
+        zone: { title: Code zone, type: string, required: false,
+                description: Code zone of the cohort, for example payments. }
+        size: { title: Ticket size, type: string, required: false,
+                description: Size bucket of the cohort, for example small. }
+
+    - key: get-calibration
+      name: Get recommendation calibration
+      function: fn-get-calibration
+      actionVerb: GET
+      description: >-
+        Returns how often the past recommendations of one Jira project turned
+        out to be right, per epoch, with sample sizes and confidence intervals
+        (SPEC §10).
+      inputs:
+        projectKey: { title: Project key, type: string, required: true,
+                      description: Key of the Jira project, for example PROJ. }
+
+    - key: record-involvement
+      name: Record agent involvement
+      function: fn-record-involvement
+      actionVerb: CREATE
+      description: >-
+        Records the involvement of a coding agent on one Jira issue, declared by
+        the tool itself: the strongest source of the app, above commit mentions
+        and bot authors (SPEC §5).
+      inputs:
+        issueKey: { title: Issue key, type: string, required: true,
+                    description: Key of the Jira issue, for example PROJ-412. }
+        level: { title: Involvement level, type: string, required: true,
+                 description: One of none, assisted, piloted, autonomous,
+                   unknown. }
+        client: { title: Client tool, type: string, required: false,
+                  description: Tool that did the work, for example claude-code. }
+        model: { title: Model, type: string, required: false,
+                 description: Model identifier behind the tool. }
+        session: { title: Session reference, type: string, required: false,
+                   description: Reference of the agent session, kept to link
+                     commits to one run. Never a person identifier. }
+
+    - key: record-decision
+      name: Record the decision taken
+      function: fn-record-decision
+      actionVerb: CREATE
+      description: >-
+        Records the decision actually taken on one Jira issue and matches it
+        against the recommendation, which is what feeds the calibration
+        (SPEC §10).
+      inputs:
+        issueKey: { title: Issue key, type: string, required: true,
+                    description: Key of the Jira issue, for example PROJ-412. }
+        decision: { title: Decision, type: string, required: true,
+                    description: One of delegated, reinforced-review,
+                      kept-by-human. }
+        reason: { title: Reason, type: string, required: false,
+                  description: One sentence explaining the decision. }
+
+    - key: report-takeover
+      name: Report a human takeover
+      function: fn-report-takeover
+      actionVerb: UPDATE
+      description: >-
+        Records that a human took the ticket back from an agent, with the
+        reason. A takeover counts against the clean closure of the ticket
+        (SPEC §6).
+      inputs:
+        issueKey: { title: Issue key, type: string, required: true,
+                    description: Key of the Jira issue, for example PROJ-412. }
+        reason: { title: Reason, type: string, required: true,
+                  description: Why the work was taken back, for example
+                    wrong-direction or stuck-on-tests. }
+
+  # ------------------------------------------------------------ serveur MCP (§15)
+  # Preview : un seul module `rovo:mcp` par app, 50 outils au plus (SPEC §19) —
+  # les neuf outils tiennent dans ce module unique. L'exposition à un client MCP
+  # externe est désactivée par défaut : un administrateur l'active par site.
+  rovo:mcp:
+    - key: delegable-mcp
+      name: Délégable ou pas
+      tools:
+        - should-delegate
+        - list-delegable-work
+        - get-delegation-evidence
+        - get-delegation-map
+        - get-cohort
+        - get-calibration
+        - record-involvement
+        - record-decision
+        - report-takeover
+
+  # ----------------------------------------------------------- agent Rovo (§15)
+  # « Conseiller de délégation » pour les humains dans Rovo Chat : il répond avec
+  # les effectifs et les fourchettes, et dit « on ne sait pas » quand la cohorte
+  # le dit. Il n'enregistre jamais une implication d'agent à la place d'un outil
+  # (cela vient du skill ou du client MCP) ; `record-decision` lui reste ouvert,
+  # car décider est un geste humain. Le prompt vit dans static/agent/prompt.md
+  # (lot L9) — le nom est plafonné à 30 caractères.
+  rovo:agent:
+    - key: delegation-advisor
+      name: Conseiller de délégation
+      description: >-
+        Answers what can be handed to coding agents in a sprint, why a ticket
+        sits in reinforced review, where agents cost us time and what changed
+        since the new model, always with sample sizes and intervals.
+      prompt: resource:agent-prompt;prompt.md
+      icon: resource:icon;icon.svg
+      conversationStarters:
+        - What can we hand to agents in sprint 42?
+        - Why is PROJ-412 in reinforced review?
+        - Where are agents wasting our time?
+        - What changed since the new model?
+      actions:
+        - should-delegate
+        - list-delegable-work
+        - get-delegation-evidence
+        - get-delegation-map
+        - get-cohort
+        - get-calibration
+        - record-decision
+      skills:
+        - before-taking-work
+      followUpPrompt: Suggest the next useful question and the cohort that answers it.
+
+  # ------------------------------------------------------------ skill Rovo (§15)
+  # « before-taking-work » : la conduite du §9 en SKILL.md, liée aux outils
+  # should-delegate, record-involvement et report-takeover. `source.dir` pointe
+  # le dossier static/skill (lot L9), pas le fichier.
+  rovo:skill:
+    - key: before-taking-work
+      name: Before taking work
+      description: >-
+        Checks whether a ticket is worth taking with an agent, records the
+        involvement while working, and reports a takeover instead of hiding it.
+      source:
+        dir: static/skill
+      dependencies:
+        tools:
+          - should-delegate
+          - record-involvement
+          - report-takeover
+
+  # ---------------------------------------------------- écrans Jira (§16, §17)
+  # Tous en UI Kit 2 natif sur la ressource `main` et le resolver unique. Les
+  # écrans « Détail d'une cohorte » (§16.3), « Couverture » (§16.6) et « Peut-on
+  # croire cette app ? » (§16.7) sont des vues de la page projet, pas des modules
+  # séparés. Le panneau du ticket se lit depuis le cache : moins de 2 s (§20).
+  jira:issuePanel:
+    - key: delegation-card-panel
+      title: Delegation
+      resource: main
+      resolver: { function: resolver }
+      render: native
+      icon: resource:icon;icon.svg
+  jira:projectPage:
+    - key: delegation-map-page
+      title: Delegation map
+      resource: main
+      resolver: { function: resolver }
+      render: native
+      icon: resource:icon;icon.svg
+  jira:projectSettingsPage:
+    - key: delegation-settings
+      title: Delegation settings
+      resource: main
+      resolver: { function: resolver }
+      render: native
+      icon: resource:icon;icon.svg
+  # Répartition du sprint : c'est l'écran qui porte la collecte du graphe en
+  # session utilisateur — par tranches, avec reprise là où elle s'était arrêtée
+  # (§17). Un droit manquant vide le résultat sans erreur (§19).
+  jira:sprintAction:
+    - key: sprint-delegation-split
+      title: Delegation split
+      resource: main
+      resolver: { function: resolver }
+      render: native
+      icon: resource:icon;icon.svg
+  # Carte réduite et part de gris. `thumbnail` pointe la même illustration que
+  # l'icône ; si la galerie des gadgets exige un raster, le lot L8 ajoute un PNG
+  # et sa ressource.
+  jira:dashboardGadget:
+    - key: delegation-gadget
+      title: Delegation map
+      description: >-
+        Reduced delegation card of the projects you watch, with the share of
+        tickets whose agent involvement is still unknown.
+      resource: main
+      resolver: { function: resolver }
+      render: native
+      thumbnail: resource:icon;icon.svg
+      refreshable: true
+
+  # ---------------------------------------------- deux champs personnalisés (§5)
+  # « Recommandation » et « Implication d'agent », en lecture seule : l'app les
+  # écrit, jamais un humain — la déclaration passe par le panneau, par le skill
+  # ou par `record-involvement`. La valeur affichée vient d'une propriété de
+  # ticket indexée : rendu instantané, sans appel réseau (§20), et valeur lisible
+  # en JQL. La déclaration humaine à la clôture (§5) alimente la même propriété.
+  jira:customField:
+    - key: recommendation-field
+      name: Recommandation
+      description: >-
+        Read-only delegation recommendation: delegate, reinforced review, keep
+        with a human, or not enough data, with the cohort behind it.
+      type: string
+      readOnly: true
+      formatter:
+        expression: 'issue.properties["delegation-recommendation"]'
+    - key: involvement-field
+      name: Implication d'agent
+      description: >-
+        Read-only agent involvement level with its source, for example
+        "autonomous (commit mention)" or "unknown".
+      type: string
+      readOnly: true
+      formatter:
+        expression: 'issue.properties["delegation-involvement"]'
+
+  # --------------------------------------------------------- fonction JQL (§16.4)
+  # `issue in delegable()` : les tickets dont la recommandation est « à confier à
+  # un agent » (DP-11). Sans argument obligatoire, donc utilisable tel quel dans
+  # une automatisation ou un filtre partagé ; la fonction lit le cache nocturne.
+  jira:jqlFunction:
+    - key: delegable
+      name: Delegable
+      function: jqlDelegable
+      arguments: []
+      types:
+        - issue
+      operators:
+        - in
+
+# --------------------------------------------------------------------- ressources
+# L'entrée UI Kit 2 (lot L8), le dossier du prompt de l'agent (lot L9) et
+# l'illustration des modules Jira. Ces chemins n'existent pas encore sur la
+# branche du manifeste : la CI ne vérifie pas leur présence, `forge deploy` si.
+resources:
+  - key: main
+    path: src/ui/frontend/index.tsx
+  - key: agent-prompt
+    path: static/agent
+  - key: icon
+    path: static/icon.svg
+
+# ------------------------------------------------------------------------ droits
+# Le strict nécessaire, en droits granulaires plutôt que `read:jira-work` /
+# `write:jira-work` en bloc. Un droit manquant sur le graphe ne produit pas
+# d'erreur : il vide le résultat (SPEC §19) — d'où un droit `read:graph` par type
+# d'objet lu, et l'écran de couverture qui les teste un par un (§16.6).
+permissions:
+  scopes:
+    - read:issue:jira                    # tickets : recherche, clés, listes
+    - read:issue-details:jira            # champs et valeurs d'un ticket
+    - read:issue.changelog:jira          # historique : réouverture, abandon
+    - read:issue-link:jira               # liens entre tickets (bugs à la suite)
+    - read:issue-status:jira             # statut courant, clôtures
+    - read:field:jira                    # les deux champs personnalisés de l'app
+    - read:project:jira                  # projets et réglages lus
+    - read:sprint:jira-software          # répartition du sprint (§16.4)
+    - read:comment:jira                  # commentaires des tickets
+    - read:me                            # identité de la session qui lit le graphe
+    - write:issue.property:jira          # porte les valeurs des deux champs
+    - write:field:jira                   # écriture des deux champs personnalisés
+    - write:comment:jira                 # commentaire de décision ou de reprise
+    - read:graph:commit:external         # graphe : commits, mention d'agent
+    - read:graph:pull-request:external   # graphe : PR, relecteurs, avis
+    - read:graph:issue:jira              # graphe : ticket -> commits
+    - read:graph:user:atlassian          # graphe : comptes robots, relecteurs
+  # Aucun bloc `permissions.runtime` : le schéma 13.9.0 n'en expose pas, et
+  # l'« agir hors ligne au nom d'un utilisateur » du §19 n'y est pas déclaré.
+  # La collecte du graphe tourne donc dans une session utilisateur ouverte,
+  # par tranches avec reprise (§17) — à revalider au prototype (R1 §3, point 3).
