@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Délégable ou pas ? — Should an agent take this ticket?</title>
+<meta name="description" content="Forge app for Jira: which tickets to hand to a coding agent, decided from the team's own history with honest statistics. Codegeist 2026.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="dots" aria-hidden="true">
+      <i class="dot dot-delegate"></i><i class="dot dot-hardened"></i><i class="dot dot-keep"></i><i class="dot dot-unknown"></i>
+    </span>
+    <span class="brand-name" data-fr="Délégable ou pas ?" data-en="Delegable or not?">Délégable ou pas ?</span>
+  </div>
+  <nav class="topnav">
+    <a href="#demo" data-fr="Démo" data-en="Demo">Démo</a>
+    <a href="#methode" data-fr="Méthode" data-en="Method">Méthode</a>
+    <a href="#outils-mcp" data-fr="Outils MCP" data-en="MCP tools">Outils MCP</a>
+    <a href="#architecture" data-fr="Architecture" data-en="Architecture">Architecture</a>
+    <a href="#juges" data-fr="Pour les juges" data-en="For judges">Pour les juges</a>
+    <a class="repo" href="https://github.com/BaptisteFaisy/delegable-ou-pas">GitHub</a>
+    <button id="bascule-langue" type="button" title="English / Français">EN</button>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero">
+  <p class="kicker" data-fr="Atlassian Forge pour Jira · Codegeist 2026 · Apps for Software Teams" data-en="Atlassian Forge for Jira · Codegeist 2026 · Apps for Software Teams">Atlassian Forge pour Jira · Codegeist 2026 · Apps for Software Teams</p>
+  <h1 data-fr="Cet agent peut-il prendre ce ticket ?" data-en="Should an agent take this ticket?">Cet agent peut-il prendre ce ticket ?</h1>
+  <p class="lede" data-fr="L’équipe sait, d’après son propre historique et avec une statistique honnête, quel travail confier à un agent de code, lequel confier sous relecture renforcée et lequel garder — et chaque ticket porte cette recommandation, avec les tickets passés qui la fondent." data-en="From its own history and with honest statistics, the team knows which work to hand to a coding agent, which to hand over under hardened review, and which to keep — and every ticket carries that recommendation, together with the past tickets it is based on.">L’équipe sait, d’après son propre historique et avec une statistique honnête, quel travail confier à un agent de code, lequel confier sous relecture renforcée et lequel garder — et chaque ticket porte cette recommandation, avec les tickets passés qui la fondent.</p>
+  <p class="hero-cta">
+    <a class="button" href="#demo" data-fr="Voir la démo" data-en="See the demo">Voir la démo</a>
+    <a class="button ghost" href="https://github.com/BaptisteFaisy/delegable-ou-pas" data-fr="Lire le code" data-en="Read the code">Lire le code</a>
+  </p>
+  <p class="sample-banner" data-fr="Toutes les données de cette page sont un jeu d’exemple, marqué comme tel. Aucun ticket réel, aucun nom de personne." data-en="Every figure on this page is sample data, labelled as such. No real ticket, no person’s name.">Toutes les données de cette page sont un jeu d’exemple, marqué comme tel. Aucun ticket réel, aucun nom de personne.</p>
+</section>
+
+<section class="problem">
+  <h2 data-fr="Le problème" data-en="The problem">Le problème</h2>
+  <ul class="grid-4">
+    <li><strong data-fr="Les chiffres publics ne valent pas pour vous" data-en="Public benchmarks are not about your code">Les chiffres publics ne valent pas pour vous</strong><span data-fr="Autres codes, autres conventions, autres tests que les vôtres." data-en="Other codebases, other conventions, other tests than yours.">Autres codes, autres conventions, autres tests que les vôtres.</span></li>
+    <li><strong data-fr="Les deux erreurs coûtent cher" data-en="Both mistakes are expensive">Les deux erreurs coûtent cher</strong><span data-fr="Trop déléguer : reprises, relecture saturée, bugs trois semaines plus tard. Trop peu : des jours passés sur ce qu’un agent fait en une heure." data-en="Too much: rework, a saturated review queue, bugs three weeks later. Too little: days spent on what an agent does in an hour.">Trop déléguer : reprises, relecture saturée, bugs trois semaines plus tard. Trop peu : des jours passés sur ce qu’un agent fait en une heure.</span></li>
+    <li><strong data-fr="La direction demande des chiffres" data-en="Leadership asks for numbers">La direction demande des chiffres</strong><span data-fr="Elle reçoit des anecdotes." data-en="It gets anecdotes.">Elle reçoit des anecdotes.</span></li>
+    <li><strong data-fr="Quand on mesure, on mesure mal" data-en="When teams measure, they measure badly">Quand on mesure, on mesure mal</strong><span data-fr="On a confié aux agents les tickets faciles : le résultat est flatteur et faux." data-en="The easy tickets went to the agents: the result is flattering and wrong.">On a confié aux agents les tickets faciles : le résultat est flatteur et faux.</span></li>
+  </ul>
+  <p class="note" data-fr="Tout ce qu’il faut existe déjà : Jira connaît la suite de chaque ticket, le graphe d’Atlassian relie chaque ticket à ses commits puis à leurs PR et à leurs relecteurs, les agents signent leurs commits. Il manquait l’outil qui rapproche ces trois sources — et qui a la rigueur de dire « on ne sait pas »." data-en="Everything needed already exists: Jira knows what happened to each ticket, the Atlassian graph links every ticket to its commits, then to their pull requests and reviewers, and coding agents sign their commits. What was missing is the tool that brings these three sources together — and is rigorous enough to say “we do not know”.">Tout ce qu’il faut existe déjà : Jira connaît la suite de chaque ticket, le graphe d’Atlassian relie chaque ticket à ses commits puis à leurs PR et à leurs relecteurs, les agents signent leurs commits. Il manquait l’outil qui rapproche ces trois sources — et qui a la rigueur de dire « on ne sait pas ».</p>
+</section>
+
+<section id="demo">
+  <h2 data-fr="Démo — le jeu d’exemple" data-en="Demo — the sample dataset">Démo — le jeu d’exemple</h2>
+  <p class="section-note" data-fr="Rendu dans le navigateur, sans serveur ni appel réseau : les chiffres viennent du jeu d’exemple du dépôt (douze mois, trois époques, un projet peuplé)." data-en="Rendered in the browser, with no server and no network call: the figures come from the repository’s sample dataset (twelve months, three epochs, one populated project).">Rendu dans le navigateur, sans serveur ni appel réseau : les chiffres viennent du jeu d’exemple du dépôt (douze mois, trois époques, un projet peuplé).</p>
+
+  <h3 data-fr="1 · La carte sur le ticket" data-en="1 · The card on the ticket">1 · La carte sur le ticket</h3>
+  <div id="carte-ticket"></div>
+
+  <h3 data-fr="2 · La carte de délégation" data-en="2 · The delegation map">2 · La carte de délégation</h3>
+  <div id="carte-delegation" class="scroll"></div>
+
+  <h3 data-fr="3 · Le détail d’une cohorte" data-en="3 · One cohort in detail">3 · Le détail d’une cohorte</h3>
+  <div id="cohorte"></div>
+
+  <h3 data-fr="4 · Les époques" data-en="4 · The epochs">4 · Les époques</h3>
+  <div id="epoques"></div>
+
+  <h3 data-fr="5 · Peut-on croire cette app ?" data-en="5 · Can you trust this app?">5 · Peut-on croire cette app ?</h3>
+  <div id="calibration"></div>
+
+  <h3 data-fr="6 · La couverture" data-en="6 · Coverage">6 · La couverture</h3>
+  <div id="couverture"></div>
+</section>
+
+<section id="methode">
+  <h2 data-fr="La méthode, vérifiable à la main" data-en="The method, verifiable by hand">La méthode, vérifiable à la main</h2>
+  <p class="section-note" data-fr="Un seul estimateur pour une proportion : l’intervalle de score de Wilson à z = 1,96. Des médianes pour les durées, jamais de moyennes. Les trois jeux de chiffres du cahier des charges tombent juste avec Wilson — essayez la calculette." data-en="One single estimator for a proportion: the Wilson score interval at z = 1.96. Medians for durations, never means. The three games of figures in the specification fall out of Wilson — try the calculator.">Un seul estimateur pour une proportion : l’intervalle de score de Wilson à z = 1,96. Des médianes pour les durées, jamais de moyennes. Les trois jeux de chiffres du cahier des charges tombent juste avec Wilson — essayez la calculette.</p>
+
+  <div id="jeux-de-chiffres"></div>
+
+  <form id="calculette" class="card calculator" autocomplete="off">
+    <label for="wilson-succes" data-fr="clôtures propres" data-en="clean closes">clôtures propres</label>
+    <input id="wilson-succes" type="number" min="0" max="100000" step="1" value="34" data-fr-ph="succès" data-en-ph="successes" placeholder="succès">
+    <label for="wilson-total" data-fr="tickets du bras" data-en="tickets in the arm">tickets du bras</label>
+    <input id="wilson-total" type="number" min="1" max="100000" step="1" value="41" data-fr-ph="effectif" data-en-ph="sample size" placeholder="effectif">
+    <output id="wilson-sortie" for="wilson-succes wilson-total"></output>
+    <p class="advice" data-fr="Sous 20 tickets par bras, l’app refuse de conclure : « pas assez de recul » est une réponse." data-en="Below 20 tickets per arm the app refuses to conclude: “not enough history” is an answer.">Sous 20 tickets par bras, l’app refuse de conclure : « pas assez de recul » est une réponse.</p>
+  </form>
+
+  <h3 data-fr="Les huit règles de la comparaison honnête" data-en="The eight rules of honest comparison">Les huit règles de la comparaison honnête</h3>
+  <ol id="regles" class="rules"></ol>
+
+  <h3 data-fr="Le vocabulaire est opposable" data-en="The vocabulary is binding">Le vocabulaire est opposable</h3>
+  <p class="section-note" data-fr="« Constaté », « écart établi », « écart non établi ». Le mot « prouvé » est réservé à l’essai contrôlé : pendant quatre semaines, dans une cohorte où la conclusion est « on ne sait pas », le sort décide qui de l’agent ou de l’humain prend chaque ticket admissible. C’est le seul chiffre que l’app qualifie de prouvé." data-en="“Observed”, “established gap”, “no established gap”. The word “proven” is reserved for the controlled trial: for four weeks, in a cohort whose conclusion is “we do not know”, chance decides whether the agent or the human takes each eligible ticket. That is the only figure the app calls proven.">« Constaté », « écart établi », « écart non établi ». Le mot « prouvé » est réservé à l’essai contrôlé : pendant quatre semaines, dans une cohorte où la conclusion est « on ne sait pas », le sort décide qui de l’agent ou de l’humain prend chaque ticket admissible. C’est le seul chiffre que l’app qualifie de prouvé.</p>
+</section>
+
+<section id="agents">
+  <h2 data-fr="Pour les agents et les orchestrateurs" data-en="For agents and orchestrators">Pour les agents et les orchestrateurs</h2>
+  <p class="section-note" data-fr="Neuf outils exposés par rovo:mcp. Les six premiers sont des GET : une règle d’automatisation peut les appeler, et un agent lancé par automatisation n’appelle que des GET. Aucun outil n’accepte un nom de personne en entrée, aucun n’en renvoie." data-en="Nine tools exposed through rovo:mcp. The first six are GET: an automation rule can call them, and an agent started by an automation only calls GETs. No tool accepts a person’s name as input, none returns one.">Neuf outils exposés par rovo:mcp. Les six premiers sont des GET : une règle d’automatisation peut les appeler, et un agent lancé par automatisation n’appelle que des GET. Aucun outil n’accepte un nom de personne en entrée, aucun n’en renvoie.</p>
+  <div id="outils-mcp" class="scroll"></div>
+  <div class="two-col">
+    <div class="card">
+      <h3 data-fr="Agent Rovo « Conseiller de délégation »" data-en="Rovo agent “Delegation advisor”">Agent Rovo « Conseiller de délégation »</h3>
+      <ul class="plain">
+        <li data-fr="« Que peut-on confier aux agents dans le sprint 42 ? »" data-en="“What can we hand to agents in sprint 42?”">« Que peut-on confier aux agents dans le sprint 42 ? »</li>
+        <li data-fr="« Pourquoi PROJ-412 est-il en relecture renforcée ? »" data-en="“Why is PROJ-412 under hardened review?”">« Pourquoi PROJ-412 est-il en relecture renforcée ? »</li>
+        <li data-fr="« Où les agents nous font-ils perdre du temps ? »" data-en="“Where are agents wasting our time?”">« Où les agents nous font-ils perdre du temps ? »</li>
+        <li data-fr="« Qu’est-ce qui a changé depuis le nouveau modèle ? »" data-en="“What changed since the new model?”">« Qu’est-ce qui a changé depuis le nouveau modèle ? »</li>
+      </ul>
+      <p class="advice" data-fr="Il répond avec les effectifs et les fourchettes, et dit « on ne sait pas » quand la cohorte le dit." data-en="It answers with sample sizes and intervals, and says “we do not know” when the cohort says so.">Il répond avec les effectifs et les fourchettes, et dit « on ne sait pas » quand la cohorte le dit.</p>
+    </div>
+    <div class="card">
+      <h3 data-fr="Skill « before-taking-work »" data-en="Skill “before-taking-work”">Skill « before-taking-work »</h3>
+      <ol class="plain">
+        <li data-fr="Interroger should-delegate avant de prendre un ticket." data-en="Call should-delegate before taking a ticket.">Interroger should-delegate avant de prendre un ticket.</li>
+        <li data-fr="Devant « à garder pour un humain » : s’arrêter et prévenir son pilote." data-en="On “keep with a human”: stop and warn your pilot.">Devant « à garder pour un humain » : s’arrêter et prévenir son pilote.</li>
+        <li data-fr="Devant « relecture renforcée » : annoncer les conditions." data-en="On “hardened review”: state the conditions.">Devant « relecture renforcée » : annoncer les conditions.</li>
+        <li data-fr="À la fin : déclarer son implication (record-involvement)." data-en="At the end: declare your involvement (record-involvement).">À la fin : déclarer son implication (record-involvement).</li>
+        <li data-fr="En passant la main : report-takeover, avec la raison." data-en="When handing over: report-takeover, with the reason.">En passant la main : report-takeover, avec la raison.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <h2 data-fr="Architecture" data-en="Architecture">Architecture</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3 data-fr="Quatre chaînes de collecte" data-en="Four collection chains">Quatre chaînes de collecte</h3>
+      <table class="chains">
+        <tr><th data-fr="chaîne" data-en="chain">chaîne</th><th data-fr="qui l’exécute" data-en="who runs it">qui l’exécute</th><th data-fr="produit" data-en="output">produit</th></tr>
+        <tr><td data-fr="Historique Jira" data-en="Jira history">Historique Jira</td><td data-fr="l’app, en arrière-plan" data-en="the app, in the background">l’app, en arrière-plan</td><td data-fr="délai, réouverture, liens, abandon" data-en="lead time, reopening, links, abandonment">délai, réouverture, liens, abandon</td></tr>
+        <tr><td data-fr="Graphe" data-en="Graph">Graphe</td><td data-fr="la session d’un utilisateur" data-en="a user’s session">la session d’un utilisateur</td><td data-fr="commits liés et leur mention, PR atteintes, relecteurs et avis" data-en="linked commits and their mention, pull requests reached, reviewers and opinions">commits liés et leur mention, PR atteintes, relecteurs et avis</td></tr>
+        <tr><td data-fr="Nature" data-en="Nature">Nature</td><td data-fr="l’app, à la création" data-en="the app, on creation">l’app, à la création</td><td data-fr="nature et taille, conservées par empreinte du texte" data-en="nature and size, kept by text fingerprint">nature et taille, conservées par empreinte du texte</td></tr>
+        <tr><td data-fr="Statistiques" data-en="Statistics">Statistiques</td><td data-fr="chaque nuit" data-en="every night">chaque nuit</td><td data-fr="cohortes, fourchettes, conclusions, recommandations en cache" data-en="cohorts, intervals, conclusions, cached recommendations">cohortes, fourchettes, conclusions, recommandations en cache</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 data-fr="Ce qu’impose le graphe" data-en="What the graph imposes">Ce qu’impose le graphe</h3>
+      <ul class="plain">
+        <li data-fr="Lecture au nom d’un utilisateur connecté : la collecte tourne par tranches pendant qu’une page est ouverte, et reprend où elle s’est arrêtée." data-en="Read on behalf of a signed-in user: collection runs in slices while a page is open, and resumes where it stopped.">Lecture au nom d’un utilisateur connecté : la collecte tourne par tranches pendant qu’une page est ouverte, et reprend où elle s’est arrêtée.</li>
+        <li data-fr="Un droit manquant ne produit pas d’erreur : il vide le résultat. L’écran de couverture dit lequel." data-en="A missing right produces no error: it empties the result. The coverage screen says which one.">Un droit manquant ne produit pas d’erreur : il vide le résultat. L’écran de couverture dit lequel.</li>
+        <li data-fr="Aucune relation directe ticket → PR : le chemin est ticket → commit, puis PR → commit." data-en="No direct issue → PR relation: the path is issue → commit, then PR → commit.">Aucune relation directe ticket → PR : le chemin est ticket → commit, puis PR → commit.</li>
+        <li data-fr="Du message de commit, l’app ne garde qu’un fait : mention trouvée ou non, et le nom de l’agent. Le message n’est jamais stocké." data-en="From a commit message the app keeps one fact only: whether a mention was found, and the agent name. The message is never stored.">Du message de commit, l’app ne garde qu’un fait : mention trouvée ou non, et le nom de l’agent. Le message n’est jamais stocké.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note" data-fr="Forge : rovo:mcp (9 outils), rovo:agent, rovo:skill, jira:issuePanel, jira:projectPage, jira:projectSettingsPage, jira:sprintAction, jira:dashboardGadget, deux champs personnalisés (« Recommandation », « Implication d’agent »), la fonction JQL delegable(), des déclencheurs sur création et mise à jour, un déclencheur planifié quotidien (900 s au plus), Forge SQL (14 tables) et le module llm pour la nature des tickets." data-en="Forge: rovo:mcp (9 tools), rovo:agent, rovo:skill, jira:issuePanel, jira:projectPage, jira:projectSettingsPage, jira:sprintAction, jira:dashboardGadget, two custom fields (“Recommendation”, “Agent involvement”), the delegable() JQL function, triggers on creation and update, a daily scheduled trigger (900 s at most), Forge SQL (14 tables) and the llm module for ticket nature.">Forge : rovo:mcp (9 outils), rovo:agent, rovo:skill, jira:issuePanel, jira:projectPage, jira:projectSettingsPage, jira:sprintAction, jira:dashboardGadget, deux champs personnalisés (« Recommandation », « Implication d’agent »), la fonction JQL delegable(), des déclencheurs sur création et mise à jour, un déclencheur planifié quotidien (900 s au plus), Forge SQL (14 tables) et le module llm pour la nature des tickets.</p>
+</section>
+
+<section id="juges">
+  <h2 data-fr="Comment tester en dix minutes" data-en="How to test it in ten minutes">Comment tester en dix minutes</h2>
+  <ol class="steps">
+    <li data-fr="Mode démonstration : le jeu d’exemple ci-dessus, douze mois, trois époques, un projet peuplé. Tout est marqué « données d’exemple »." data-en="Demo mode: the sample dataset above — twelve months, three epochs, one populated project. Everything is labelled “sample data”.">Mode démonstration : le jeu d’exemple ci-dessus, douze mois, trois époques, un projet peuplé. Tout est marqué « données d’exemple ».</li>
+    <li data-fr="Agent Rovo : les quatre questions du §15." data-en="Rovo agent: the four questions of §15.">Agent Rovo : les quatre questions du §15.</li>
+    <li data-fr="Client MCP : should-delegate et list-delegable-work sur le projet d’exemple." data-en="MCP client: should-delegate and list-delegable-work on the sample project.">Client MCP : should-delegate et list-delegable-work sur le projet d’exemple.</li>
+    <li data-fr="Données réelles : sur un site relié à un dépôt, l’écran de couverture guide l’attribution des droits, puis la collecte démarre." data-en="Real data: on a site linked to a repository, the coverage screen guides the granting of rights, then collection starts.">Données réelles : sur un site relié à un dépôt, l’écran de couverture guide l’attribution des droits, puis la collecte démarre.</li>
+  </ol>
+  <p class="note" data-fr="Le site de démonstration fourni ne comprend pas de dépôt de code : le graphe n’y contient donc ni commit ni PR. La vidéo montre la collecte réelle sur un site relié à un dépôt, et l’écran de couverture interroge le graphe en direct sur les objets présents partout (tickets, utilisateurs, sprints)." data-en="The provided demo site has no code repository: its graph therefore contains neither commit nor pull request. The video shows real collection on a site linked to a repository, and the coverage screen queries the graph live on the objects present everywhere (issues, users, sprints).">Le site de démonstration fourni ne comprend pas de dépôt de code : le graphe n’y contient donc ni commit ni PR. La vidéo montre la collecte réelle sur un site relié à un dépôt, et l’écran de couverture interroge le graphe en direct sur les objets présents partout (tickets, utilisateurs, sprints).</p>
+</section>
+
+<section id="non-negotiables">
+  <h2 data-fr="Ce qui n’est pas négociable" data-en="What is not negotiable">Ce qui n’est pas négociable</h2>
+  <ul class="grid-3">
+    <li data-fr="Aucun taux sans son effectif et sa fourchette." data-en="No rate without its sample size and its interval.">Aucun taux sans son effectif et sa fourchette.</li>
+    <li data-fr="« On ne sait pas » s’affiche comme les autres conclusions." data-en="“We do not know” is displayed like any other conclusion.">« On ne sait pas » s’affiche comme les autres conclusions.</li>
+    <li data-fr="L’absence de mention d’agent ne prouve pas l’absence d’agent : l’inconnu n’est jamais compté « sans agent »." data-en="A missing agent mention does not prove there was no agent: unknown is never counted as “without”.">L’absence de mention d’agent ne prouve pas l’absence d’agent : l’inconnu n’est jamais compté « sans agent ».</li>
+    <li data-fr="Pas un outil de notation : aucune donnée par personne, cohortes étroites masquées." data-en="Not a scoring tool: no per-person data, narrow cohorts masked.">Pas un outil de notation : aucune donnée par personne, cohortes étroites masquées.</li>
+    <li data-fr="La recommandation conseille, elle ne bloque jamais." data-en="The recommendation advises, it never blocks.">La recommandation conseille, elle ne bloque jamais.</li>
+    <li data-fr="Sobriété : les messages de commit sont lus puis écartés." data-en="Sobriety: commit messages are read, then dropped.">Sobriété : les messages de commit sont lus puis écartés.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    <span data-fr="Dépôt" data-en="Repository">Dépôt</span> :
+    <a href="https://github.com/BaptisteFaisy/delegable-ou-pas">BaptisteFaisy/delegable-ou-pas</a>
+    · <span data-fr="cahier des charges" data-en="specification">cahier des charges</span> :
+    <a href="https://github.com/BaptisteFaisy/delegable-ou-pas/blob/main/docs/CAHIER-DES-CHARGES.md">docs/CAHIER-DES-CHARGES.md</a>
+    · <span data-fr="méthode" data-en="method">méthode</span> :
+    <a href="https://github.com/BaptisteFaisy/delegable-ou-pas/blob/main/docs/METHODE.md">docs/METHODE.md</a>
+  </p>
+  <p class="small" data-fr="Ce site est statique, sans suivi ni cookie. Les chiffres affichés sont un jeu d’exemple." data-en="This site is static, with no tracking and no cookie. The figures shown are sample data.">Ce site est statique, sans suivi ni cookie. Les chiffres affichés sont un jeu d’exemple.</p>
+</footer>
+
+<script src="donnees.js"></script>
+<script src="app.js"></script>
+<script>
+  // Les huit règles et la liste des outils sont rendues ici plutôt que dans
+  // app.js pour garder chaque fonction sous 50 lignes.
+  document.addEventListener('DOMContentLoaded', function () {
+    var regles = document.getElementById('regles');
+    if (regles && window.DONNEES) {
+      window.DONNEES.HONESTY_RULES.forEach(function (regle) {
+        var li = document.createElement('li');
+        li.setAttribute('data-fr', regle.fr);
+        li.setAttribute('data-en', regle.en);
+        li.textContent = regle.fr;
+        regles.appendChild(li);
+      });
+    }
+  });
+</script>
+</body>
+</html>
