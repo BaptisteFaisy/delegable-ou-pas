@@ -43,7 +43,7 @@ jobs:
         shell: bash
         run: git clean -ffdx -e /node_modules -e /.npm-state -e /dist -e /build
 
-      - name: Dépendances (cache npm partagé, installation si le lock a changé)
+      - name: Dépendances (jeu partagé sur le runner, installation si besoin)
         shell: bash
         run: |
           echo "$HOME/bin" >> "$GITHUB_PATH"
@@ -53,6 +53,28 @@ jobs:
           # Le marqueur vit HORS de node_modules : `npm ci` efface ce dossier.
           mkdir -p .npm-state
           MARKER=.npm-state/lock-hash
+          # Un `npm ci` à froid dure plus de 5 minutes sur une machine chargée :
+          # il ne tient pas dans le budget. Les runners de ce dépôt partagent
+          # donc UN jeu de dépendances, installé une fois dans
+          # ~/shared/<depot>/node_modules, chaque workspace y pointant par un
+          # lien. Le lien et le marqueur sont restaurés à chaque run : si un
+          # `npm ci` a remplacé le lien par un vrai dossier, le run suivant se
+          # répare seul au lieu d'échouer pour toujours.
+          # Après un changement de package-lock.json, réchauffer le jeu partagé
+          # (procédure dans docs/CI.md) — sinon l'avertissement ci-dessous s'affiche.
+          SHARED="$HOME/shared/delegable-ou-pas/node_modules"
+          if [ -d "$SHARED" ]; then
+            if [ ! -L node_modules ]; then
+              rm -rf node_modules
+              ln -s "$SHARED" node_modules
+              echo "lien vers le jeu partage retabli"
+            fi
+            STAMP="$(cat "$SHARED/.lock-hash" 2>/dev/null || true)"
+            if [ -n "$STAMP" ] && [ "$STAMP" != "$LOCK_HASH" ]; then
+              echo "::warning::jeu de dependances partage perime (verrou $LOCK_HASH, jeu $STAMP) - rechauffer, voir docs/CI.md"
+            fi
+            printf '%s' "$LOCK_HASH" > "$MARKER"
+          fi
           if [ ! -d node_modules ] || [ "$LOCK_HASH" != "$(cat "$MARKER" 2>/dev/null)" ]; then
             echo "installation des dependances..."
             npm ci --prefer-offline --no-audit --no-fund
