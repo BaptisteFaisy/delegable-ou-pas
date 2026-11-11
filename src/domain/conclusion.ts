@@ -1,6 +1,7 @@
 /**
  * The four conclusions of a comparison, and the order in which they are
- * arbitrated: sample size, then unbalanced arms, then overlapping intervals.
+ * arbitrated: sample size, then unbalanced arms, then the difference interval,
+ * then the equivalence test.
  *
  * Realises SPEC §7 rule 4 (better, same, worse, and "we do not know", which is
  * a conclusion in its own right, never an error case), SPEC §7 rule 5 (arms
@@ -9,10 +10,18 @@
  * module only ever receives one pair of arms).
  * DP-09.
  *
+ * Corrects the merged defect: "same" used to be concluded whenever two Wilson
+ * intervals overlapped; overlapping intervals can still hide an established
+ * difference. The arbiter is now the Newcombe interval on `rateA - rateB`
+ * (established or not), then a TOST equivalence test for "same". When neither
+ * is met the honest answer is "we do not know" — which also means "not enough
+ * data to call it the same" (see `difference.ts`, METHODE.md).
+ *
  * The domain is pure: no `@forge/*`, no `node:fs`, no network, no clock.
  */
 
 import type { Balance, Conclusion, ProportionStat } from '../types.js';
+import { DEFAULT_EQUIVALENCE_MARGIN, newcombeDifference, tostEquivalence } from './difference.js';
 import { DEFAULT_MIN_ARM_SIZE } from './stats.js';
 import type { DurationInterval } from './stats.js';
 
@@ -68,7 +77,9 @@ function boundsOverlap(a: IntervalBound, b: IntervalBound): boolean {
 
 /**
  * True when the two intervals share at least one value. Touching bounds count
- * as an overlap: the app never claims a gap it cannot support (SPEC §7 rule 4).
+ * as an overlap. This predicate is a diagnostic of the raw intervals; it is no
+ * longer the arbiter of an established gap for proportions — the difference
+ * interval is (see `difference.ts`, METHODE.md).
  */
 export function intervalsOverlap(a: ProportionStat, b: ProportionStat): boolean {
   return boundsOverlap(a, b);
@@ -78,19 +89,26 @@ export function intervalsOverlap(a: ProportionStat, b: ProportionStat): boolean 
  * Compares two arms of one cohort (SPEC §7 rules 2, 4 and 5).
  *
  * Arbitration order, non negotiable: sample size first, then balance of the
- * arms, then the intervals. `not-enough-data` is rendered like the other three
- * conclusions, with its own wording (SPEC §20, recipe 6).
+ * arms, then the difference interval, then equivalence. An interval of the
+ * difference that excludes 0 is `better`/`worse` by its sign; otherwise a TOST
+ * inside `[-equivMargin, +equivMargin]` is `same`; otherwise the honest answer
+ * is `not-enough-data` — which also covers "not enough data to call it the
+ * same" (SPEC §20, recipe 6). `equivMargin` defaults to 10 points and is
+ * adjustable per project.
  */
 export function conclude(
   agent: ProportionStat | null,
   human: ProportionStat | null,
   minArmSize: number = DEFAULT_MIN_ARM_SIZE,
   balance: Balance,
+  equivMargin: number = DEFAULT_EQUIVALENCE_MARGIN,
 ): Conclusion {
   if (!isUsable(agent, minArmSize) || !isUsable(human, minArmSize)) return 'not-enough-data';
   if (!balance.balanced) return 'not-enough-data';
-  if (intervalsOverlap(agent, human)) return 'same';
-  return agent.rate > human.rate ? 'better' : 'worse';
+  const difference = newcombeDifference(agent, human);
+  if (difference.established) return difference.diff > 0 ? 'better' : 'worse';
+  if (tostEquivalence(agent, human, equivMargin).equivalent) return 'same';
+  return 'not-enough-data';
 }
 
 /**

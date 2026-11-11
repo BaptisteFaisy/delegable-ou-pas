@@ -330,3 +330,55 @@ le tirage n'est pas respecté ne prouve rien : il est compté, puis exclu.
 
 Ces interdits sont couverts par des tests nommés d'après le comportement, dans
 `tests/domain/` et `tests/acceptance/` (recettes 1 à 16, SPEC §22).
+
+## 15. L'écart se teste sur la différence
+
+Longtemps, « écart établi » a voulu dire « deux fourchettes qui ne se
+recouvrent pas » (§6, §10). C'était une erreur ; elle est corrigée ici.
+
+**Le recouvrement est trompeur.** Deux intervalles de confiance à 95 % qui se
+chevauchent peuvent très bien cacher une différence significative. L'exemple
+qui a motivé la correction :
+
+| Bras | Effectif | Taux | Wilson |
+|---|---|---|---|
+| agent | 100 | 60 % | [50,2 % ; 69,1 %] |
+| humain | 100 | 45 % | [35,6 % ; 54,8 %] |
+
+Les deux fourchettes se recouvrent (54,8 % > 50,2 %) : l'ancienne règle
+concluait « pareil ». Pourtant l'intervalle de la **différence** vaut
+≈ [1,2 % ; 28,0 %] : il exclut 0, l'écart est établi, l'agent fait mieux.
+L'ancienne règle rendait donc un « pareil » faux.
+
+**La règle qui remplace le recouvrement.** On ne compare plus deux fourchettes
+côte à côte, on construit l'intervalle de confiance de `taux agent − taux
+humain` :
+
+- **Newcombe, méthode 10 (hybride)** : un intervalle sur la différence, monté à
+  partir des deux intervalles de Wilson déjà calculés (§1) — pas de nouveau
+  calcul de variance, on réutilise ce que `stats.ts` a produit. Si cet
+  intervalle **exclut 0**, l'écart est établi : `better` si la différence est
+  positive, `worse` si elle est négative.
+
+- **TOST (test d'équivalence)** : si l'intervalle de la différence **contient 0**,
+  on se demande alors s'il tient **entier** dans `[-marge, +marge]`. Si oui,
+  les deux bras sont assez proches pour qu'on dise « même » (`same`). La marge
+  par défaut est **10 points** (`DEFAULT_EQUIVALENCE_MARGIN = 0.10`) ; elle est
+  **réglable par projet** — une équipe qui tolère 5 points d'écart et une autre
+  qui en tolère 15 n'ont pas la même notion de « pareil ».
+
+- **Sinon** — ni écart établi, ni équivalence — la conclusion est
+  `not-enough-data`. « On ne sait pas » couvre désormais aussi « on n'a pas
+  assez de recul pour dire que c'est pareil » : une différence qui contient 0
+  mais dont l'intervalle dépasse la marge n'autorise ni « mieux » ni « pareil ».
+
+L'exemple du SPEC §7 règle 3 (34/41 contre 32/37) tombe exactement dans ce
+dernier cas : différence ≈ −3,6 %, intervalle ≈ [−19,7 % ; 13,2 %] — il contient
+0, dépasse les 10 points de marge — donc `not-enough-data`. C'est la réponse
+honnête : ces effectifs ne tranchent ni l'écart ni l'équivalence.
+
+En pratique : `conclude()` applique cette logique dans cet ordre — effectif,
+déséquilibre des bras, écart établi (Newcombe), équivalence (TOST), sinon « on
+ne sait pas ». Les quatre conclusions du SPEC §7 règle 4 restent les mêmes ;
+seul le critère qui les arbitre a changé. `src/domain/difference.ts` porte
+Newcombe et TOST ; `src/domain/conclusion.ts` les appelle.
