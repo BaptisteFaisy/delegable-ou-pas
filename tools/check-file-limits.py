@@ -17,7 +17,10 @@ EXTENSIONS = {'.ts', '.tsx', '.js', '.jsx', '.mjs', '.py', '.yml', '.yaml', '.md
 # Dossiers régénérables ou qui ne viennent pas du dépôt.
 EXCLUDE_DIRS = {'node_modules', '.git', 'dist', 'build', '.npm-state', '__pycache__', '.github'}
 # Fichiers générés, jamais écrits à la main.
-EXCLUDE_FILES = {'package-lock.json', 'pnpm-lock.yaml'}
+EXCLUDE_FILES = {'package-lock.json', 'pnpm-lock.yaml',
+                 # Le cahier des charges est un document d'entrée reçu tel quel
+                 # (512 lignes) : il ne se découpe pas, ce n'est pas du code.
+                 'CAHIER-DES-CHARGES.md'}
 
 
 def iter_files(root):
