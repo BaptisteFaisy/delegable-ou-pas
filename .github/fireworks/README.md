@@ -37,12 +37,17 @@ Le script est lu sur `origin/main` (pas sur la branche de la PR, qui peut
 
 ## Réglages
 
-| Variable / secret | Défaut | Effet |
+| Variable / secret | Valeur sur ce dépôt | Effet |
 |---|---|---|
-| secret `FIREWORKS_API_KEY` | — | sans lui, l'agent ne fait rien |
-| var `FIREWORKS_MODEL` | `accounts/fireworks/models/minimax-m3p1-flash` | modèle interrogé |
-| var `FIREWORKS_BASE_URL` | `https://api.fireworks.ai/inference/v1/chat/completions` | point d'API |
+| secret `FIREWORKS_API_KEY` | clé **InferHub** | sans lui, l'agent ne fait rien |
+| var `FIREWORKS_BASE_URL` | `https://api.inferhub.dev/v1/chat/completions` | point d'API ; sans elle, l'agent retombe sur le défaut Fireworks et la clé InferHub est refusée |
+| var `FIREWORKS_MODEL` | `combo/cheap` | modèle interrogé (routeur InferHub) |
 | var `FIREWORKS_AGENT_RESOLVE` | `1` | `0` coupe l'agent sans toucher au code |
+
+Le nom des variables garde le préfixe historique `FIREWORKS_` : l'agent parle un
+point d'entrée « complétions de chat » compatible OpenAI, et le routeur
+**InferHub** en face fait le choix du modèle et le repli. Changer de fournisseur
+ne demande donc que ces deux variables, aucun code.
 
 ## Garde-fous
 
