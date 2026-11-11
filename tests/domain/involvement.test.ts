@@ -110,6 +110,13 @@ describe('sources de l’implication', () => {
     expect(resolveInvolvement('PROJ-1', [], '2026-03-02T10:00:00Z', '', '', '')).toBeNull();
   });
 
+  it('ne donne aucun candidat de commit pour un ticket sans commit', () => {
+    expect(fromBotAuthor([])).toBeNull();
+    expect(fromCommitMention([], '2026-03-02T10:00:00Z')).toBeNull();
+    expect(signedShare([])).toBe(0);
+    expect(resolveInvolvement('PROJ-1', [], '2026-03-02T10:00:00Z', '', '', '')).toBeNull();
+  });
+
   it('lit le niveau déclaré dans le champ de clôture', () => {
     expect(fromClosureField('Assistée')?.level).toBe('assisted');
     expect(fromClosureField('Aucune')?.level).toBe('none');
