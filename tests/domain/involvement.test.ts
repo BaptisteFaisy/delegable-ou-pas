@@ -142,15 +142,16 @@ describe('sources de l’implication', () => {
     expect(candidate.evidence).toContain('declared-by:claude-code');
   });
 
-  it('rend le taux d’implication connue pour la santé de l’app', () => {
-    const rate = knownInvolvement([
+  it('rend le taux d’implication connue avec son effectif et sa fourchette', () => {
+    const stat = knownInvolvement([
       involvement('assisted'),
       involvement('none'),
       involvement('unknown'),
     ]);
-    expect(rate.known).toBe(2);
-    expect(rate.total).toBe(3);
-    expect(rate.rate).toBeCloseTo(2 / 3);
-    expect(knownInvolvement([]).rate).toBeNull();
+    expect(stat.n).toBe(3);
+    expect(stat.rate).toBeCloseTo(2 / 3);
+    expect(stat.ciLow).toBeLessThan(stat.rate);
+    expect(stat.ciHigh).toBeGreaterThan(stat.rate);
+    expect(knownInvolvement([])).toEqual({ n: 0, rate: 0, ciLow: 0, ciHigh: 1 });
   });
 });

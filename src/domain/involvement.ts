@@ -7,9 +7,10 @@
  * involvement stays `unknown`, and `unknown` is never counted as "without
  * agent" (SPEC §5, DP-03, recipe 2).
  */
-import type { CommitFact, Involvement, Level, SourceCandidate } from '../types.js';
+import type { CommitFact, Involvement, Level, ProportionStat, SourceCandidate } from '../types.js';
 import type { InvolvementDeclaration } from '../ports.js';
 import { SOURCE_ORDER } from '../types.js';
+import { proportion } from './stats.js';
 
 /**
  * Evidence keys joined with `;`: a key or a count, never a free-text quote,
@@ -204,23 +205,12 @@ export function resolveInvolvement(
   };
 }
 
-/** The health indicator of SPEC §13: how many involvements are known. */
-export interface KnownInvolvement {
-  /** Tickets whose involvement is known, `unknown` excluded (SPEC §13). */
-  known: number;
-  /** Tickets considered. */
-  total: number;
-  /** Share of known involvements in [0, 1]; null when there is no ticket. */
-  rate: number | null;
-}
-
 /**
- * The "taux d'implication connue" indicator (SPEC §13): the share of tickets
- * whose involvement is known. The confidence interval is computed by L1
- * `proportion` (SPEC §7 rule 3), never here.
+ * The "taux d'implication connue" health indicator (SPEC §13): the share of
+ * tickets whose involvement is known, with its sample size and its Wilson
+ * interval, computed by L1 `proportion` (SPEC §7 rule 3).
  */
-export function knownInvolvement(involvements: readonly Involvement[]): KnownInvolvement {
+export function knownInvolvement(involvements: readonly Involvement[]): ProportionStat {
   const known = involvements.filter(involvement => involvement.level !== 'unknown').length;
-  const total = involvements.length;
-  return { known, total, rate: total === 0 ? null : known / total };
+  return proportion(known, involvements.length);
 }
