@@ -10,9 +10,11 @@
 # `docs/research/R1-modules-forge.md` pour l'état de la recherche documentaire.
 #
 # Formes vérifiées le 11/11/2026 contre le schéma `@forge/manifest` 13.9.0
-# (celui qu'embarque la CLI Forge 15.1.0), validées hors ligne par Ajv sur ce
-# schéma. La CLI ne peut pas tourner ici : elle exige Node ^22.23.4 ||
-# ^24.22.1 || >=26.12.1 et la machine porte Node 26.9.0 (R1 §4).
+# (celui qu'embarque la CLI Forge 15.1.0) et contre la version 1.5.1 épinglée
+# dans package.json : c'est elle que la garde du dépôt (`tools/check-manifest.mjs`)
+# valide par Ajv — elle exige `app.name`, là où 13.9.0 l'interdisait (R1 §1.1).
+# La CLI ne peut pas tourner ici : elle exige Node ^22.23.4 || ^24.22.1 ||
+# >=26.12.1 et la machine porte Node 26.9.0 (R1 §4).
 #
 # Limites plateforme respectées (SPEC §19) : un seul module `rovo:mcp` et 50
 # outils au plus ; `action` bornée à 55 s et à des entrées simples ;
@@ -23,11 +25,12 @@ app:
   # l'appId n'a pas la forme d'un UUID v4. Valeur provisoire — `forge create`
   # la remplace par l'identifiant réel à l'enregistrement de l'app.
   id: ari:cloud:ecosystem::app/867d827f-8677-48e1-97d9-bdefc0ee0ff9
-  # Pas de clé `name` : le schéma `@forge/manifest` 13.9.0 l'interdit sur le
-  # bloc `app` (`additionalProperties: false`, propriétés admises : description,
-  # id, runtime, compatibility, access, licensing, features, connect, storage,
-  # package). Le nom affiché « Délégable ou pas ? » se saisit à la création de
-  # l'app et dans la console développeur (R1 §1.1).
+  # `name` est exigé par la garde du dépôt : le schéma `@forge/manifest` 1.5.1
+  # épinglé dans package.json demande `required: [id, name]` et 1 à 50
+  # caractères. Le schéma 13.9.0 de la CLI ne l'admettait pas (R1 §1.1) : si
+  # la CLI le refuse encore, le nom se saisit à la création de l'app et dans
+  # la console développeur.
+  name: Délégable ou pas ?
   description: >-
     Tells a software team which Jira tickets can be handed to a coding agent,
     which ones need reinforced review and which ones should stay with a human.
@@ -40,31 +43,37 @@ app:
   compatibility:
     jira:
       required: true
+    # Confluence reste optionnel (SPEC §17) : la garde du dépôt refuse
+    # `required: true` pour Confluence.
+    confluence:
+      required: false
 
 modules:
   # ---------------------------------------------------------- fonctions Forge
-  # `src/index.ts` ne fait que câbler ces points d'entrée (lot L7) : aucune
-  # logique n'y vit. Une `action` est une fonction Forge ordinaire
-  # (payload, context), pas un resolver ; les écrans UI Kit 2 passent par le
-  # resolver unique. Les neuf fonctions `fn-*` partagent `index.dispatch`, qui
-  # aiguille sur `context.moduleKey` : `dispatch` est un export JavaScript, pas
-  # une clé de module — aucune fonction orpheline n'est déclarée ici.
+  # Un point d'entrée par fichier, sous `src/handlers/` (lot L7) : ces fichiers
+  # sont annoncés comme souches dans `docs/CONTRACTS.md` §6, le temps qu'ils
+  # arrivent. `src/index.ts` ne fait que câbler (lot L7) : aucune logique n'y
+  # vit. Une `action` est une fonction Forge ordinaire (payload, context), pas
+  # un resolver ; les écrans UI Kit 2 passent par le resolver unique. Les neuf
+  # fonctions `fn-*` partagent `handlers/dispatch.dispatch`, qui aiguille sur
+  # `context.moduleKey` : `dispatch` est un export JavaScript, pas une clé de
+  # module — aucune fonction orpheline n'est déclarée ici.
   function:
-    - { key: resolver, handler: index.handler }
-    - { key: onEvent, handler: index.onEvent }
+    - { key: resolver, handler: handlers/resolver.handler }
+    - { key: onEvent, handler: handlers/events.onEvent }
     # Recalcul nocturne (SPEC §17 « Statistiques »). 900 s est le plafond du
     # module `function` et celui du déclencheur planifié (SPEC §19).
-    - { key: onScheduled, handler: index.onScheduled, timeoutSeconds: 900 }
-    - { key: jqlDelegable, handler: index.jqlDelegable }
-    - { key: fn-should-delegate, handler: index.dispatch }
-    - { key: fn-list-delegable-work, handler: index.dispatch }
-    - { key: fn-get-delegation-evidence, handler: index.dispatch }
-    - { key: fn-get-delegation-map, handler: index.dispatch }
-    - { key: fn-get-cohort, handler: index.dispatch }
-    - { key: fn-get-calibration, handler: index.dispatch }
-    - { key: fn-record-involvement, handler: index.dispatch }
-    - { key: fn-record-decision, handler: index.dispatch }
-    - { key: fn-report-takeover, handler: index.dispatch }
+    - { key: onScheduled, handler: handlers/scheduled.onScheduled, timeoutSeconds: 900 }
+    - { key: jqlDelegable, handler: handlers/jql.jqlDelegable }
+    - { key: fn-should-delegate, handler: handlers/dispatch.dispatch }
+    - { key: fn-list-delegable-work, handler: handlers/dispatch.dispatch }
+    - { key: fn-get-delegation-evidence, handler: handlers/dispatch.dispatch }
+    - { key: fn-get-delegation-map, handler: handlers/dispatch.dispatch }
+    - { key: fn-get-cohort, handler: handlers/dispatch.dispatch }
+    - { key: fn-get-calibration, handler: handlers/dispatch.dispatch }
+    - { key: fn-record-involvement, handler: handlers/dispatch.dispatch }
+    - { key: fn-record-decision, handler: handlers/dispatch.dispatch }
+    - { key: fn-report-takeover, handler: handlers/dispatch.dispatch }
 
   # ------------------------------------------------------------- stockage (§18)
   # Forge SQL ne déclare aucune table dans le manifeste : le module `sql`
@@ -460,9 +469,7 @@ resources:
 
 # ------------------------------------------------------------------------ droits
 # Le strict nécessaire, en droits granulaires plutôt que `read:jira-work` /
-# `write:jira-work` en bloc. Un droit manquant sur le graphe ne produit pas
-# d'erreur : il vide le résultat (SPEC §19) — d'où un droit `read:graph` par type
-# d'objet lu, et l'écran de couverture qui les teste un par un (§16.6).
+# `write:jira-work` en bloc.
 permissions:
   scopes:
     - read:issue:jira                    # tickets : recherche, clés, listes
@@ -478,10 +485,13 @@ permissions:
     - write:issue.property:jira          # porte les valeurs des deux champs
     - write:field:jira                   # écriture des deux champs personnalisés
     - write:comment:jira                 # commentaire de décision ou de reprise
-    - read:graph:commit:external         # graphe : commits, mention d'agent
-    - read:graph:pull-request:external   # graphe : PR, relecteurs, avis
-    - read:graph:issue:jira              # graphe : ticket -> commits
-    - read:graph:user:atlassian          # graphe : comptes robots, relecteurs
+  # Droits de graphe : **retirés** tant que l'API du graphe est en Preview
+  # (SPEC §19) — les noms vérifiés par R1 §4 contre la liste officielle de la
+  # CLI (`read:graph:commit:external`, `read:graph:pull-request:external`,
+  # `read:graph:issue:jira`, `read:graph:user:atlassian`) ont quatre segments,
+  # forme que la garde du dépôt refuse. Un droit manquant vide le résultat sans
+  # erreur (SPEC §19). À déclarer dès la sortie de Preview, un droit par type
+  # d'objet lu : commit, pull request, ticket, utilisateur (SPEC §17).
   # Aucun bloc `permissions.runtime` : le schéma 13.9.0 n'en expose pas, et
   # l'« agir hors ligne au nom d'un utilisateur » du §19 n'y est pas déclaré.
   # La collecte du graphe tourne donc dans une session utilisateur ouverte,

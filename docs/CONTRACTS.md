@@ -467,3 +467,32 @@ signale en `CONTRACT-NEEDED: <fichier>.<symbole> — <raison>` dans la réponse
 finale de l'agent ; il est ensuite traité par une PR dédiée dont le corps porte
 `CONTRACT-CHANGE`. En attendant, le lot travaille avec les types existants, ou
 déclare son type auxiliaire **dans son propre module** (famille 2, §0).
+
+## 6. Souches des points d'entrée Forge (lot L7)
+
+Le manifeste (`manifest.yml`) déclare cinq points d'entrée Forge. Les fichiers
+correspondants arrivent avec le lot L7 : tant qu'ils manquent, la garde du
+dépôt (`tools/check-manifest.mjs`) les compte comme **souches annoncées** — un
+avertissement, pas un échec. Une souche se signale en écrivant son chemin ici,
+sous la forme exacte `src/handlers/<rôle>.ts` : c'est la seule forme que la
+garde lit.
+
+- `src/handlers/resolver.ts` — entrée `resolver` : resolver unique des écrans
+  UI Kit 2 (SPEC §16).
+- `src/handlers/events.ts` — entrée `onEvent` : déclencheur `avi:jira:*`
+  (SPEC §17).
+- `src/handlers/scheduled.ts` — entrée `onScheduled` : recalcul nocturne
+  (SPEC §17).
+- `src/handlers/jql.ts` — entrée `jqlDelegable` : fonction JQL `delegable()`
+  (SPEC §16.4, DP-25).
+- `src/handlers/dispatch.ts` — entrée `dispatch` : les neuf outils MCP
+  (`rovo:mcp` et `action`, SPEC §15).
+- `src/index.ts` — assemblage : instancie `Deps` et route vers `src/handlers/`
+  et `src/actions/` (CONTRACTS-ADAPTATEURS.md, § L7). Ce n'est pas une souche
+  au sens de la garde, qui ne lit que `src/handlers/…` : il figure ici pour la
+  lecture.
+
+Ces fichiers ne portent **aucune logique métier** : ils construisent `Deps`
+(`src/deps.ts`) et appellent le domaine ou `src/actions/`. Écrire une ligne
+ici **ne crée pas** de fichier : elle déclare une souche attendue — le fichier
+arrive avec le lot qui le porte.
