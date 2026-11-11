@@ -460,6 +460,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_ECRITURE: ${{ secrets.AUTOMERGE_PAT }}
           FIREWORKS_API_KEY: ${{ secrets.FIREWORKS_API_KEY }}
+          # Sans cette ligne l'agent de conflit retombe sur le point d'API par
+          # défaut (Fireworks) alors que le secret porte une clé InferHub : la
+          # saisine échoue en 401 et la PR DIRTY attend un humain. Même correctif
+          # que sur le dépôt frère, où il est déjà payé.
+          FIREWORKS_BASE_URL: ${{ vars.FIREWORKS_BASE_URL }}
           FIREWORKS_MODEL: ${{ vars.FIREWORKS_MODEL }}
           FIREWORKS_AGENT_RESOLVE: ${{ vars.FIREWORKS_AGENT_RESOLVE }}
           FIREWORKS_AGENT_SCOPE: ${{ vars.FIREWORKS_AGENT_SCOPE }}
