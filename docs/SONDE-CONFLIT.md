@@ -1,6 +1,8 @@
-# Sonde de conflit — variante A
+# Sonde de conflit — variante B
 
-Cette ligne vient de la branche A. Elle existe uniquement pour provoquer un
-conflit réel avec la branche B sur le même fichier et la même ligne, et prouver
-que l'agent de conflit de la file (`pr-auto-merge` + `conflict_agent.py`, branché
-sur le routeur InferHub) résout et pousse sans intervention humaine.
+Cette ligne vient de la branche B et intègre aussi l'intention de la branche A.
+Elle contredit volontairement la variante A pour produire un conflit de fusion
+réel sur le même fichier et la même ligne, et prouver que l'agent de conflit de
+la file (`pr-auto-merge` + `conflict_agent.py`, branché sur le routeur InferHub)
+résout et pousse la PR : elle passe de DIRTY à mergée sans qu'un humain
+n'écrive une ligne.
