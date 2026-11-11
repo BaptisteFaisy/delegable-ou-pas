@@ -71,18 +71,60 @@ describe('conclusion honnête', () => {
     expect(conclude(agent, human, 20, UNBALANCED)).toBe('not-enough-data');
   });
 
-  it('conclut « pareil » quand les fourchettes se recouvrent', () => {
+  it('ne dit plus « pareil » sur le seul recouvrement : la différence décide (34/41 vs 32/41)', () => {
     const agent = proportion(34, 41);
     const human = proportion(32, 41);
+    // The raw intervals still overlap (corrected arbiter: see difference.ts).
     expect(intervalsOverlap(agent, human)).toBe(true);
-    expect(conclude(agent, human, 20, BALANCED)).toBe('same');
+    // The difference interval (≈ [-0,125 ; 0,219]) contains 0 and is wider than
+    // the 10-point equivalence margin: neither a gap nor equivalence → honest
+    // "we do not know", where the old rule wrongly said "same".
+    expect(conclude(agent, human, 20, BALANCED)).toBe('not-enough-data');
   });
 
-  it('considère des fourchettes qui se touchent comme recouvrantes', () => {
+  it('ne dit plus « pareil » sur des fourchettes qui se touchent : la différence exclut 0', () => {
     const agent = { n: 40, rate: 0.9, ciLow: 0.8, ciHigh: 0.95 };
     const human = { n: 40, rate: 0.7, ciLow: 0.6, ciHigh: 0.8 };
     expect(intervalsOverlap(agent, human)).toBe(true);
-    expect(conclude(agent, human, 20, BALANCED)).toBe('same');
+    // Touching bounds used to count as "same". The difference interval here
+    // excludes 0 (≈ [0,059 ; 0,341]), so the gap is established after all.
+    expect(conclude(agent, human, 20, BALANCED)).toBe('better');
+  });
+
+  it('établit l\'écart que l\'ancien recouvrement appelait « pareil » (60/100 vs 45/100)', () => {
+    const agent = proportion(60, 100);
+    const human = proportion(45, 100);
+    // Wilson: [0,502 ; 0,691] et [0,356 ; 0,548] — they overlap, and the merged
+    // rule concluded "same". Newcombe on the difference ≈ [0,012 ; 0,280]:
+    // it excludes 0, so the gap is established. This is the proof of the fix.
+    expect(intervalsOverlap(agent, human)).toBe(true);
+    expect(conclude(agent, human, 20, BALANCED)).toBe('better');
+  });
+
+  it('répond honnêtement « on ne sait pas » pour 34/41 vs 32/37 (SPEC §7 règle 3)', () => {
+    const agent = proportion(34, 41);
+    const human = proportion(32, 37);
+    // Difference ≈ -0,036, its interval contains 0 → no established gap; TOST
+    // at 0,10 does not establish equivalence → not-enough-data.
+    expect(conclude(agent, human, 20, BALANCED)).toBe('not-enough-data');
+  });
+
+  it('accepte une marge d\'équivalence personnalisée pour conclure « pareil »', () => {
+    const agent = proportion(34, 41);
+    const human = proportion(32, 37);
+    expect(conclude(agent, human, 20, BALANCED, 0.30)).toBe('same');
+  });
+
+  it('conclut « pire »/« mieux » sur des taux extrêmes 0 contre 1', () => {
+    const zero = proportion(0, 20);
+    const one = proportion(20, 20);
+    expect(conclude(zero, one, 20, BALANCED)).toBe('worse');
+    expect(conclude(one, zero, 20, BALANCED)).toBe('better');
+  });
+
+  it('refuse de conclure quand un bras n\'a aucun ticket mesuré (n = 0)', () => {
+    expect(conclude(proportion(0, 0), proportion(45, 100), 20, BALANCED)).toBe('not-enough-data');
+    expect(conclude(proportion(60, 100), proportion(0, 0), 20, BALANCED)).toBe('not-enough-data');
   });
 
   it('conclut « mieux » quand la fourchette des agents est au-dessus', () => {
