@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Délégable ou pas ? — Should an agent take this ticket?</title>
-<meta name="description" content="Forge app for Jira: which tickets to hand to a coding agent, decided from the team's own history with honest statistics. Codegeist 2026.">
+<meta name="description" content="Forge app for Jira: which tickets to hand to a coding agent, decided from the team's own history with honest statistics. Every screen and every feature, rendered from the sample dataset. Codegeist 2026.">
 <link rel="stylesheet" href="styles.css">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 </head>
@@ -18,7 +18,8 @@
     <span class="brand-name" data-fr="Délégable ou pas ?" data-en="Delegable or not?">Délégable ou pas ?</span>
   </div>
   <nav class="topnav">
-    <a href="#demo" data-fr="Démo" data-en="Demo">Démo</a>
+    <a href="#ecrans" data-fr="Écrans" data-en="Screens">Écrans</a>
+    <a href="#fonctionnalites" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</a>
     <a href="#methode" data-fr="Méthode" data-en="Method">Méthode</a>
     <a href="#outils-mcp" data-fr="Outils MCP" data-en="MCP tools">Outils MCP</a>
     <a href="#architecture" data-fr="Architecture" data-en="Architecture">Architecture</a>
@@ -35,10 +36,11 @@
   <h1 data-fr="Cet agent peut-il prendre ce ticket ?" data-en="Should an agent take this ticket?">Cet agent peut-il prendre ce ticket ?</h1>
   <p class="lede" data-fr="L’équipe sait, d’après son propre historique et avec une statistique honnête, quel travail confier à un agent de code, lequel confier sous relecture renforcée et lequel garder — et chaque ticket porte cette recommandation, avec les tickets passés qui la fondent." data-en="From its own history and with honest statistics, the team knows which work to hand to a coding agent, which to hand over under hardened review, and which to keep — and every ticket carries that recommendation, together with the past tickets it is based on.">L’équipe sait, d’après son propre historique et avec une statistique honnête, quel travail confier à un agent de code, lequel confier sous relecture renforcée et lequel garder — et chaque ticket porte cette recommandation, avec les tickets passés qui la fondent.</p>
   <p class="hero-cta">
-    <a class="button" href="#demo" data-fr="Voir la démo" data-en="See the demo">Voir la démo</a>
+    <a class="button" href="#ecrans" data-fr="Voir les huit écrans" data-en="See the eight screens">Voir les huit écrans</a>
+    <a class="button ghost" href="#fonctionnalites" data-fr="Voir les fonctionnalités" data-en="See the features">Voir les fonctionnalités</a>
     <a class="button ghost" href="https://github.com/BaptisteFaisy/delegable-ou-pas" data-fr="Lire le code" data-en="Read the code">Lire le code</a>
   </p>
-  <p class="sample-banner" data-fr="Toutes les données de cette page sont un jeu d’exemple, marqué comme tel. Aucun ticket réel, aucun nom de personne." data-en="Every figure on this page is sample data, labelled as such. No real ticket, no person’s name.">Toutes les données de cette page sont un jeu d’exemple, marqué comme tel. Aucun ticket réel, aucun nom de personne.</p>
+  <p class="sample-banner" data-fr="Toutes les données de cette page sont le jeu d’exemple du dépôt, marqué comme tel. Elles sont produites par le vrai code de l’application — aucun chiffre n’est écrit à la main ici. Aucun ticket réel, aucun nom de personne." data-en="Every figure on this page is the repository’s sample dataset, labelled as such. It is produced by the application’s real code — no number is hand-written here. No real ticket, no person’s name.">Toutes les données de cette page sont le jeu d’exemple du dépôt, marqué comme tel. Elles sont produites par le vrai code de l’application — aucun chiffre n’est écrit à la main ici. Aucun ticket réel, aucun nom de personne.</p>
 </section>
 
 <section class="problem">
@@ -49,38 +51,168 @@
     <li><strong data-fr="La direction demande des chiffres" data-en="Leadership asks for numbers">La direction demande des chiffres</strong><span data-fr="Elle reçoit des anecdotes." data-en="It gets anecdotes.">Elle reçoit des anecdotes.</span></li>
     <li><strong data-fr="Quand on mesure, on mesure mal" data-en="When teams measure, they measure badly">Quand on mesure, on mesure mal</strong><span data-fr="On a confié aux agents les tickets faciles : le résultat est flatteur et faux." data-en="The easy tickets went to the agents: the result is flattering and wrong.">On a confié aux agents les tickets faciles : le résultat est flatteur et faux.</span></li>
   </ul>
-  <p class="note" data-fr="Tout ce qu’il faut existe déjà : Jira connaît la suite de chaque ticket, le graphe d’Atlassian relie chaque ticket à ses commits puis à leurs PR et à leurs relecteurs, les agents signent leurs commits. Il manquait l’outil qui rapproche ces trois sources — et qui a la rigueur de dire « on ne sait pas »." data-en="Everything needed already exists: Jira knows what happened to each ticket, the Atlassian graph links every ticket to its commits, then to their pull requests and reviewers, and coding agents sign their commits. What was missing is the tool that brings these three sources together — and is rigorous enough to say “we do not know”.">Tout ce qu’il faut existe déjà : Jira connaît la suite de chaque ticket, le graphe d’Atlassian relie chaque ticket à ses commits puis à leurs PR et à leurs relecteurs, les agents signent leurs commits. Il manquait l’outil qui rapproche ces trois sources — et qui a la rigueur de dire « on ne sait pas ».</p>
 </section>
 
-<section id="demo">
-  <h2 data-fr="Démo — le jeu d’exemple" data-en="Demo — the sample dataset">Démo — le jeu d’exemple</h2>
-  <p class="section-note" data-fr="Rendu dans le navigateur, sans serveur ni appel réseau : les chiffres viennent du jeu d’exemple du dépôt (douze mois, trois époques, un projet peuplé)." data-en="Rendered in the browser, with no server and no network call: the figures come from the repository’s sample dataset (twelve months, three epochs, one populated project).">Rendu dans le navigateur, sans serveur ni appel réseau : les chiffres viennent du jeu d’exemple du dépôt (douze mois, trois époques, un projet peuplé).</p>
+<nav id="demo-nav" class="sticky-nav" aria-label="Sommaire de la démonstration"></nav>
 
-  <h3 data-fr="1 · La carte sur le ticket" data-en="1 · The card on the ticket">1 · La carte sur le ticket</h3>
-  <div id="carte-ticket"></div>
+<section id="ecrans">
+  <h2 data-fr="Les huit écrans de l’app" data-en="The app’s eight screens">Les huit écrans de l’app</h2>
+  <p class="section-note" data-fr="Ce que voit chaque utilisateur, rendu ici depuis le jeu d’exemple : le développeur sur son ticket, le tech lead sur son projet, le responsable d’ingénierie sur la calibration, l’orchestrateur par MCP." data-en="What each user sees, rendered here from the sample dataset: the developer on a ticket, the tech lead on a project, the engineering manager on calibration, the orchestrator through MCP.">Ce que voit chaque utilisateur, rendu ici depuis le jeu d’exemple : le développeur sur son ticket, le tech lead sur son projet, le responsable d’ingénierie sur la calibration, l’orchestrateur par MCP.</p>
 
-  <h3 data-fr="2 · La carte de délégation" data-en="2 · The delegation map">2 · La carte de délégation</h3>
-  <div id="carte-delegation" class="scroll"></div>
+  <section class="panel" id="ecran-carte-ticket">
+    <h3 data-fr="1 · La carte sur le ticket" data-en="1 · The card on the ticket">1 · La carte sur le ticket</h3>
+    <p class="panel-intro" data-fr="jira:issuePanel — la recommandation, la cohorte, les chiffres avec effectifs et fourchettes, les tickets de référence, les conditions, la confiance, la décision prise, l’implication relevée et sa source." data-en="jira:issuePanel — the recommendation, the cohort, figures with sample sizes and intervals, reference tickets, conditions, confidence, the decision taken, the detected involvement and its source.">jira:issuePanel — la recommandation, la cohorte, les chiffres avec effectifs et fourchettes, les tickets de référence, les conditions, la confiance, la décision prise, l’implication relevée et sa source.</p>
+    <div class="panel-body"></div>
+  </section>
 
-  <h3 data-fr="3 · Le détail d’une cohorte" data-en="3 · One cohort in detail">3 · Le détail d’une cohorte</h3>
-  <div id="cohorte"></div>
+  <section class="panel" id="ecran-carte-delegation">
+    <h3 data-fr="2 · La carte de délégation" data-en="2 · The delegation map">2 · La carte de délégation</h3>
+    <p class="panel-intro" data-fr="jira:projectPage — la matrice natures × zones aux quatre couleurs, la q-valeur de chaque case après correction de multiplicité, la part de gris, les écarts à la recommandation." data-en="jira:projectPage — the natures × zones matrix in four colours, each cell’s q-value after multiplicity correction, the share of grey, the deviations from the recommendation.">jira:projectPage — la matrice natures × zones aux quatre couleurs, la q-valeur de chaque case après correction de multiplicité, la part de gris, les écarts à la recommandation.</p>
+    <div class="panel-body"></div>
+  </section>
 
-  <h3 data-fr="4 · Les époques" data-en="4 · The epochs">4 · Les époques</h3>
-  <div id="epoques"></div>
+  <section class="panel" id="ecran-cohorte">
+    <h3 data-fr="3 · Le détail d’une cohorte" data-en="3 · One cohort in detail">3 · Le détail d’une cohorte</h3>
+    <p class="panel-intro" data-fr="Les deux bras, leurs effectifs, leurs fourchettes, l’intervalle de la différence, la composition, l’appariement, les tickets du fondement, époque par époque." data-en="Both arms, their sample sizes, their intervals, the interval of the difference, the composition, the matching, the evidence tickets, epoch by epoch.">Les deux bras, leurs effectifs, leurs fourchettes, l’intervalle de la différence, la composition, l’appariement, les tickets du fondement, époque par époque.</p>
+    <div class="panel-body"></div>
+  </section>
 
-  <h3 data-fr="5 · Peut-on croire cette app ?" data-en="5 · Can you trust this app?">5 · Peut-on croire cette app ?</h3>
-  <div id="calibration"></div>
+  <section class="panel" id="ecran-sprint">
+    <h3 data-fr="4 · La répartition du sprint" data-en="4 · The sprint breakdown">4 · La répartition du sprint</h3>
+    <p class="panel-intro" data-fr="jira:sprintAction — les tickets par recommandation et la part délégable en points." data-en="jira:sprintAction — tickets by recommendation and the delegable share of story points.">jira:sprintAction — les tickets par recommandation et la part délégable en points.</p>
+    <div class="panel-body"></div>
+  </section>
 
-  <h3 data-fr="6 · La couverture" data-en="6 · Coverage">6 · La couverture</h3>
-  <div id="couverture"></div>
+  <section class="panel" id="ecran-reglages">
+    <h3 data-fr="5 · Les réglages du projet" data-en="5 · Project settings">5 · Les réglages du projet</h3>
+    <p class="panel-intro" data-fr="jira:projectSettingsPage — mentions de commit et mentions vues, date d’adoption, natures, zones, tailles, seuil, zones sensibles, définition de la relecture renforcée, époques." data-en="jira:projectSettingsPage — commit mentions and mentions seen, adoption date, natures, zones, sizes, threshold, sensitive zones, the definition of hardened review, epochs.">jira:projectSettingsPage — mentions de commit et mentions vues, date d’adoption, natures, zones, tailles, seuil, zones sensibles, définition de la relecture renforcée, époques.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="ecran-couverture">
+    <h3 data-fr="6 · La couverture" data-en="6 · Coverage">6 · La couverture</h3>
+    <p class="panel-intro" data-fr="Part d’implication connue, état de chaque droit sur le graphe, niveau de capacité, dernière collecte. Un droit manquant est dit, jamais un zéro silencieux." data-en="Share of known involvement, state of every graph permission, capability level, last collection. A missing right is stated, never a silent zero.">Part d’implication connue, état de chaque droit sur le graphe, niveau de capacité, dernière collecte. Un droit manquant est dit, jamais un zéro silencieux.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="ecran-calibration">
+    <h3 data-fr="7 · Peut-on croire cette app ?" data-en="7 · Can you trust this app?">7 · Peut-on croire cette app ?</h3>
+    <p class="panel-intro" data-fr="La calibration : les taux par recommandation, Brier, log-loss, AUC, la courbe de fiabilité, par cohorte et par version de politique, et le verdict." data-en="Calibration: rates by recommendation, Brier, log-loss, AUC, the reliability curve, by cohort and by policy version, and the verdict.">La calibration : les taux par recommandation, Brier, log-loss, AUC, la courbe de fiabilité, par cohorte et par version de politique, et le verdict.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="ecran-gadget">
+    <h3 data-fr="8 · Le gadget de tableau de bord" data-en="8 · The dashboard gadget">8 · Le gadget de tableau de bord</h3>
+    <p class="panel-intro" data-fr="jira:dashboardGadget — la carte réduite et la part de gris." data-en="jira:dashboardGadget — the reduced map and the share of grey.">jira:dashboardGadget — la carte réduite et la part de gris.</p>
+    <div class="panel-body"></div>
+  </section>
+</section>
+
+<section id="fonctionnalites">
+  <h2 data-fr="Les fonctionnalités, une par une" data-en="Every feature, one by one">Les fonctionnalités, une par une</h2>
+  <p class="section-note" data-fr="Chaque panneau rend le résultat du vrai module correspondant, exécuté sur le jeu d’exemple : les formules ne sont pas réécrites pour le site." data-en="Each panel renders the output of the corresponding real module, run on the sample dataset: the formulas are not rewritten for the site.">Chaque panneau rend le résultat du vrai module correspondant, exécuté sur le jeu d’exemple : les formules ne sont pas réécrites pour le site.</p>
+
+  <section class="panel" id="feat-implication">
+    <h3 data-fr="Reconnaître le travail d’un agent : les cinq sources" data-en="Recognising an agent’s work: the five sources">Reconnaître le travail d’un agent : les cinq sources</h3>
+    <p class="panel-intro" data-fr="Déclaration MCP, auteur robot, mention de commit, champ de clôture, date d’adoption. La meilleure source disponible est retenue — et affichée. L’inconnu n’est jamais compté « sans agent »." data-en="MCP declaration, bot author, commit mention, closure field, adoption date. The best available source wins — and is shown. Unknown is never counted as “without agent”.">Déclaration MCP, auteur robot, mention de commit, champ de clôture, date d’adoption. La meilleure source disponible est retenue — et affichée. L’inconnu n’est jamais compté « sans agent ».</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-mentions">
+    <h3 data-fr="Le catalogue de mentions de commit" data-en="The commit mention catalogue">Le catalogue de mentions de commit</h3>
+    <p class="panel-intro" data-fr="Motifs réglables, mentions réellement vues sur les commits de l’équipe à confirmer. Du message, l’app ne garde qu’un fait : le message n’est jamais stocké." data-en="Adjustable patterns, mentions actually seen on the team’s commits, awaiting confirmation. From a message the app keeps one fact only: the message is never stored.">Motifs réglables, mentions réellement vues sur les commits de l’équipe à confirmer. Du message, l’app ne garde qu’un fait : le message n’est jamais stocké.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-ecart-etabli">
+    <h3 data-fr="« Écart établi » : testé sur la différence" data-en="“Established gap”: tested on the difference">« Écart établi » : testé sur la différence</h3>
+    <p class="panel-intro" data-fr="Deux intervalles qui se recouvrent ne prouvent pas l’absence de différence. L’app teste l’intervalle de Newcombe sur la différence, et « pareil » par équivalence (TOST)." data-en="Two overlapping intervals do not prove there is no difference. The app tests the Newcombe interval of the difference, and “same” through equivalence (TOST).">Deux intervalles qui se recouvrent ne prouvent pas l’absence de différence. L’app teste l’intervalle de Newcombe sur la différence, et « pareil » par équivalence (TOST).</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-survie">
+    <h3 data-fr="Le délai par analyse de survie" data-en="Lead time through survival analysis">Le délai par analyse de survie</h3>
+    <p class="panel-intro" data-fr="Kaplan-Meier censure les tickets encore ouverts au lieu de les ignorer, log-rank teste l’écart, la part censurée est affichée." data-en="Kaplan-Meier censors tickets still open instead of ignoring them, log-rank tests the gap, the censored share is displayed.">Kaplan-Meier censure les tickets encore ouverts au lieu de les ignorer, log-rank teste l’écart, la part censurée est affichée.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-multiplicite">
+    <h3 data-fr="35 cases testées, pas 35 conclusions" data-en="35 cells tested, not 35 conclusions">35 cases testées, pas 35 conclusions</h3>
+    <p class="panel-intro" data-fr="Correction de Benjamini-Hochberg : chaque case porte sa q-valeur, et la carte dit combien survivent et combien de faux positifs sont attendus." data-en="Benjamini-Hochberg correction: every cell carries its q-value, and the map states how many survive and how many false positives are expected.">Correction de Benjamini-Hochberg : chaque case porte sa q-valeur, et la carte dit combien survivent et combien de faux positifs sont attendus.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-appariement">
+    <h3 data-fr="Conclure malgré des bras déséquilibrés" data-en="Concluding despite unbalanced arms">Conclure malgré des bras déséquilibrés</h3>
+    <p class="panel-intro" data-fr="Appariement exact nature × zone × taille, puis plus proche voisin sur score de propension, avec la balance avant/après et le nombre de tickets jetés." data-en="Exact matching on nature × zone × size, then nearest neighbour on a propensity score, with the before/after balance and the number of dropped tickets.">Appariement exact nature × zone × taille, puis plus proche voisin sur score de propension, avec la balance avant/après et le nombre de tickets jetés.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-puissance">
+    <h3 data-fr="La puissance calculée avant l’essai" data-en="Power computed before the trial">La puissance calculée avant l’essai</h3>
+    <p class="panel-intro" data-fr="Effectif par bras, effet minimal détectable, puissance atteignable — et « cet essai n’est pas réalisable chez vous » quand le rythme de tickets ne suffit pas." data-en="Sample size per arm, minimum detectable effect, achievable power — and “this trial is not feasible for you” when the ticket rate is too low.">Effectif par bras, effet minimal détectable, puissance atteignable — et « cet essai n’est pas réalisable chez vous » quand le rythme de tickets ne suffit pas.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-sequentiel">
+    <h3 data-fr="Regarder tous les jours sans tricher" data-en="Looking every day without cheating">Regarder tous les jours sans tricher</h3>
+    <p class="panel-intro" data-fr="Frontières d’O’Brien-Fleming, dépense d’alpha, arrêt de sécurité si un bras accumule les réouvertures. Cinq regards à z ≈ 1,8 ne concluent pas." data-en="O’Brien-Fleming boundaries, alpha spending, safety stop when one arm accumulates reopenings. Five looks at z ≈ 1.8 do not conclude.">Frontières d’O’Brien-Fleming, dépense d’alpha, arrêt de sécurité si un bras accumule les réouvertures. Cinq regards à z ≈ 1,8 ne concluent pas.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-essai">
+    <h3 data-fr="L’essai contrôlé : le seul « prouvé »" data-en="The controlled trial: the only “proven”">L’essai contrôlé : le seul « prouvé »</h3>
+    <p class="panel-intro" data-fr="Le sort décide qui prend le ticket, le tirage est reproductible, un tirage non respecté sort le ticket de l’essai." data-en="Chance decides who takes the ticket, the draw is reproducible, an unrespected draw removes the ticket from the trial.">Le sort décide qui prend le ticket, le tirage est reproductible, un tirage non respecté sort le ticket de l’essai.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-naive">
+    <h3 data-fr="Le chiffre naïf contre sa décomposition" data-en="The naive figure against its breakdown">Le chiffre naïf contre sa décomposition</h3>
+    <p class="panel-intro" data-fr="Le total que tout le monde cite, étiqueté comme tel, à côté des cohortes qui le contredisent — et la preuve du biais de sélection." data-en="The figure everybody quotes, labelled as such, next to the cohorts that contradict it — and the evidence of selection bias.">Le total que tout le monde cite, étiqueté comme tel, à côté des cohortes qui le contredisent — et la preuve du biais de sélection.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-calibration-fine">
+    <h3 data-fr="La calibration fine" data-en="Fine-grained calibration">La calibration fine</h3>
+    <p class="panel-intro" data-fr="Brier, log-loss, AUC, courbe de fiabilité avec ses bins vides visibles, par cohorte et par version de politique." data-en="Brier, log-loss, AUC, reliability curve with its empty bins visible, by cohort and by policy version.">Brier, log-loss, AUC, courbe de fiabilité avec ses bins vides visibles, par cohorte et par version de politique.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-conditions">
+    <h3 data-fr="Des conditions exécutables" data-en="Executable conditions">Des conditions exécutables</h3>
+    <p class="panel-intro" data-fr="« Test de migration exigé » devient une vérification sur la PR. Non vérifiable vaut null : l’inconnu n’est ni un échec ni une réussite." data-en="“Migration test required” becomes a check on the pull request. Not verifiable is null: unknown is neither a failure nor a success.">« Test de migration exigé » devient une vérification sur la PR. Non vérifiable vaut null : l’inconnu n’est ni un échec ni une réussite.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-priorite">
+    <h3 data-fr="La collecte par valeur d’information" data-en="Collection by information value">La collecte par valeur d’information</h3>
+    <p class="panel-intro" data-fr="Le graphe ne se lit qu’en session utilisateur, par tranches. L’ordre maximise les cases qui sortent du gris, et chaque ticket choisi dit pourquoi." data-en="The graph is read only in a user session, in slices. The order maximises the cells leaving grey, and every chosen ticket says why.">Le graphe ne se lit qu’en session utilisateur, par tranches. L’ordre maximise les cases qui sortent du gris, et chaque ticket choisi dit pourquoi.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-jira-seul">
+    <h3 data-fr="Le repli sans aucun droit sur le graphe" data-en="The fallback with no graph permission at all">Le repli sans aucun droit sur le graphe</h3>
+    <p class="panel-intro" data-fr="Trois niveaux de capacité : complet, Jira seul, déclaratif. Le seuil s’élargit, et chaque capacité manquante produit une conséquence écrite." data-en="Three capability levels: full, Jira only, declared only. The threshold widens, and every missing capability produces a written consequence.">Trois niveaux de capacité : complet, Jira seul, déclaratif. Le seuil s’élargit, et chaque capacité manquante produit une conséquence écrite.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-epoques">
+    <h3 data-fr="Les époques" data-en="The epochs">Les époques</h3>
+    <p class="panel-intro" data-fr="Un changement d’outil, de modèle ou de consignes ouvre une époque. On ne mélange jamais deux époques, et les anciens chiffres restent visibles, grisés." data-en="A change of tool, model or instructions opens an epoch. Two epochs are never mixed, and old figures stay visible, greyed out.">Un changement d’outil, de modèle ou de consignes ouvre une époque. On ne mélange jamais deux époques, et les anciens chiffres restent visibles, grisés.</p>
+    <div class="panel-body"></div>
+  </section>
+
+  <section class="panel" id="feat-anonymat">
+    <h3 data-fr="Jamais par personne" data-en="Never per person">Jamais par personne</h3>
+    <p class="panel-intro" data-fr="Aucune statistique individuelle, aucun classement. Une cohorte portée par moins de trois personnes est masquée — et le dit." data-en="No individual statistic, no ranking. A cohort carried by fewer than three people is masked — and says so.">Aucune statistique individuelle, aucun classement. Une cohorte portée par moins de trois personnes est masquée — et le dit.</p>
+    <div class="panel-body"></div>
+  </section>
 </section>
 
 <section id="methode">
   <h2 data-fr="La méthode, vérifiable à la main" data-en="The method, verifiable by hand">La méthode, vérifiable à la main</h2>
-  <p class="section-note" data-fr="Un seul estimateur pour une proportion : l’intervalle de score de Wilson à z = 1,96. Des médianes pour les durées, jamais de moyennes. Les trois jeux de chiffres du cahier des charges tombent juste avec Wilson — essayez la calculette." data-en="One single estimator for a proportion: the Wilson score interval at z = 1.96. Medians for durations, never means. The three games of figures in the specification fall out of Wilson — try the calculator.">Un seul estimateur pour une proportion : l’intervalle de score de Wilson à z = 1,96. Des médianes pour les durées, jamais de moyennes. Les trois jeux de chiffres du cahier des charges tombent juste avec Wilson — essayez la calculette.</p>
-
+  <p class="section-note" data-fr="Un seul estimateur pour une proportion : l’intervalle de score de Wilson à z = 1,96. Des médianes pour les durées, jamais de moyennes. Essayez la calculette : elle utilise la même fonction que l’application." data-en="One single estimator for a proportion: the Wilson score interval at z = 1.96. Medians for durations, never means. Try the calculator: it uses the same function as the application.">Un seul estimateur pour une proportion : l’intervalle de score de Wilson à z = 1,96. Des médianes pour les durées, jamais de moyennes. Essayez la calculette : elle utilise la même fonction que l’application.</p>
   <div id="jeux-de-chiffres"></div>
-
   <form id="calculette" class="card calculator" autocomplete="off">
     <label for="wilson-succes" data-fr="clôtures propres" data-en="clean closes">clôtures propres</label>
     <input id="wilson-succes" type="number" min="0" max="100000" step="1" value="34" data-fr-ph="succès" data-en-ph="successes" placeholder="succès">
@@ -89,20 +221,22 @@
     <output id="wilson-sortie" for="wilson-succes wilson-total"></output>
     <p class="advice" data-fr="Sous 20 tickets par bras, l’app refuse de conclure : « pas assez de recul » est une réponse." data-en="Below 20 tickets per arm the app refuses to conclude: “not enough history” is an answer.">Sous 20 tickets par bras, l’app refuse de conclure : « pas assez de recul » est une réponse.</p>
   </form>
-
   <h3 data-fr="Les huit règles de la comparaison honnête" data-en="The eight rules of honest comparison">Les huit règles de la comparaison honnête</h3>
   <ol id="regles" class="rules"></ol>
-
   <h3 data-fr="Le vocabulaire est opposable" data-en="The vocabulary is binding">Le vocabulaire est opposable</h3>
-  <p class="section-note" data-fr="« Constaté », « écart établi », « écart non établi ». Le mot « prouvé » est réservé à l’essai contrôlé : pendant quatre semaines, dans une cohorte où la conclusion est « on ne sait pas », le sort décide qui de l’agent ou de l’humain prend chaque ticket admissible. C’est le seul chiffre que l’app qualifie de prouvé." data-en="“Observed”, “established gap”, “no established gap”. The word “proven” is reserved for the controlled trial: for four weeks, in a cohort whose conclusion is “we do not know”, chance decides whether the agent or the human takes each eligible ticket. That is the only figure the app calls proven.">« Constaté », « écart établi », « écart non établi ». Le mot « prouvé » est réservé à l’essai contrôlé : pendant quatre semaines, dans une cohorte où la conclusion est « on ne sait pas », le sort décide qui de l’agent ou de l’humain prend chaque ticket admissible. C’est le seul chiffre que l’app qualifie de prouvé.</p>
+  <p class="section-note" data-fr="« Constaté », « écart établi », « écart non établi ». Le mot « prouvé » est réservé à l’essai contrôlé : c’est le seul chiffre que l’app qualifie ainsi." data-en="“Observed”, “established gap”, “no established gap”. The word “proven” is reserved for the controlled trial: it is the only figure the app calls that.">« Constaté », « écart établi », « écart non établi ». Le mot « prouvé » est réservé à l’essai contrôlé : c’est le seul chiffre que l’app qualifie ainsi.</p>
 </section>
 
 <section id="agents">
   <h2 data-fr="Pour les agents et les orchestrateurs" data-en="For agents and orchestrators">Pour les agents et les orchestrateurs</h2>
-  <p class="section-note" data-fr="Neuf outils exposés par rovo:mcp. Les six premiers sont des GET : une règle d’automatisation peut les appeler, et un agent lancé par automatisation n’appelle que des GET. Aucun outil n’accepte un nom de personne en entrée, aucun n’en renvoie." data-en="Nine tools exposed through rovo:mcp. The first six are GET: an automation rule can call them, and an agent started by an automation only calls GETs. No tool accepts a person’s name as input, none returns one.">Neuf outils exposés par rovo:mcp. Les six premiers sont des GET : une règle d’automatisation peut les appeler, et un agent lancé par automatisation n’appelle que des GET. Aucun outil n’accepte un nom de personne en entrée, aucun n’en renvoie.</p>
+  <p class="section-note" data-fr="Neuf outils exposés par rovo:mcp. Les six premiers sont des GET : une règle d’automatisation peut les appeler. Aucun outil n’accepte un nom de personne en entrée, aucun n’en renvoie." data-en="Nine tools exposed through rovo:mcp. The first six are GET: an automation rule can call them. No tool accepts a person’s name as input, none returns one.">Neuf outils exposés par rovo:mcp. Les six premiers sont des GET : une règle d’automatisation peut les appeler. Aucun outil n’accepte un nom de personne en entrée, aucun n’en renvoie.</p>
   <div id="outils-mcp" class="scroll"></div>
+  <div class="panel" id="mcp-appels">
+    <h3 data-fr="Un appel réel, rendu tel quel" data-en="A real call, rendered as is">Un appel réel, rendu tel quel</h3>
+    <div class="panel-body"></div>
+  </div>
   <div class="two-col">
-    <div class="card">
+    <div class="card panel" id="agent-rovo">
       <h3 data-fr="Agent Rovo « Conseiller de délégation »" data-en="Rovo agent “Delegation advisor”">Agent Rovo « Conseiller de délégation »</h3>
       <ul class="plain">
         <li data-fr="« Que peut-on confier aux agents dans le sprint 42 ? »" data-en="“What can we hand to agents in sprint 42?”">« Que peut-on confier aux agents dans le sprint 42 ? »</li>
@@ -112,7 +246,7 @@
       </ul>
       <p class="advice" data-fr="Il répond avec les effectifs et les fourchettes, et dit « on ne sait pas » quand la cohorte le dit." data-en="It answers with sample sizes and intervals, and says “we do not know” when the cohort says so.">Il répond avec les effectifs et les fourchettes, et dit « on ne sait pas » quand la cohorte le dit.</p>
     </div>
-    <div class="card">
+    <div class="card panel" id="skill">
       <h3 data-fr="Skill « before-taking-work »" data-en="Skill “before-taking-work”">Skill « before-taking-work »</h3>
       <ol class="plain">
         <li data-fr="Interroger should-delegate avant de prendre un ticket." data-en="Call should-delegate before taking a ticket.">Interroger should-delegate avant de prendre un ticket.</li>
@@ -148,18 +282,18 @@
       </ul>
     </div>
   </div>
-  <p class="note" data-fr="Forge : rovo:mcp (9 outils), rovo:agent, rovo:skill, jira:issuePanel, jira:projectPage, jira:projectSettingsPage, jira:sprintAction, jira:dashboardGadget, deux champs personnalisés (« Recommandation », « Implication d’agent »), la fonction JQL delegable(), des déclencheurs sur création et mise à jour, un déclencheur planifié quotidien (900 s au plus), Forge SQL (14 tables) et le module llm pour la nature des tickets." data-en="Forge: rovo:mcp (9 tools), rovo:agent, rovo:skill, jira:issuePanel, jira:projectPage, jira:projectSettingsPage, jira:sprintAction, jira:dashboardGadget, two custom fields (“Recommendation”, “Agent involvement”), the delegable() JQL function, triggers on creation and update, a daily scheduled trigger (900 s at most), Forge SQL (14 tables) and the llm module for ticket nature.">Forge : rovo:mcp (9 outils), rovo:agent, rovo:skill, jira:issuePanel, jira:projectPage, jira:projectSettingsPage, jira:sprintAction, jira:dashboardGadget, deux champs personnalisés (« Recommandation », « Implication d’agent »), la fonction JQL delegable(), des déclencheurs sur création et mise à jour, un déclencheur planifié quotidien (900 s au plus), Forge SQL (14 tables) et le module llm pour la nature des tickets.</p>
+  <div id="panneau-architecture" class="panel"><div class="panel-body"></div></div>
 </section>
 
 <section id="juges">
   <h2 data-fr="Comment tester en dix minutes" data-en="How to test it in ten minutes">Comment tester en dix minutes</h2>
   <ol class="steps">
     <li data-fr="Mode démonstration : le jeu d’exemple ci-dessus, douze mois, trois époques, un projet peuplé. Tout est marqué « données d’exemple »." data-en="Demo mode: the sample dataset above — twelve months, three epochs, one populated project. Everything is labelled “sample data”.">Mode démonstration : le jeu d’exemple ci-dessus, douze mois, trois époques, un projet peuplé. Tout est marqué « données d’exemple ».</li>
-    <li data-fr="Agent Rovo : les quatre questions du §15." data-en="Rovo agent: the four questions of §15.">Agent Rovo : les quatre questions du §15.</li>
-    <li data-fr="Client MCP : should-delegate et list-delegable-work sur le projet d’exemple." data-en="MCP client: should-delegate and list-delegable-work on the sample project.">Client MCP : should-delegate et list-delegable-work sur le projet d’exemple.</li>
+    <li data-fr="Agent Rovo : les quatre questions ci-dessus." data-en="Rovo agent: the four questions above.">Agent Rovo : les quatre questions ci-dessus.</li>
+    <li data-fr="Client MCP : should-delegate et list-delegable-work sur le projet d’exemple — un appel réel est rendu ci-dessus." data-en="MCP client: should-delegate and list-delegable-work on the sample project — a real call is rendered above.">Client MCP : should-delegate et list-delegable-work sur le projet d’exemple — un appel réel est rendu ci-dessus.</li>
     <li data-fr="Données réelles : sur un site relié à un dépôt, l’écran de couverture guide l’attribution des droits, puis la collecte démarre." data-en="Real data: on a site linked to a repository, the coverage screen guides the granting of rights, then collection starts.">Données réelles : sur un site relié à un dépôt, l’écran de couverture guide l’attribution des droits, puis la collecte démarre.</li>
   </ol>
-  <p class="note" data-fr="Le site de démonstration fourni ne comprend pas de dépôt de code : le graphe n’y contient donc ni commit ni PR. La vidéo montre la collecte réelle sur un site relié à un dépôt, et l’écran de couverture interroge le graphe en direct sur les objets présents partout (tickets, utilisateurs, sprints)." data-en="The provided demo site has no code repository: its graph therefore contains neither commit nor pull request. The video shows real collection on a site linked to a repository, and the coverage screen queries the graph live on the objects present everywhere (issues, users, sprints).">Le site de démonstration fourni ne comprend pas de dépôt de code : le graphe n’y contient donc ni commit ni PR. La vidéo montre la collecte réelle sur un site relié à un dépôt, et l’écran de couverture interroge le graphe en direct sur les objets présents partout (tickets, utilisateurs, sprints).</p>
+  <p class="note" data-fr="Le site de démonstration fourni ne comprend pas de dépôt de code : le graphe n’y contient donc ni commit ni PR. La vidéo montre la collecte réelle sur un site relié à un dépôt." data-en="The provided demo site has no code repository: its graph therefore contains neither commit nor pull request. The video shows real collection on a site linked to a repository.">Le site de démonstration fourni ne comprend pas de dépôt de code : le graphe n’y contient donc ni commit ni PR. La vidéo montre la collecte réelle sur un site relié à un dépôt.</p>
 </section>
 
 <section id="non-negotiables">
@@ -185,26 +319,14 @@
     · <span data-fr="méthode" data-en="method">méthode</span> :
     <a href="https://github.com/BaptisteFaisy/delegable-ou-pas/blob/main/docs/METHODE.md">docs/METHODE.md</a>
   </p>
-  <p class="small" data-fr="Ce site est statique, sans suivi ni cookie. Les chiffres affichés sont un jeu d’exemple." data-en="This site is static, with no tracking and no cookie. The figures shown are sample data.">Ce site est statique, sans suivi ni cookie. Les chiffres affichés sont un jeu d’exemple.</p>
+  <p id="pied-meta" class="small"></p>
+  <p class="small" data-fr="Ce site est statique, sans suivi ni cookie. Les chiffres affichés viennent du jeu d’exemple du dépôt, calculés par le vrai code de l’application." data-en="This site is static, with no tracking and no cookie. The figures shown come from the repository’s sample dataset, computed by the application’s real code.">Ce site est statique, sans suivi ni cookie. Les chiffres affichés viennent du jeu d’exemple du dépôt, calculés par le vrai code de l’application.</p>
 </footer>
 
 <script src="donnees.js"></script>
 <script src="app.js"></script>
-<script>
-  // Les huit règles et la liste des outils sont rendues ici plutôt que dans
-  // app.js pour garder chaque fonction sous 50 lignes.
-  document.addEventListener('DOMContentLoaded', function () {
-    var regles = document.getElementById('regles');
-    if (regles && window.DONNEES) {
-      window.DONNEES.HONESTY_RULES.forEach(function (regle) {
-        var li = document.createElement('li');
-        li.setAttribute('data-fr', regle.fr);
-        li.setAttribute('data-en', regle.en);
-        li.textContent = regle.fr;
-        regles.appendChild(li);
-      });
-    }
-  });
-</script>
+<script src="rendu-commun.js"></script>
+<script src="rendu-ecrans.js"></script>
+<script src="rendu-panneaux.js"></script>
 </body>
 </html>
