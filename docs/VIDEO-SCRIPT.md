@@ -47,14 +47,13 @@ contredit les autres.
 
 - cohorte : *data migration · billing · size M — 26 tickets with an agent, 31
   without* ;
-- *Clean closure: 69 % with an agent (between 50 and 84 %), 87 % without
+- *Clean closure: 69 % with an agent (between 50 and 83 %), 87 % without
   (between 71 and 95 %)* ;
 - *Median lead time: 1.5 days with an agent, 3 days without* ;
 - *What went wrong with an agent: 5 reopenings out of 8, on a migration that
   cannot be replayed* ;
 - *Reference tickets: PROJ-207, PROJ-233, PROJ-301* ;
-- la recommandation (*agent, relecture renforcée*), la confiance (*moyenne*),
-  les conditions, et le bandeau de démonstration.
+- conditions, confiance, et le bandeau de démonstration.
 
 **Voix off.**
 > “This is the card a developer sees before taking the ticket. Every rate comes
@@ -62,18 +61,17 @@ contredit les autres.
 > names the cohort it rests on, the tickets behind the figures, and what went
 > wrong before. And when the data is thin, it says so.”
 
-*(Note de montage : la carte affiche « agent, relecture renforcée », confiance
-moyenne — exactement la carte du SPEC §8. L'écart de clôture propre n'est pas
-établi (« pareil »), mais le délai est meilleur, d'où la relecture renforcée.
-La voix off ne dit jamais « prouvé » ni « moins bien » : elle lit ce que l'app
-affiche. Voir `docs/DEMO-DATA.md` §6.)*
+*(Note de montage : la carte du domaine mergé affiche « pas assez de recul »
+sur ce ticket — l'écart n'est ni établi ni équivalent. La voix off ne dit
+jamais « prouvé » ni « moins bien » : elle lit ce que l'app affiche. Voir
+`docs/DEMO-DATA.md` §6.)*
 
 ## Plan 4 · 1:50 – 2:30 — la carte de délégation
 
 **À l'écran.** La matrice natures × zones : une case verte, une orange, une
-rouge, et beaucoup de gris. Clic sur la rouge (40 % [21 ; 62] contre 86 %
-[65 ; 96], écart établi) ; clic sur une grise (« on ne sait pas », 21 cohortes
-sur 26). Bascule d'époque : époque 2 → époque 3 (*new model, 14 September*).
+rouge, et beaucoup de gris. Clic sur la rouge (40 % [22 ; 61] contre 86 %
+[65 ; 95], écart établi) ; clic sur une grise (« on ne sait pas », 31 cohortes
+sur 36). Bascule d'époque : époque 2 → époque 3 (*new model, 14 September*).
 
 **Voix off.**
 > “One page for the tech lead: what can be handed over, what must stay with a
@@ -159,8 +157,8 @@ this ticket? Now you can answer with a number — and its interval. »*
 |---|---|---|
 | 0:00 – 0:30 | 1 | `PROJ-412` |
 | 0:30 – 1:00 | 2 | chiffre naïf + décomposition par cohorte |
-| 1:00 – 1:50 | 3 | cohorte 26/31, 69 % [50 ; 84] contre 87 % [71 ; 95], 1,5 j contre 3 j, 5 réouvertures sur 8, PROJ-207/233/301 |
-| 1:50 – 2:30 | 4 | matrice verte/orange/rouge/grise, 21 cohortes grises sur 26, bascule d'époque |
+| 1:00 – 1:50 | 3 | cohorte 26/31, 69 % [50 ; 83] contre 87 % [71 ; 95], 1,5 j contre 3 j, 5 réouvertures sur 8, PROJ-207/233/301 |
+| 1:50 – 2:30 | 4 | matrice verte/orange/rouge/grise, 31 cohortes grises sur 36, bascule d'époque |
 | 2:30 – 3:00 | 5 | `list-delegable-work` sprint 42, `should-delegate`, skill `before-taking-work` |
 | 3:00 – 3:25 | 6 | calibration |
 | 3:25 – 3:55 | 7 | `trial-demo-001`, état `running` |

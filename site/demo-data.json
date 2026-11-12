@@ -14,14 +14,14 @@
           "recommendation": "delegate"
         },
         {
-          "clean": 50,
+          "clean": 100,
           "interval": {
-            "ciHigh": 0.9054713451991339,
-            "ciLow": 0.09452865480086614,
-            "n": 2,
-            "rate": 0.5
+            "ciHigh": 1,
+            "ciLow": 0.2065432914738929,
+            "n": 1,
+            "rate": 1
           },
-          "n": 2,
+          "n": 1,
           "recommendation": "delegate-with-review"
         },
         {
@@ -44,11 +44,11 @@
         "en": "The accuracy of past recommendations, with the sample size and interval of every row. If “delegate” does not clearly beat “keep”, the app says so at the top of the page.",
         "fr": "La justesse des recommandations passées, avec l’effectif et la fourchette de chaque ligne. Si « à confier » ne fait pas nettement mieux que « à garder », l’app l’écrit en tête de page."
       },
-      "tickets": 5
+      "tickets": 8
     },
     "carteDelegation": {
       "cells": 12,
-      "greyShare": 0.75,
+      "greyShare": 0.5833333333333334,
       "label": {
         "en": "The delegation map",
         "fr": "La carte de délégation"
@@ -59,85 +59,85 @@
             "col": 0,
             "colour": "unknown",
             "conclusion": "not-enough-data",
-            "n": 283,
+            "n": 626,
             "row": 1
+          },
+          {
+            "col": 3,
+            "colour": "delegate",
+            "conclusion": "better",
+            "n": 494,
+            "row": 6
+          },
+          {
+            "col": 3,
+            "colour": "delegate",
+            "conclusion": "same",
+            "n": 345,
+            "row": 0
+          },
+          {
+            "col": 2,
+            "colour": "review-hardened",
+            "conclusion": "worse",
+            "n": 217,
+            "row": 5
           },
           {
             "col": 0,
             "colour": "unknown",
             "conclusion": "not-enough-data",
-            "n": 112,
+            "n": 156,
+            "row": 0
+          },
+          {
+            "col": 3,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 153,
+            "row": 7
+          },
+          {
+            "col": 3,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 130,
+            "row": 5
+          },
+          {
+            "col": 0,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 118,
             "row": 0
           },
           {
             "col": 1,
             "colour": "review-hardened",
             "conclusion": "worse",
-            "n": 99,
-            "row": 2
-          },
-          {
-            "col": 3,
-            "colour": "delegate",
-            "conclusion": "better",
-            "n": 80,
-            "row": 6
-          },
-          {
-            "col": 2,
-            "colour": "delegate",
-            "conclusion": "better",
-            "n": 70,
+            "n": 106,
             "row": 2
           },
           {
             "col": 3,
             "colour": "unknown",
             "conclusion": "not-enough-data",
-            "n": 53,
-            "row": 5
-          },
-          {
-            "col": 3,
-            "colour": "unknown",
-            "conclusion": "not-enough-data",
-            "n": 39,
-            "row": 7
-          },
-          {
-            "col": 0,
-            "colour": "unknown",
-            "conclusion": "not-enough-data",
-            "n": 33,
+            "n": 85,
             "row": 0
           },
           {
-            "col": 0,
-            "colour": "unknown",
-            "conclusion": "not-enough-data",
-            "n": 25,
-            "row": 3
-          },
-          {
-            "col": 0,
-            "colour": "unknown",
-            "conclusion": "not-enough-data",
-            "n": 20,
-            "row": 3
+            "col": 2,
+            "colour": "delegate",
+            "conclusion": "better",
+            "n": 74,
+            "row": 2
           },
           {
             "col": 2,
             "colour": "unknown",
             "conclusion": "not-enough-data",
-            "n": 19,
-            "row": 2
-          },
-          {
-            "col": 0,
-            "colour": "unknown",
-            "conclusion": "not-enough-data",
-            "n": 13,
-            "row": 6
+            "n": 70,
+            "row": 7
           }
         ],
         "columns": [
@@ -204,13 +204,9 @@
           "zone": "billing"
         },
         "computedAt": "2026-11-30T12:00:00Z",
-        "conclusion": "same",
-        "conditions": [
-          "relecture renforcée : au moins 2 relecteurs",
-          "un relecteur responsable de la zone est requis",
-          "une preuve par critère d'acceptation"
-        ],
-        "confidence": "medium",
+        "conclusion": "not-enough-data",
+        "conditions": [],
+        "confidence": "low",
         "demo": true,
         "epochId": "epoch-3",
         "failureCauses": [
@@ -231,7 +227,7 @@
         "issueKey": "PROJ-412",
         "reasons": [
           "Cohorte : data-migration · billing · taille M (26 tickets avec agent, 31 sans)",
-          "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 84 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
+          "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 83 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
           "écart non établi"
         ],
         "referenceIssueKeys": [
@@ -239,7 +235,7 @@
           "PROJ-233",
           "PROJ-301"
         ],
-        "value": "delegate-with-review"
+        "value": "not-enough-data"
       },
       "label": {
         "en": "The card on the ticket",
@@ -249,33 +245,33 @@
         "en": "jira:issuePanel — the recommendation, the cohort, both arms with sample sizes and intervals, reference tickets, conditions, confidence, the decision taken and the detected involvement with its source.",
         "fr": "jira:issuePanel — la recommandation, la cohorte, les deux bras avec effectifs et fourchettes, les tickets de référence, les conditions, la confiance, la décision prise et l’implication relevée avec sa source."
       },
-      "tickets": 5
+      "tickets": 8
     },
     "cohorte": {
       "arms": {
         "agent": {
-          "ciHigh": 0.685892525250887,
-          "ciLow": 0.41245213738758246,
-          "n": 47,
-          "rate": 0.5531914893617021
+          "ciHigh": 0.641427378576938,
+          "ciLow": 0.37680695448409596,
+          "n": 51,
+          "rate": 0.5098039215686274
         },
         "human": {
-          "ciHigh": 0.9332320300570737,
-          "ciLow": 0.7472642307950509,
-          "n": 52,
-          "rate": 0.8653846153846154
+          "ciHigh": 0.898124385519693,
+          "ciLow": 0.6966928866143076,
+          "n": 55,
+          "rate": 0.8181818181818182
         }
       },
       "cohorte": "data-migration|billing|M",
       "difference": {
-        "ciHigh": -0.1345361808120678,
-        "ciLow": -0.46843280367181156,
-        "diff": -0.31219312602291327,
+        "ciHigh": -0.12925700188498257,
+        "ciLow": -0.4635520159960782,
+        "diff": -0.3083778966131908,
         "established": true,
-        "nA": 47,
-        "nB": 52,
-        "rateA": 0.5531914893617021,
-        "rateB": 0.8653846153846154
+        "nA": 51,
+        "nB": 55,
+        "rateA": 0.5098039215686274,
+        "rateB": 0.8181818181818182
       },
       "label": {
         "en": "One cohort in detail",
@@ -320,7 +316,7 @@
           "tickets-without-commit — the tickets without any commit — les tickets sans commit"
         ]
       },
-      "knownInvolvementShare": 0.5816326530612245,
+      "knownInvolvementShare": 0.5920381082000681,
       "label": {
         "en": "Coverage",
         "fr": "La couverture"
@@ -358,15 +354,15 @@
         "fr": "Part d’implication connue, état de chaque droit sur le graphe, niveau de capacité, dernière collecte. Un droit manquant est dit, jamais un zéro silencieux."
       },
       "unknown": {
-        "ciHigh": 0.4512081731892925,
-        "ciLow": 0.38623454794730816,
-        "n": 882,
-        "rate": 0.41836734693877553
+        "ciHigh": 0.425838940860575,
+        "ciLow": 0.39032513674387376,
+        "n": 2939,
+        "rate": 0.407961891799932
       }
     },
     "gadget": {
       "cells": 12,
-      "greyShare": 0.75,
+      "greyShare": 0.5833333333333334,
       "label": {
         "en": "The dashboard gadget",
         "fr": "Le gadget de tableau de bord"
@@ -476,14 +472,14 @@
       "byRecommendation": [
         {
           "recommendation": "delegate-with-review",
-          "tickets": 2
+          "tickets": 1
         },
         {
           "recommendation": "not-enough-data",
-          "tickets": 3
+          "tickets": 7
         }
       ],
-      "delegablePointsShare": 0.4,
+      "delegablePointsShare": 0.125,
       "label": {
         "en": "The sprint breakdown",
         "fr": "La répartition du sprint"
@@ -492,7 +488,7 @@
         "en": "jira:sprintAction — tickets by recommendation and the delegable share.",
         "fr": "jira:sprintAction — les tickets par recommandation et la part délégable."
       },
-      "tickets": 5
+      "tickets": 8
     }
   },
   "features": {
@@ -552,21 +548,39 @@
     },
     "appariement": {
       "balance": {
-        "balanced": true,
+        "balanced": false,
         "criteria": [
+          {
+            "after": -0.4759186508900295,
+            "before": -0.6155870112510925,
+            "name": "leadTimeH",
+            "ok": false
+          },
           {
             "after": 0,
             "before": 0,
-            "name": "leadTimeH",
+            "name": "nature:configuration",
+            "ok": true
+          },
+          {
+            "after": 0,
+            "before": 0,
+            "name": "zone:api",
+            "ok": true
+          },
+          {
+            "after": 0,
+            "before": 0,
+            "name": "size:S",
             "ok": true
           }
         ]
       },
       "cohorte": "configuration|api|S",
       "exact": {
-        "matchedShare": 0,
-        "pairs": 0,
-        "unmatchedAgent": 0,
+        "matchedShare": 0.875,
+        "pairs": 7,
+        "unmatchedAgent": 2,
         "unmatchedHuman": 0
       },
       "label": {
@@ -574,9 +588,9 @@
         "fr": "Conclure malgré des bras déséquilibrés"
       },
       "propensity": {
-        "matchedShare": 0,
-        "pairs": 0,
-        "unmatchedAgent": 0,
+        "matchedShare": 0.875,
+        "pairs": 7,
+        "unmatchedAgent": 2,
         "unmatchedHuman": 0
       },
       "summary": {
@@ -586,9 +600,9 @@
     },
     "calibrationFine": {
       "fine": {
-        "auc": 0.4166666666666667,
-        "brier": 0.27304,
-        "logLoss": 0.7455240564860734,
+        "auc": 0.6,
+        "brier": 0.2272,
+        "logLoss": 0.6441419195879423,
         "reliability": [
           {
             "bin": 0,
@@ -652,12 +666,12 @@
           },
           {
             "bin": 5,
-            "n": 3,
+            "n": 7,
             "observed": {
-              "ciHigh": 0.9385096847238394,
-              "ciLow": 0.20765495512648796,
-              "n": 3,
-              "rate": 0.6666666666666666
+              "ciHigh": 0.8417830777373732,
+              "ciLow": 0.2504542304090258,
+              "n": 7,
+              "rate": 0.5714285714285714
             },
             "predictedHigh": 0.6,
             "predictedLow": 0.5
@@ -676,12 +690,12 @@
           },
           {
             "bin": 7,
-            "n": 2,
+            "n": 1,
             "observed": {
-              "ciHigh": 0.9054713451991339,
-              "ciLow": 0.09452865480086614,
-              "n": 2,
-              "rate": 0.5
+              "ciHigh": 1,
+              "ciLow": 0.2065432914738929,
+              "n": 1,
+              "rate": 1
             },
             "predictedHigh": 0.8,
             "predictedLow": 0.7
@@ -716,16 +730,16 @@
         "en": "Fine-grained calibration",
         "fr": "La calibration fine"
       },
-      "records": 5,
+      "records": 8,
       "summary": {
         "en": "Brier, log loss, AUC, reliability curve with its empty bins visible, by cohort and by policy version — and the verdict that widens “not enough history” when the advice adds nothing.",
         "fr": "Brier, log-loss, AUC, courbe de fiabilité avec ses bins vides visibles, par cohorte et par version de politique — et le verdict qui élargit « pas assez de recul » quand les avis n’apportent rien."
       },
       "verdict": {
-        "auc": 0.4166666666666667,
-        "brier": 0.27304,
+        "auc": 0.6,
+        "brier": 0.2272,
         "informative": false,
-        "reason": "Pas assez de recul pour noter l’app : 2 tickets « à confier » et 0 « à garder », sous le seuil de 20 par seau.",
+        "reason": "Pas assez de recul pour noter l’app : 1 tickets « à confier » et 0 « à garder », sous le seuil de 20 par seau.",
         "widenUnknown": true
       }
     },
@@ -805,12 +819,12 @@
     },
     "ecartEtabli": {
       "avecAgent": {
-        "ciHigh": 0.9052426214366236,
-        "ciLow": 0.7153653834518579,
-        "n": 59,
-        "rate": 0.8305084745762712
+        "ciHigh": 0.8997500990435576,
+        "ciLow": 0.7507967733749072,
+        "n": 93,
+        "rate": 0.8387096774193549
       },
-      "cohorte": "bugfix|api|M",
+      "cohorte": "tests|web-ui|M",
       "counterExample": {
         "established": true,
         "label": {
@@ -842,19 +856,19 @@
         }
       },
       "difference": {
-        "ciHigh": 0.10085097904212367,
-        "ciLow": -0.17043182106742139,
-        "diff": -0.03741605372561563,
-        "established": false,
-        "nA": 59,
-        "nB": 53,
-        "rateA": 0.8305084745762712,
-        "rateB": 0.8679245283018868
+        "ciHigh": 0.2453521384791074,
+        "ciLow": 0.004127512640773226,
+        "diff": 0.1260659992584353,
+        "established": true,
+        "nA": 93,
+        "nB": 87,
+        "rateA": 0.8387096774193549,
+        "rateB": 0.7126436781609196
       },
       "equivalence": {
-        "ciHigh": 0.10085097904212367,
-        "ciLow": -0.17043182106742139,
-        "diff": -0.03741605372561563,
+        "ciHigh": 0.2453521384791074,
+        "ciLow": 0.004127512640773226,
+        "diff": 0.1260659992584353,
         "equivalent": false,
         "margin": 0.1
       },
@@ -863,10 +877,10 @@
         "fr": "Écart établi, testé sur la différence"
       },
       "sansAgent": {
-        "ciHigh": 0.9345222979931043,
-        "ciLow": 0.7515949119376506,
-        "n": 53,
-        "rate": 0.8679245283018868
+        "ciHigh": 0.7971440676338534,
+        "ciLow": 0.6101583136540148,
+        "n": 87,
+        "rate": 0.7126436781609196
       },
       "summary": {
         "en": "Two overlapping Wilson intervals do not prove there is no difference: the app tests the Newcombe interval of the difference, and “same” through equivalence (TOST).",
@@ -957,35 +971,35 @@
       "sources": [
         {
           "source": "mcp-declaration",
-          "tickets": 75
+          "tickets": 249
         },
         {
           "source": "bot-author",
-          "tickets": 69
+          "tickets": 236
         },
         {
           "source": "commit-mention",
-          "tickets": 63
+          "tickets": 229
         },
         {
           "source": "closure-field",
-          "tickets": 297
+          "tickets": 1017
         },
         {
           "source": "adoption-date",
-          "tickets": 378
+          "tickets": 1208
         }
       ],
       "summary": {
         "en": "Five sources, from the safest to the least safe; the best available wins and is shown. Unknown is never counted as “without agent”.",
         "fr": "Cinq sources, de la plus sûre à la moins sûre ; la meilleure disponible est retenue et affichée. L’inconnu n’est jamais compté « sans agent »."
       },
-      "tickets": 882,
+      "tickets": 2939,
       "unknownShare": {
-        "ciHigh": 0.4512081731892925,
-        "ciLow": 0.38623454794730816,
-        "n": 882,
-        "rate": 0.41836734693877553
+        "ciHigh": 0.425838940860575,
+        "ciLow": 0.39032513674387376,
+        "n": 2939,
+        "rate": 0.407961891799932
       }
     },
     "jiraSeul": {
@@ -1031,7 +1045,7 @@
       }
     },
     "mentions": {
-      "commits": 1715,
+      "commits": 5815,
       "example": {
         "agentName": "Claude Code",
         "found": true,
@@ -1068,7 +1082,7 @@
           "id": "copilot"
         }
       ],
-      "signedShare": 0.160932944606414,
+      "signedShare": 0.16337059329320722,
       "summary": {
         "en": "Adjustable patterns, each marked “to be confirmed by the team”. From a message the app keeps one fact only: whether a mention was found, and the agent name — the message is never stored.",
         "fr": "Motifs réglables, chacun marqué « à confirmer par l’équipe ». Du message, l’app ne garde qu’un fait : mention trouvée ou non, et le nom de l’agent — le message n’est jamais stocké."
@@ -1077,73 +1091,80 @@
     "multiplicite": {
       "cells": [
         {
-          "key": "data-migration|billing|M",
-          "pValue": 0.000572836168251993,
-          "qValue": 0.005728361682519931,
+          "key": "refactor|data-pipeline|L",
+          "pValue": 1.4456631857768979e-8,
+          "qValue": 1.5902295043545878e-7,
           "rank": 1,
           "significant": true
         },
         {
-          "key": "tests|web-ui|M",
-          "pValue": 0.012282738972377331,
-          "qValue": 0.06141369486188666,
+          "key": "data-migration|billing|M",
+          "pValue": 0.0007430558221604302,
+          "qValue": 0.004086807021882366,
           "rank": 2,
-          "significant": false
+          "significant": true
         },
         {
           "key": "data-migration|data-pipeline|M",
-          "pValue": 0.02328578255853829,
-          "qValue": 0.07761927519512764,
+          "pValue": 0.031675309346802086,
+          "qValue": 0.11563932498794315,
           "rank": 3,
           "significant": false
         },
         {
-          "key": "bugfix|api|S",
-          "pValue": 0.0755605675259415,
-          "qValue": 0.18890141881485373,
+          "key": "tests|web-ui|M",
+          "pValue": 0.042050663631979325,
+          "qValue": 0.11563932498794315,
           "rank": 4,
           "significant": false
         },
         {
-          "key": "tests|api|S",
-          "pValue": 0.3352344137959594,
-          "qValue": 0.6377946184716997,
+          "key": "ui-change|data-pipeline|M",
+          "pValue": 0.24304672613221678,
+          "qValue": 0.5347027974908769,
           "rank": 5,
           "significant": false
         },
         {
-          "key": "external-integration|api|L",
-          "pValue": 0.38267677108301984,
-          "qValue": 0.6377946184716997,
+          "key": "bugfix|api|M",
+          "pValue": 0.6701510283517259,
+          "qValue": 0.9013206019626332,
           "rank": 6,
           "significant": false
         },
         {
-          "key": "bugfix|api|M",
-          "pValue": 0.5816397014774904,
-          "qValue": 0.8309138592535578,
+          "key": "bugfix|web-ui|S",
+          "pValue": 0.6789344444059919,
+          "qValue": 0.9013206019626332,
           "rank": 7,
           "significant": false
         },
         {
-          "key": "external-integration|api|M",
-          "pValue": 0.7952497535349383,
-          "qValue": 0.9156050105391479,
+          "key": "bugfix|api|S",
+          "pValue": 0.7753113820828385,
+          "qValue": 0.9013206019626332,
           "rank": 8,
           "significant": false
         },
         {
-          "key": "data-migration|data-pipeline|S",
-          "pValue": 0.911008439507264,
-          "qValue": 0.9156050105391479,
+          "key": "configuration|api|S",
+          "pValue": 0.8384637819224633,
+          "qValue": 0.9013206019626332,
           "rank": 9,
           "significant": false
         },
         {
-          "key": "ui-change|web-ui|S",
-          "pValue": 0.9156050105391479,
-          "qValue": 0.9156050105391479,
+          "key": "bugfix|web-ui|M",
+          "pValue": 0.8751577481368337,
+          "qValue": 0.9013206019626332,
           "rank": 10,
+          "significant": false
+        },
+        {
+          "key": "ui-change|web-ui|S",
+          "pValue": 0.9013206019626332,
+          "qValue": 0.9013206019626332,
+          "rank": 11,
           "significant": false
         }
       ],
@@ -1154,8 +1175,8 @@
       "note": {
         "expectedFalse": 1.75,
         "method": "benjamini-hochberg",
-        "surviving": 1,
-        "tested": 10
+        "surviving": 2,
+        "tested": 11
       },
       "summary": {
         "en": "A 35-cell map tested at 5 % mechanically yields 1.75 false positives: every cell carries its q-value and the map states how many survive.",
@@ -1167,190 +1188,206 @@
         "cells": [
           {
             "agent": {
-              "ciHigh": 0.9052426214366236,
-              "ciLow": 0.7153653834518579,
-              "n": 59,
-              "rate": 0.8305084745762712
+              "ciHigh": 0.8794184013172571,
+              "ciLow": 0.3541973474990897,
+              "n": 9,
+              "rate": 0.6666666666666666
             },
             "conclusion": "not-enough-data",
             "human": {
-              "ciHigh": 0.9345222979931043,
-              "ciLow": 0.7515949119376506,
-              "n": 53,
-              "rate": 0.8679245283018868
+              "ciHigh": 0.9177828342909844,
+              "ciLow": 0.35892909014821267,
+              "n": 7,
+              "rate": 0.7142857142857143
+            },
+            "key": "configuration|api|S"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.8997500990435576,
+              "ciLow": 0.7507967733749072,
+              "n": 93,
+              "rate": 0.8387096774193549
+            },
+            "conclusion": "better",
+            "human": {
+              "ciHigh": 0.7971440676338534,
+              "ciLow": 0.6101583136540148,
+              "n": 87,
+              "rate": 0.7126436781609196
+            },
+            "key": "tests|web-ui|M"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9813578864886503,
+              "ciLow": 0.9383245299920588,
+              "n": 293,
+              "rate": 0.9658703071672355
+            },
+            "conclusion": "same",
+            "human": {
+              "ciHigh": 0.9893885116779224,
+              "ciLow": 0.8701857125563401,
+              "n": 52,
+              "rate": 0.9615384615384616
+            },
+            "key": "bugfix|web-ui|M"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.40000986539273287,
+              "ciLow": 0.07667440615177301,
+              "n": 21,
+              "rate": 0.19047619047619047
+            },
+            "conclusion": "worse",
+            "human": {
+              "ciHigh": 0.8283061795731426,
+              "ciLow": 0.7121218394178983,
+              "n": 196,
+              "rate": 0.7755102040816326
+            },
+            "key": "refactor|data-pipeline|L"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9193299132761629,
+              "ciLow": 0.7533626140708477,
+              "n": 69,
+              "rate": 0.855072463768116
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 0.904730299570778,
+              "ciLow": 0.7375997655871838,
+              "n": 74,
+              "rate": 0.8378378378378378
+            },
+            "key": "bugfix|api|S"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9110599603710386,
+              "ciLow": 0.46768966087934005,
+              "n": 12,
+              "rate": 0.75
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 0.9025411942607853,
+              "ciLow": 0.4343497069897537,
+              "n": 11,
+              "rate": 0.7272727272727273
+            },
+            "key": "ui-change|web-ui|S"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.8731612971368666,
+              "ciLow": 0.6736054886034556,
+              "n": 62,
+              "rate": 0.7903225806451613
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 0.9000025025865582,
+              "ciLow": 0.7015856902425105,
+              "n": 56,
+              "rate": 0.8214285714285714
             },
             "key": "bugfix|api|M"
           },
           {
             "agent": {
-              "ciHigh": 0.685892525250887,
-              "ciLow": 0.41245213738758246,
-              "n": 47,
-              "rate": 0.5531914893617021
+              "ciHigh": 0.641427378576938,
+              "ciLow": 0.37680695448409596,
+              "n": 51,
+              "rate": 0.5098039215686274
             },
             "conclusion": "worse",
             "human": {
-              "ciHigh": 0.9332320300570737,
-              "ciLow": 0.7472642307950509,
-              "n": 52,
-              "rate": 0.8653846153846154
+              "ciHigh": 0.898124385519693,
+              "ciLow": 0.6966928866143076,
+              "n": 55,
+              "rate": 0.8181818181818182
             },
             "key": "data-migration|billing|M"
           },
           {
             "agent": {
-              "ciHigh": 0.9293890829149256,
-              "ciLow": 0.7092737396097997,
-              "n": 40,
-              "rate": 0.85
+              "ciHigh": 0.6906129145096089,
+              "ciLow": 0.4117588341636533,
+              "n": 45,
+              "rate": 0.5555555555555556
             },
-            "conclusion": "better",
+            "conclusion": "not-enough-data",
             "human": {
               "ciHigh": 0.7365188938759863,
               "ciLow": 0.445956198273935,
               "n": 40,
               "rate": 0.6
             },
-            "key": "tests|web-ui|M"
+            "key": "bugfix|web-ui|S"
           },
           {
             "agent": {
-              "ciHigh": 0.9212965937143589,
-              "ciLow": 0.6810888526532568,
-              "n": 36,
-              "rate": 0.8333333333333334
+              "ciHigh": 0.8892533964790407,
+              "ciLow": 0.6365391162355784,
+              "n": 38,
+              "rate": 0.7894736842105263
             },
             "conclusion": "better",
             "human": {
-              "ciHigh": 0.7363426221431113,
-              "ciLow": 0.42221304146519273,
-              "n": 34,
-              "rate": 0.5882352941176471
+              "ciHigh": 0.7045897012345685,
+              "ciLow": 0.3958078731600341,
+              "n": 36,
+              "rate": 0.5555555555555556
             },
             "key": "data-migration|data-pipeline|M"
           },
           {
             "agent": {
-              "ciHigh": 0.9486333993289995,
-              "ciLow": 0.5230138624217553,
-              "n": 11,
-              "rate": 0.8181818181818182
+              "ciHigh": 0.7365370416005986,
+              "ciLow": 0.4348568313132931,
+              "n": 37,
+              "rate": 0.5945945945945946
             },
             "conclusion": "not-enough-data",
             "human": {
-              "ciHigh": 0.9433190520193067,
-              "ciLow": 0.49015684672072335,
-              "n": 10,
-              "rate": 0.8
-            },
-            "key": "ui-change|web-ui|S"
-          },
-          {
-            "agent": {
-              "ciHigh": 0.9637768390302125,
-              "ciLow": 0.3755282641185388,
-              "n": 5,
-              "rate": 0.8
-            },
-            "conclusion": "not-enough-data",
-            "human": {
-              "ciHigh": 1,
-              "ciLow": 0.7961107336956521,
-              "n": 15,
-              "rate": 1
-            },
-            "key": "bugfix|api|S"
-          },
-          {
-            "agent": {
-              "ciHigh": 0.9525108273576373,
-              "ciLow": 0.6666458812053,
-              "n": 22,
-              "rate": 0.8636363636363636
-            },
-            "conclusion": "not-enough-data",
-            "human": {
-              "ciHigh": 0.9385096847238394,
-              "ciLow": 0.20765495512648796,
-              "n": 3,
-              "rate": 0.6666666666666666
-            },
-            "key": "external-integration|api|L"
-          },
-          {
-            "agent": {
-              "ciHigh": 0.9025411942607853,
-              "ciLow": 0.4343497069897537,
-              "n": 11,
+              "ciHigh": 0.849327273436772,
+              "ciLow": 0.5578211674561319,
+              "n": 33,
               "rate": 0.7272727272727273
             },
-            "conclusion": "not-enough-data",
-            "human": {
-              "ciHigh": 0.9367762376877729,
-              "ciLow": 0.45258334367280534,
-              "n": 9,
-              "rate": 0.7777777777777778
-            },
-            "key": "external-integration|api|M"
-          },
-          {
-            "agent": {
-              "ciHigh": 0.8731950283838191,
-              "ciLow": 0.4236888781333764,
-              "n": 13,
-              "rate": 0.6923076923076923
-            },
-            "conclusion": "not-enough-data",
-            "human": {
-              "ciHigh": 0.9032306674407831,
-              "ciLow": 0.29998832134152864,
-              "n": 6,
-              "rate": 0.6666666666666666
-            },
-            "key": "data-migration|data-pipeline|S"
-          },
-          {
-            "agent": {
-              "ciHigh": 0.9999999999999999,
-              "ciLow": 0.6096569663469354,
-              "n": 6,
-              "rate": 1
-            },
-            "conclusion": "not-enough-data",
-            "human": {
-              "ciHigh": 0.9743210440510252,
-              "ciLow": 0.4868654966809701,
-              "n": 7,
-              "rate": 0.8571428571428571
-            },
-            "key": "tests|api|S"
+            "key": "ui-change|data-pipeline|M"
           }
         ],
         "contradicts": false,
-        "explanation": "the naive total establishes no direction, so no cohort can contradict it (0 of 3 decisive) — le total naïf n'établit aucune direction, aucune cohorte ne peut le contredire (0 sur 3 décisives)",
+        "explanation": "the naive total establishes no direction, so no cohort can contradict it (0 of 4 decisive) — le total naïf n'établit aucune direction, aucune cohorte ne peut le contredire (0 sur 4 décisives)",
         "naive": {
           "agent": {
-            "ciHigh": 0.8232824859392568,
-            "ciLow": 0.7203636303789512,
-            "n": 250,
-            "rate": 0.776
+            "ciHigh": 0.8364220722441752,
+            "ciLow": 0.779514663967018,
+            "n": 730,
+            "rate": 0.8095890410958904
           },
           "conclusion": "same",
           "difference": {
-            "ciHigh": 0.07829543122883698,
-            "ciLow": -0.07139297407046111,
-            "diff": 0.0030742358078602594,
+            "ciHigh": 0.08317775560174306,
+            "ciLow": -0.003160250552821313,
+            "diff": 0.03988270415616857,
             "established": false,
-            "nA": 250,
-            "nB": 229,
-            "rateA": 0.776,
-            "rateB": 0.7729257641921398
+            "nA": 730,
+            "nB": 647,
+            "rateA": 0.8095890410958904,
+            "rateB": 0.7697063369397218
           },
           "human": {
-            "ciHigh": 0.8224228320088499,
-            "ciLow": 0.7144228175657966,
-            "n": 229,
-            "rate": 0.7729257641921398
+            "ciHigh": 0.8004996444981916,
+            "ciLow": 0.7357291398942014,
+            "n": 647,
+            "rate": 0.7697063369397218
           },
           "labelled": "naive figure — chiffre naïf"
         }
@@ -1362,47 +1399,47 @@
       },
       "naive": {
         "agent": {
-          "ciHigh": 0.8232824859392568,
-          "ciLow": 0.7203636303789512,
-          "n": 250,
-          "rate": 0.776
+          "ciHigh": 0.8364220722441752,
+          "ciLow": 0.779514663967018,
+          "n": 730,
+          "rate": 0.8095890410958904
         },
         "conclusion": "same",
         "difference": {
-          "ciHigh": 0.07829543122883698,
-          "ciLow": -0.07139297407046111,
-          "diff": 0.0030742358078602594,
+          "ciHigh": 0.08317775560174306,
+          "ciLow": -0.003160250552821313,
+          "diff": 0.03988270415616857,
           "established": false,
-          "nA": 250,
-          "nB": 229,
-          "rateA": 0.776,
-          "rateB": 0.7729257641921398
+          "nA": 730,
+          "nB": 647,
+          "rateA": 0.8095890410958904,
+          "rateB": 0.7697063369397218
         },
         "human": {
-          "ciHigh": 0.8224228320088499,
-          "ciLow": 0.7144228175657966,
-          "n": 229,
-          "rate": 0.7729257641921398
+          "ciHigh": 0.8004996444981916,
+          "ciLow": 0.7357291398942014,
+          "n": 647,
+          "rate": 0.7697063369397218
         },
         "labelled": "naive figure — chiffre naïf"
       },
       "paradox": false,
       "selectionBias": {
-        "biased": false,
-        "detail": "easy-ticket share 15 % in the agent arm against 17 % in the human arm (gap 1 points, tolerance 20 points); 0 of 10 cohort(s) above tolerance; worst cohort external-integration|api|L (gap 7 points) — part des tickets faciles : 15 % dans le bras agent contre 17 % dans le bras humain (écart 1 points, tolérance 20 points) ; 0 cohorte(s) sur 10 au-delà de la tolérance ; pire cohorte external-integration|api|L (écart 7 points)"
+        "biased": true,
+        "detail": "easy-ticket share 21 % in the agent arm against 15 % in the human arm (gap 5 points, tolerance 20 points); 2 of 11 cohort(s) above tolerance; worst cohort bugfix|web-ui|M (gap 32 points) — part des tickets faciles : 21 % dans le bras agent contre 15 % dans le bras humain (écart 5 points, tolérance 20 points) ; 2 cohorte(s) sur 11 au-delà de la tolérance ; pire cohorte bugfix|web-ui|M (écart 32 points)"
       },
       "simpson": {
-        "detail": "the naive total establishes no direction, so no cohort can contradict it (0 of 3 decisive) — le total naïf n'établit aucune direction, aucune cohorte ne peut le contredire (0 sur 3 décisives)",
+        "detail": "the naive total establishes no direction, so no cohort can contradict it (0 of 4 decisive) — le total naïf n'établit aucune direction, aucune cohorte ne peut le contredire (0 sur 4 décisives)",
         "paradox": false
       },
       "summary": {
         "en": "The figure everybody quotes, labelled as such, next to the cohorts that contradict it — and the numeric evidence of selection bias.",
         "fr": "Le total que tout le monde cite, étiqueté comme tel, à côté des cohortes qui le contredisent — et la preuve chiffrée du biais de sélection."
       },
-      "tickets": 882
+      "tickets": 2939
     },
     "priorite": {
-      "explanation": "Slice: 4 ticket(s) for 4 min of session. / Tranche : 4 ticket(s) pour 4 min de session.\n1. proj-demo-001-1 (gain 2) — Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (human). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (human).\n2. proj-demo-001-10 (gain 2) — Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n3. proj-demo-001-11 (gain 2) — Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n4. proj-demo-001-12 (gain 2) — Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).",
+      "explanation": "Slice: 4 ticket(s) for 4 min of session. / Tranche : 4 ticket(s) pour 4 min de session.\n1. proj-demo-001-1 (gain 2) — Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n2. proj-demo-001-10 (gain 2) — Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n3. proj-demo-001-11 (gain 2) — Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n4. proj-demo-001-12 (gain 2) — Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).",
       "label": {
         "en": "Collection by information value",
         "fr": "La collecte par valeur d’information"
@@ -1410,31 +1447,7 @@
       "needs": [
         {
           "agentCount": 0,
-          "cohortKey": "bugfix|api|S",
-          "humanCount": 0,
-          "threshold": 20
-        },
-        {
-          "agentCount": 0,
-          "cohortKey": "configuration|api|S",
-          "humanCount": 0,
-          "threshold": 20
-        },
-        {
-          "agentCount": 0,
-          "cohortKey": "refactor|api|M",
-          "humanCount": 0,
-          "threshold": 20
-        },
-        {
-          "agentCount": 0,
-          "cohortKey": "tests|api|S",
-          "humanCount": 0,
-          "threshold": 20
-        },
-        {
-          "agentCount": 0,
-          "cohortKey": "ui-change|web-ui|S",
+          "cohortKey": "data-migration|billing|M",
           "humanCount": 0,
           "threshold": 20
         }
@@ -1443,22 +1456,22 @@
         {
           "gain": 2,
           "issueId": "proj-demo-001-1",
-          "reason": "Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (human). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (human)."
+          "reason": "Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
         },
         {
           "gain": 2,
           "issueId": "proj-demo-001-10",
-          "reason": "Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
+          "reason": "Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
         },
         {
           "gain": 2,
           "issueId": "proj-demo-001-11",
-          "reason": "Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
+          "reason": "Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
         },
         {
           "gain": 2,
           "issueId": "proj-demo-001-12",
-          "reason": "Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
+          "reason": "Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
         }
       ],
       "slice": {
@@ -1609,159 +1622,167 @@
             "arm": "agent",
             "censored": 0,
             "censoredShare": 0,
-            "medianH": 29.357142857142858,
+            "medianH": 26.320689655172416,
             "points": [
               [
                 4,
-                0.9961977186311787
+                0.998849252013809
               ],
               [
                 5,
-                0.9923954372623575
+                0.9976985040276181
               ],
               [
                 8,
-                0.9847908745247149
+                0.995397008055236
               ],
               [
                 9,
-                0.9733840304182511
+                0.8285385500575375
               ],
               [
                 10,
-                0.9657794676806085
+                0.8227848101265824
               ],
               [
                 11,
-                0.9619771863117872
+                0.8055235903337171
               ],
               [
                 12,
-                0.9581749049429659
+                0.804372842347526
               ],
               [
                 13,
-                0.920152091254753
+                0.7928653624856158
               ],
               [
                 14,
-                0.8973384030418251
+                0.7675489067894132
               ],
               [
                 15,
-                0.8174904942965779
+                0.7100115074798621
               ],
               [
                 16,
-                0.752851711026616
+                0.6904487917146147
               ],
               [
                 17,
-                0.7490494296577946
+                0.6892980437284236
               ],
               [
                 18,
-                0.6653992395437262
+                0.661680092059839
               ],
               [
                 20,
-                0.5817490494296578
+                0.5822784810126583
               ],
               [
                 22,
-                0.5779467680608364
+                0.5627157652474108
               ],
               [
                 24,
-                0.5665399239543726
+                0.5592635212888378
               ],
               [
                 25,
-                0.55893536121673
+                0.5569620253164558
               ],
               [
                 26,
-                0.5513307984790875
+                0.5535097813578826
               ],
               [
                 27,
-                0.5399239543726236
+                0.38665132336018415
               ],
               [
                 28,
-                0.5361216730038023
+                0.3843498273878021
               ],
               [
                 30,
-                0.4828897338403042
+                0.331415420023015
               ],
               [
                 32,
-                0.47908745247148293
+                0.32911392405063294
               ],
               [
                 33,
-                0.47528517110266166
+                0.3118527042577676
               ],
               [
                 34,
-                0.4638783269961978
+                0.30840046029919455
               ],
               [
                 36,
-                0.4600760456273765
+                0.3072497123130035
               ],
               [
                 38,
-                0.44106463878327
+                0.2980437284234753
               ],
               [
                 39,
-                0.4030418250950571
+                0.28653624856156507
               ],
               [
                 42,
-                0.37262357414448677
+                0.2543153049482164
               ],
               [
                 45,
-                0.2965779467680609
+                0.1979286536248562
+              ],
+              [
+                46,
+                0.19677790563866518
               ],
               [
                 48,
-                0.2281368821292776
+                0.17606444188722675
               ],
               [
                 50,
-                0.2243346007604563
+                0.17491369390103573
               ],
               [
                 51,
-                0.22053231939163503
+                0.1737629459148447
               ],
               [
                 54,
-                0.14068441064638787
+                0.14959723820483317
               ],
               [
                 58,
-                0.13688212927756657
+                0.1461449942462601
               ],
               [
                 60,
-                0.05703422053231941
+                0.06789413118527043
               ],
               [
                 62,
-                0.05323193916349812
+                0.06444188722669736
+              ],
+              [
+                66,
+                0.04833141542002302
               ],
               [
                 72,
-                0.04562737642585553
+                0.04602991944764097
               ],
               [
                 75,
-                0.03802281368821294
+                0.04372842347525892
               ],
               [
                 90,
@@ -1773,179 +1794,195 @@
             "arm": "human",
             "censored": 0,
             "censoredShare": 0,
-            "medianH": 35.67857142857144,
+            "medianH": 34.07142857142858,
             "points": [
               [
                 4,
-                0.9959349593495935
+                0.9986631016042781
               ],
               [
                 6,
-                0.991869918699187
+                0.9973262032085561
               ],
               [
                 7,
-                0.9878048780487805
+                0.9959893048128342
               ],
               [
                 8,
-                0.983739837398374
+                0.9946524064171123
               ],
               [
                 10,
-                0.9796747967479675
+                0.9612299465240641
               ],
               [
                 11,
-                0.9715447154471546
+                0.9585561497326203
               ],
               [
                 12,
-                0.9593495934959351
+                0.9545454545454546
               ],
               [
                 13,
-                0.9552845528455286
+                0.9331550802139037
               ],
               [
                 14,
-                0.9471544715447155
+                0.9304812834224598
               ],
               [
                 15,
-                0.9227642276422765
+                0.9224598930481284
               ],
               [
                 18,
-                0.9186991869918699
+                0.9197860962566846
               ],
               [
                 19,
-                0.8821138211382115
+                0.9077540106951872
+              ],
+              [
+                20,
+                0.8716577540106953
               ],
               [
                 21,
-                0.878048780487805
+                0.8703208556149734
               ],
               [
                 22,
-                0.7967479674796749
+                0.7901069518716578
               ],
               [
                 24,
-                0.7886178861788619
+                0.7620320855614974
               ],
               [
                 26,
-                0.7804878048780489
+                0.732620320855615
               ],
               [
                 28,
-                0.6910569105691058
+                0.7005347593582888
               ],
               [
                 29,
-                0.6829268292682928
+                0.6978609625668449
               ],
               [
                 30,
-                0.6138211382113823
+                0.643048128342246
               ],
               [
                 32,
-                0.6097560975609758
+                0.5160427807486632
               ],
               [
                 33,
-                0.6016260162601629
+                0.5133689839572193
               ],
               [
                 36,
-                0.48780487804878075
+                0.4759358288770054
               ],
               [
                 38,
-                0.4837398373983743
+                0.47459893048128354
               ],
               [
                 39,
-                0.4796747967479678
+                0.4532085561497327
               ],
               [
                 40,
-                0.47560975609756134
+                0.45053475935828885
               ],
               [
                 42,
-                0.47154471544715487
+                0.4451871657754012
               ],
               [
                 44,
-                0.4634146341463418
+                0.4425133689839573
               ],
               [
                 45,
-                0.4390243902439028
+                0.4344919786096258
               ],
               [
                 46,
-                0.43495934959349625
+                0.4291443850267381
               ],
               [
                 48,
-                0.4308943089430897
+                0.4197860962566846
               ],
               [
                 50,
-                0.4268292682926832
+                0.41711229946524075
               ],
               [
                 54,
-                0.41463414634146367
+                0.4117647058823531
               ],
               [
                 57,
-                0.3780487804878051
+                0.39973262032085577
               ],
               [
                 58,
-                0.3617886178861791
+                0.39438502673796805
+              ],
+              [
+                60,
+                0.35828877005347604
               ],
               [
                 62,
-                0.3577235772357726
+                0.3556149732620322
               ],
               [
                 66,
-                0.2804878048780489
+                0.2767379679144386
               ],
               [
                 72,
-                0.2723577235772359
+                0.25133689839572204
               ],
               [
                 78,
-                0.2642276422764229
+                0.22192513368983968
               ],
               [
                 84,
-                0.1829268292682928
+                0.19518716577540116
               ],
               [
                 87,
-                0.1747967479674798
+                0.1925133689839573
               ],
               [
                 90,
-                0.10975609756097568
+                0.17112299465240646
+              ],
+              [
+                94,
+                0.16978609625668453
               ],
               [
                 96,
-                0.10569105691056917
+                0.042780748663101616
+              ],
+              [
+                98,
+                0.04144385026737969
               ],
               [
                 108,
-                0.004065040650406506
+                0.008021390374331553
               ],
               [
                 144,
@@ -1959,11 +1996,11 @@
           "censoredB": 0,
           "censoredShareA": 0,
           "censoredShareB": 0,
-          "chi2": 53.56655125387862,
+          "chi2": 239.1269884908779,
           "established": true,
-          "nA": 263,
-          "nB": 246,
-          "pValue": 2.4997948242241095e-13,
+          "nA": 869,
+          "nB": 748,
+          "pValue": 6.096245060051367e-54,
           "reason": null
         }
       }
@@ -2020,13 +2057,9 @@
             "zone": "billing"
           },
           "computedAt": "2026-11-30T12:00:00Z",
-          "conclusion": "same",
-          "conditions": [
-            "relecture renforcée : au moins 2 relecteurs",
-            "un relecteur responsable de la zone est requis",
-            "une preuve par critère d'acceptation"
-          ],
-          "confidence": "medium",
+          "conclusion": "not-enough-data",
+          "conditions": [],
+          "confidence": "low",
           "demo": true,
           "epochId": "epoch-3",
           "failureCauses": [
@@ -2047,7 +2080,7 @@
           "issueKey": "PROJ-412",
           "reasons": [
             "Cohorte : data-migration · billing · taille M (26 tickets avec agent, 31 sans)",
-            "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 84 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
+            "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 83 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
             "écart non établi"
           ],
           "referenceIssueKeys": [
@@ -2055,7 +2088,7 @@
             "PROJ-233",
             "PROJ-301"
           ],
-          "value": "delegate-with-review"
+          "value": "not-enough-data"
         },
         "tool": "should-delegate"
       },
@@ -2072,7 +2105,7 @@
       "en": "The first six are GET: an automation rule can call them. None accepts a person’s name as input, none returns one.",
       "fr": "Les six premiers sont des GET : une règle d’automatisation peut les appeler. Aucun n’accepte un nom de personne en entrée, aucun n’en renvoie."
     },
-    "tickets": 882
+    "tickets": 2939
   },
   "meta": {
     "cohorts": 12,
@@ -2082,6 +2115,6 @@
     "generator": "tests/site/demo-data.test.ts",
     "project": "PROJ",
     "referenceDate": "2026-11-30",
-    "tickets": 882
+    "tickets": 2939
   }
 }
