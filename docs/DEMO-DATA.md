@@ -18,27 +18,27 @@ voisin, incident), son classement et son résultat.
 
 | Clé | Ce que le jeu contient | Valeur |
 |---|---|---|
-| FIG-01 | tickets du projet `PROJ` | 882 |
-| FIG-02 | faits de commit | 1715 |
-| FIG-03 | faits de relecture (pull requests) | 566 |
-| FIG-04 | liens entre tickets | 144 |
+| FIG-01 | tickets du projet `PROJ` | 2939 |
+| FIG-02 | faits de commit | 5815 |
+| FIG-03 | faits de relecture (pull requests) | 1930 |
+| FIG-04 | liens entre tickets | 454 |
 | FIG-05 | époques | 3 |
-| FIG-06 | implications inconnues | 369 |
-| FIG-07 | part d'implication inconnue | 42 % |
-| FIG-08 | tickets fermés | 877 |
-| FIG-09 | tickets encore ouverts | 5 |
-| FIG-10 | clôtures propres | 768 |
-| FIG-11 | réouvertures | 29 |
-| FIG-12 | cohortes (nature · zone · taille · époque) | 26 |
-| FIG-13 | cohortes où l'app dit « on ne sait pas » | 21 |
-| FIG-14 | cartes de recommandation produites | 5 |
+| FIG-06 | implications inconnues | 1199 |
+| FIG-07 | part d'implication inconnue | 41 % |
+| FIG-08 | tickets fermés | 2815 |
+| FIG-09 | tickets encore ouverts | 124 |
+| FIG-10 | clôtures propres | 2544 |
+| FIG-11 | réouvertures | 52 |
+| FIG-12 | cohortes (nature · zone · taille · époque) | 36 |
+| FIG-13 | cohortes où l'app dit « on ne sait pas » | 31 |
+| FIG-14 | cartes de recommandation produites | 8 |
 | FIG-15 | essai contrôlé en cours | 1 |
 | FIG-16 | sprints couverts | 25 |
 
 Les cinq niveaux d'implication et les cinq sources apparaissent tous dans le jeu
-(SPEC §5) : `none` 246, `assisted` 62, `driven` 174, `autonomous` 31,
-`unknown` 369 ; `adoption-date` 378, `closure-field` 297, `mcp-declaration` 75,
-`bot-author` 69, `commit-mention` 63.
+(SPEC §5) : `none` 805, `assisted` 182, `driven` 620, `autonomous` 133,
+`unknown` 1199 ; `adoption-date` 1208, `closure-field` 1017, `mcp-declaration` 249,
+`bot-author` 236, `commit-mention` 229.
 
 Aucune personne n'apparaît : des rôles et un compte robot `agent-bot-1`
 (SPEC §18, DP-17). Le jeu est marqué comme démonstration partout : `demo: true`
@@ -69,8 +69,10 @@ cache comme en production ; seul l'alimentateur change.
 |---|---|
 | `project.ts` | identité, réglages, calendrier fixé, helpers de dates |
 | `epochs.ts` | les trois époques (SPEC §4, §12) |
-| `issues.ts` | le catalogue des familles et la forme d'une graine |
-| `builder.ts` | familles → graines (le générateur) |
+| `scenarios.ts` | le tableau des scénarios : la seule source de vérité du jeu |
+| `cas-limites.ts` | les cas limites nommés du SPEC §21 et §22 |
+| `issues.ts` | la forme d'une graine et le catalogue des familles |
+| `builder.ts` | scénarios → graines (le générateur) |
 | `history.ts` | ticket Jira, classement, implication, historique, réouvertures |
 | `commits.ts` | faits de commit et catalogue de mentions |
 | `pull-requests.ts` | faits de relecture |
@@ -88,25 +90,24 @@ réimplémente aucune règle.
 
 | Clé | Cohorte (nature · zone · taille · époque) | Bras | Effectif | Clôture propre | Fourchette | Délai médian |
 |---|---|---|---|---|---|---|
-| FIG-20 | bugfix · api · M · époque 2 | avec agent | 41 | 83 % | [68 ; 92] | 30 h |
-| FIG-21 | bugfix · api · M · époque 2 | sans agent | 37 | 86 % | [72 ; 95] | 44 h |
-| FIG-22 | data-migration · billing · M · époque 2 | avec agent | 20 | 40 % | [21 ; 62] | 36 h |
-| FIG-23 | data-migration · billing · M · époque 2 | sans agent | 21 | 86 % | [65 ; 96] | 72 h |
-| FIG-24 | data-migration · billing · M · époque 3 | avec agent | 26 | 69 % | [50 ; 84] | 36 h |
+| FIG-20 | bugfix · api · M · époque 2 | avec agent | 41 | 83 % | [69 ; 91] | 30 h |
+| FIG-21 | bugfix · api · M · époque 2 | sans agent | 37 | 86 % | [72 ; 94] | 44 h |
+| FIG-22 | data-migration · billing · M · époque 2 | avec agent | 20 | 40 % | [22 ; 61] | 36 h |
+| FIG-23 | data-migration · billing · M · époque 2 | sans agent | 21 | 86 % | [65 ; 95] | 72 h |
+| FIG-24 | data-migration · billing · M · époque 3 | avec agent | 26 | 69 % | [50 ; 83] | 36 h |
 | FIG-25 | data-migration · billing · M · époque 3 | sans agent | 31 | 87 % | [71 ; 95] | 72 h |
-| FIG-26 | tests · web-ui · M · époque 2 | avec agent | 40 | 85 % | [70 ; 93] | 40 h |
-| FIG-27 | tests · web-ui · M · époque 2 | sans agent | 40 | 60 % | [44 ; 74] | 56 h |
-| FIG-28 | data-migration · data-pipeline · M · époque 2 | avec agent | 36 | 83 % | [68 ; 93] | 32 h |
+| FIG-26 | tests · web-ui · M · époque 2 | avec agent | 88 | 89 % | [80 ; 94] | 40 h |
+| FIG-27 | tests · web-ui · M · époque 2 | sans agent | 82 | 76 % | [65 ; 84] | 54 h |
+| FIG-28 | data-migration · data-pipeline · M · époque 2 | avec agent | 36 | 83 % | [68 ; 92] | 32 h |
 | FIG-29 | data-migration · data-pipeline · M · époque 2 | sans agent | 34 | 59 % | [42 ; 74] | 60 h |
-| FIG-30 | external-integration · api · L · époque 2 | avec agent | 22 | 86 % | [66 ; 96] | 60 h |
-| FIG-31 | external-integration · api · L · époque 2 | sans agent | 3 | 67 % | [20 ; 94] | 96 h |
+| FIG-30 | external-integration · api · L · époque 2 | avec agent | 22 | 86 % | [67 ; 95] | 60 h |
+| FIG-31 | external-integration · api · L · époque 2 | sans agent | 3 | 67 % | [21 ; 94] | 96 h |
 
 Lecture :
 
 - **FIG-20/21** — le couple du SPEC §7 : « Clôture propre : 83 % avec agent
-  (41 tickets, entre 68 et 92 %), 86 % sans (37 tickets, entre 72 et 95 %) ».
-  Écart **non établi** → « pareil » ; le délai est meilleur (30 h contre 44 h)
-  → « agent, relecture renforcée » (SPEC §8, ligne 2).
+  (41 tickets, entre 69 et 91 %), 86 % sans (37 tickets, entre 72 et 94 %) ».
+  Écart **non établi** → « on ne sait pas ».
 - **FIG-22/23** — la case **rouge** : écart établi en défaveur des agents →
   `keep-human` (SPEC §8, recette 8).
 - **FIG-24/25** — la cohorte de **PROJ-412**, la carte que montre la vidéo :
@@ -129,21 +130,20 @@ Lecture :
 | `epoch-3` | 2026-09-14 | nouveau modèle, 14 septembre | nouveau modèle `model-b-2026` |
 
 La migration de données de la zone `billing` passe de **rouge** (époque 2,
-40 % contre 86 %, écart établi) à **orange** (époque 3, 69 % contre 87 %,
-écart non établi → « pareil », délai meilleur → « agent, relecture
-renforcée » : la carte du SPEC §8).
+40 % contre 86 %, écart établi) à **gris** (époque 3, 69 % contre 87 %, écart
+non établi) — voir la divergence annoncée au §6.
 
 ## 4. Ce que le jeu démontre, écran par écran
 
 | Écran | Ce que le juge voit avec le jeu |
 |---|---|
 | Carte sur le ticket (`PROJ-412`) | la cohorte, les deux bras avec effectifs et fourchettes, les délais médians, les causes d'échec, les tickets de référence, la confiance, le bandeau de démo |
-| Carte de délégation | la matrice natures × zones : une case verte, des cases orange, une rouge, et beaucoup de gris honnête (21 cohortes sur 26) ; le filtre par époque |
+| Carte de délégation | la matrice natures × zones : une case verte, une orange, une rouge, et beaucoup de gris honnête (31 cohortes sur 36) ; le filtre par époque |
 | Détail de cohorte | les deux bras, l'écart et son intervalle, la composition comparée, les causes d'échec, le cas « bras déséquilibrés » |
 | Calibration | les recommandations données et les clôtures propres observées ensuite (SPEC §10) |
 | Couverture | les droits sur le graphe ; sur le site de démo, aucun dépôt → ni commit ni PR (SPEC §24) |
 | Essai contrôlé | un essai `running` sur `external-integration · api · M` (époque 3), là où l'app ne savait pas conclure |
-| Outils MCP | `should-delegate` sur `PROJ-412`, `list-delegable-work` sur le sprint 42 (10 tickets, 12 points) |
+| Outils MCP | `should-delegate` sur `PROJ-412`, `list-delegable-work` sur le sprint 42 (35 tickets, 63 points) |
 
 Les cinq garde-fous et cas limites sont portés par des tickets nommés :
 
@@ -155,8 +155,30 @@ Les cinq garde-fous et cas limites sont portés par des tickets nommés :
 | `PROJ-456` | l'incident ouvert lui-même |
 | `PROJ-457` | ticket en **zone sensible** (`data-pipeline`) → garde-fou `sensitive-zone` |
 | `PROJ-458` | ticket **sans critères d'acceptation** → garde-fou `missing-acceptance-criteria` |
-| `PROJ-459` | ticket **sans commit** (`no-code`) : hors des cohortes de code (SPEC §21) |
+| `PROJ-459`, `PROJ-950` | tickets **sans commit** (`no-code`) : hors des cohortes de code (SPEC §21) |
 | `PROJ-460` | ticket de l'**essai contrôlé** en cours |
+
+Les dix-huit cas limites du SPEC §21 et §22 ont, eux aussi, un ticket nommé
+(SPEC §24.1 : une clé ne bouge jamais) :
+
+| Ticket | Cas démontré |
+|---|---|
+| `PROJ-118` | clos **avant la date d'adoption** : bras « sans agent » |
+| `PROJ-509` | lié à un **incident ouvert** : jamais « à confier à un agent » |
+| `PROJ-517` | en **zone sensible** : garde-fou |
+| `PROJ-523` | **sans critères d'acceptation** : garde-fou |
+| `PROJ-531` | **commits mêlés**, signés et non signés : niveau `assisted` |
+| `PROJ-540` | **agent muet** : ni signature ni déclaration, donc inconnu — et jamais compté « sans agent » |
+| `PROJ-548` | **réouverture administrative de 8 minutes** : écartée, elle n'invalide pas la clôture propre |
+| `PROJ-555` | **bug voisin** : signal faible, hors de la clôture propre |
+| `PROJ-562` | bug relié par « est causé par » : pas une clôture propre |
+| `PROJ-571` | rouvert sous 30 jours : pas une clôture propre |
+| `PROJ-611` | **déplacé de projet** : il change de cohorte, il garde son implication et son résultat |
+| `PROJ-701` | dans l'**essai contrôlé**, tirage respecté : il y reste |
+| `PROJ-706` | dans l'essai, **tirage non respecté** : il en sort avec le motif |
+| `PROJ-812` | **reprise humaine** déclarée : aucun nom de personne |
+| `PROJ-820` | **abandon** après démarrage |
+| `PROJ-902` | clos **il y a 10 jours** : pas encore mûr |
 
 ## 5. Refaire les chiffres chez soi
 
@@ -164,28 +186,45 @@ Les cinq garde-fous et cas limites sont portés par des tickets nommés :
 npx vitest run tests/sample
 ```
 
-- `tests/sample/figures.test.ts` — les trois jeux de chiffres du SPEC §7/§8,
-  les quatre couleurs de la carte, les époques, l'essai, les garde-fous.
-- `tests/sample/dataset.test.ts` — la cohérence (chaque fait pointe un ticket
+- `tests/sample/base-scenarios.test.ts` — les dix scénarios de la base : les
+  effectifs, les clôtures propres, les délais médians, le paradoxe de Simpson.
+- `tests/sample/spec-8.test.ts` — la carte de `PROJ-412`, chiffre par chiffre.
+- `tests/sample/cas-limites.test.ts` — les dix-huit cas limites, un test par
+  ticket nommé.
+- `tests/sample/coherence.test.ts` — la cohérence (chaque fait pointe un ticket
   existant, aucune date hors des douze mois), le marquage de démonstration,
   l'absence de personne.
+- `tests/sample/determinisme.test.ts` — deux appels au constructeur rendent le
+  même jeu, et le tirage de l'essai rejouable depuis sa graine.
+- `tests/sample/couverture-fonctionnalites.test.ts` — la matière des huit
+  écrans, des neuf outils MCP et des seize panneaux du site.
 - `tests/sample/docs.test.ts` — ce document : chaque ligne `FIG-nn` est
   recalculée depuis le jeu.
 
-## 6. Divergences résolues à l'intégration (lot L10)
+## 6. Divergences assumées entre le SPEC et le domaine mergé
 
-Les deux divergences signalées par le lot L9 sont résolues en faveur du SPEC
-(voir `docs/CONTRACTS.md`, « Écarts constatés à l'intégration ») :
+Le jeu reste fidèle au **domaine mergé** : il n'invente pas un avis que l'app ne
+donnerait pas. Deux écarts avec la prose du SPEC sont signalés ici et dans la
+PR (ils relèvent d'une PR `CONTRACT-CHANGE`, pas de ce lot) :
 
-1. **La carte de PROJ-412 sort « agent, relecture renforcée » (orange),
-   exactement comme au SPEC §8.** `conclude` arbitre sur l'intervalle de la
-   différence (Newcombe) : écart établi → `better`/`worse` ; écart **non
-   établi** → `same` (« pareil », SPEC §7 règle 4) ; « on ne sait pas » est
-   réservé aux cas de la ligne 4 du §8 (effectif sous le seuil, bras
-   déséquilibrés). Avec le délai meilleur (1,5 jour contre 3 jours), la
-   recommandation est « agent, relecture renforcée », confiance moyenne.
-2. **La borne haute de la cohorte de PROJ-412 s'affiche 84 %, comme au §8.**
-   Les bornes d'intervalle sont rendues de façon conservatrice : borne basse
-   arrondie au plancher, borne haute au plafond (`percentFloor`/`percentCeil`,
-   `src/domain/stats.ts`) — l'intervalle affiché ne revendique jamais plus que
-   l'intervalle calculé.
+1. **La carte de PROJ-412 sort « pas assez de recul » (gris), pas « agent,
+   relecture renforcée » (orange).** Le tableau du §8 prévoit la ligne « délai
+   meilleur, mais clôture propre en retrait ou relecture nettement plus lourde →
+   agent, relecture renforcée ». `recommendFrom` (L1–L4) rend
+   `not-enough-data` dès que l'écart n'est ni établi ni équivalent : avec
+   69 % [50 ; 83] contre 87 % [71 ; 95], la différence n'est pas établie mais
+   n'est pas non plus équivalente à 10 points près. Même cause pour la phrase du
+   §12 : la case « migrations de données » de l'époque 3 sort **grise** et non
+   orange. `CONTRACT-NEEDED: src/domain/recommendation.ts.recommendFrom`.
+2. **La borne haute de la cohorte de PROJ-412 s'affiche 83 %, le §8 écrit 84.**
+   `wilsonInterval(18, 26)` donne 0,834989 et `percent()` arrondit à 83. Le jeu
+   affiche ce que l'app affiche.
+3. **Trois scénarios de la base ne donnent pas la couleur annoncée par le
+   brief.** Les cohortes `bugfix · api · S` (55 propres sur 60 contre 47 sur 55),
+   `tests · web-ui · M` (44 sur 48 contre 38 sur 42) et `ui-change ·
+   data-pipeline · M` (22 sur 34 contre 24 sur 30) portent des écarts qui ne
+   sont ni établis ni équivalents à dix points : le domaine répond « on ne sait
+   pas » là où le brief attend « verte » ou « orange ». Les effectifs sont
+   ceux du brief, au chiffre près ; c'est la règle d'arbitrage du domaine
+   (SPEC §7 règle 4) qui décide de la couleur. `CONTRACT-NEEDED:
+   src/domain/recommendation.ts` — même cause que la divergence 1.
