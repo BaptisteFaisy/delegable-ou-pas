@@ -1,37 +1,29 @@
 /**
- * Public site renderer — no framework, no build step, no network call.
+ * Public site — loader, language switch and dispatch.
  *
- * Reads `window.DONNEES` (donnees.js) and fills the demo sections: the ticket
- * card, the delegation map, the cohort detail, the calibration, the coverage
- * screen, the epochs and the nine MCP tools. Also drives the Wilson interval
- * calculator so a visitor can check the published figures by hand, and the
- * FR/EN switch (SPEC §20: interface in English and in French).
+ * The page shows every feature of the product. It contains no business logic:
+ * `demo-data.json` is produced by the real domain code (tests/site), and the
+ * panels are rendered by `rendu-ecrans.js` (the eight screens) and
+ * `rendu-panneaux.js` (the sixteen feature panels). Both expose a `mount`
+ * function on `window`; when they are absent — or when the JSON has not been
+ * generated yet — this file falls back to the panel's own `label` and `summary`,
+ * so the page never shows a hole.
  *
- * Rule: files < 500 lines, functions < 50 lines.
+ * Rule: files < 500 lines, functions < 50 lines. No dependency, no CDN.
  */
 'use strict';
 
-const D = window.DONNEES;
-
 /** Current language; the switch writes it back to <html lang>. */
 let LANG = 'fr';
+
+/** The generated dataset, or null until/unless it loads. */
+let DATA = null;
 
 /** Picks the localised form of a value: a string, or { en, fr }. */
 function t(value) {
   if (value === null || value === undefined) return '';
   if (typeof value === 'string') return value;
-  return value[LANG] || value.en || '';
-}
-
-/** “83 %” — a rate is never printed without its sample size next to it. */
-function pct(value) {
-  return `${Math.round(value * 100)} %`;
-}
-
-/** The only authorised rendering of a proportion: rate + n + interval (§7 rule 3). */
-function rateWithEvidence(stat) {
-  return `${pct(stat.rate)} (${stat.n} ${LANG === 'fr' ? 'tickets' : 'tickets'}, `
-    + `${LANG === 'fr' ? 'entre' : 'between'} ${pct(stat.ciLow)} ${LANG === 'fr' ? 'et' : 'and'} ${pct(stat.ciHigh)})`;
+  return value[LANG] || value.en || value.fr || '';
 }
 
 function el(tag, className, text) {
@@ -42,270 +34,233 @@ function el(tag, className, text) {
 }
 
 function clear(node) {
-  while (node.firstChild) node.removeChild(node.firstChild);
+  while (node && node.firstChild) node.removeChild(node.firstChild);
 }
 
-/* ------------------------------------------------------------ the ticket card */
+/* ------------------------------------------------------------------ datasets */
 
-const RECOMMENDATION_LABEL = {
-  delegate: { en: 'Delegate to an agent', fr: 'À confier à un agent' },
-  'review-hardened': { en: 'Agent, hardened review', fr: 'Agent, relecture renforcée' },
-  'keep-human': { en: 'Keep with a human', fr: 'À garder pour un humain' },
-  'not-enough-data': { en: 'Not enough history', fr: 'Pas assez de recul' },
-};
-
-function renderTicketCard() {
-  const root = document.getElementById('carte-ticket');
-  if (!root) return;
-  clear(root);
-  const card = TICKET();
-  root.appendChild(card);
+/** Loads the generated dataset; a missing file is a normal state, not a crash. */
+async function loadDemoData() {
+  try {
+    const response = await fetch('demo-data.json', { cache: 'no-store' });
+    if (!response.ok) return null;
+    const json = await response.json();
+    return json && typeof json === 'object' ? json : null;
+  } catch (error) {
+    return null;
+  }
 }
 
-/** Builds the card of SPEC §8: cohort, figures, references, conditions, trust. */
-function TICKET() {
-  const c = D.TICKET_CARD;
-  const box = el('div', 'card ticket-card');
-  box.appendChild(el('div', 'demo-flag', LANG === 'fr' ? 'données d’exemple' : 'sample data'));
-  box.appendChild(el('h3', 'ticket-key', `${c.key} · ${t(c.title)}`));
-
-  const reco = el('p', `reco reco-${c.recommendation}`);
-  reco.append(`${LANG === 'fr' ? 'Recommandation' : 'Recommendation'} : `);
-  reco.appendChild(el('strong', null, t(RECOMMENDATION_LABEL[c.recommendation])));
-  box.appendChild(reco);
-
-  const cohorte = c.cohort;
-  box.appendChild(el('p', 'line',
-    `${LANG === 'fr' ? 'Cohorte' : 'Cohort'} : ${t(cohorte.nature)} · ${t(cohorte.zone)} · `
-    + `${LANG === 'fr' ? 'taille' : 'size'} ${cohorte.size} `
-    + `(${cohorte.armAgent.n} ${LANG === 'fr' ? 'avec agent' : 'with agent'}, `
-    + `${cohorte.armHuman.n} ${LANG === 'fr' ? 'sans' : 'without'})`));
-
-  box.appendChild(el('p', 'line',
-    `${LANG === 'fr' ? 'Clôture propre' : 'Clean close'} : ${rateWithEvidence(c.cleanClose.agent)} `
-    + `${LANG === 'fr' ? 'avec agent' : 'with agent'}, ${rateWithEvidence(c.cleanClose.human)} `
-    + `${LANG === 'fr' ? 'sans' : 'without'}`));
-
-  box.appendChild(el('p', 'line',
-    `${LANG === 'fr' ? 'Délai médian' : 'Median lead time'} : ${c.medianLead.agentDays} `
-    + `${LANG === 'fr' ? 'jour avec agent' : 'day with agent'}, ${c.medianLead.humanDays} `
-    + `${LANG === 'fr' ? 'jours sans' : 'days without'}`));
-
-  box.appendChild(el('p', 'line warn',
-    `${LANG === 'fr' ? 'Ce qui a mal tourné avec agent' : 'What went wrong with an agent'} : ${t(c.whatWentWrong)}`));
-
-  box.appendChild(el('p', 'line',
-    `${LANG === 'fr' ? 'Tickets de référence' : 'Reference tickets'} : ${c.references.join(', ')}`));
-
-  const conditions = el('p', 'line');
-  conditions.append(`${LANG === 'fr' ? 'Conditions' : 'Conditions'} : `);
-  conditions.append(t(c.conditions).join(LANG === 'fr' ? ' · ' : ' · '));
-  box.appendChild(conditions);
-
-  box.appendChild(el('p', 'line',
-    `${LANG === 'fr' ? 'Confiance' : 'Confidence'} : ${t(c.confidence)}`));
-
-  box.appendChild(el('p', 'line muted',
-    `${LANG === 'fr' ? 'Implication relevée' : 'Detected involvement'} : ${t(c.involvement.level)} `
-    + `— ${LANG === 'fr' ? 'source' : 'source'} : ${t(c.involvement.source)}`));
-  box.appendChild(el('p', 'line muted',
-    `${LANG === 'fr' ? 'Décision enregistrée' : 'Recorded decision'} : ${t(c.decision.text)}`));
-  box.appendChild(el('p', 'advice',
-    LANG === 'fr'
-      ? 'Un avis, pas un ordre : la recommandation ne bloque rien, et la décision prise est enregistrée.'
-      : 'An opinion, not an order: the recommendation blocks nothing, and the decision taken is recorded.'));
-  return box;
+/** One panel's data, looked up in `ecrans` then `features`, or null. */
+function panelData(section, key) {
+  if (!DATA) return null;
+  const screens = DATA.ecrans || {};
+  const features = DATA.features || {};
+  return screens[key] || features[key] || null;
 }
 
-/* --------------------------------------------------------- the delegation map */
+/* -------------------------------------------------------------------- format */
 
-const COLOUR_LABEL = {
-  delegate: { en: 'delegate', fr: 'à confier' },
-  'review-hardened': { en: 'hardened review', fr: 'relecture renforcée' },
-  'keep-human': { en: 'keep human', fr: 'à garder' },
-  unknown: { en: 'we do not know', fr: 'on ne sait pas' },
-};
-
-function renderMap() {
-  const root = document.getElementById('carte-delegation');
-  if (!root) return;
-  clear(root);
-  const table = el('table', 'matrix');
-  const head = el('tr');
-  head.appendChild(el('th', null, LANG === 'fr' ? 'nature ↓ / zone →' : 'nature ↓ / zone →'));
-  D.MAP_ZONES.forEach((zone) => head.appendChild(el('th', null, t(zone.label))));
-  table.appendChild(head);
-  D.MAP_NATURES.forEach((nature) => table.appendChild(mapRow(nature)));
-  root.appendChild(table);
-  root.appendChild(mapLegend());
+/** “83 %” — never printed alone: always with its sample size and interval. */
+function pct(value) {
+  if (typeof value !== 'number' || Number.isNaN(value)) return '—';
+  return `${Math.round(value * 100)} %`;
 }
 
-function mapRow(nature) {
-  const row = el('tr');
-  row.appendChild(el('th', null, t(nature.label)));
-  D.MAP_ZONES.forEach((zone) => {
-    const cell = D.MAP_CELLS.find((c) => c.nature === nature.id && c.zone === zone.id);
-    const td = el('td', cell ? `cell cell-${cell.colour}` : 'cell cell-unknown');
-    td.title = cell
-      ? `${t(COLOUR_LABEL[cell.colour])} — n = ${cell.n}`
-      : t(COLOUR_LABEL.unknown);
-    td.textContent = cell ? String(cell.n) : '·';
-    row.appendChild(td);
+/** The only authorised rendering of a proportion (SPEC §7 rule 3). */
+function rateWithEvidence(stat) {
+  if (!stat || typeof stat.n !== 'number') return '—';
+  const tickets = LANG === 'fr' ? 'tickets' : 'tickets';
+  const between = LANG === 'fr' ? 'entre' : 'between';
+  const and = LANG === 'fr' ? 'et' : 'and';
+  return `${pct(stat.rate)} (${stat.n} ${tickets}, ${between} ${pct(stat.ciLow)} ${and} ${pct(stat.ciHigh)})`;
+}
+
+/* ------------------------------------------------------------------ the nav */
+
+/** Builds the sticky table of contents from the panels present in the page. */
+function buildNav() {
+  const nav = document.getElementById('demo-nav');
+  if (!nav) return;
+  clear(nav);
+  const groups = [
+    { id: 'ecrans', label: { fr: 'Écrans', en: 'Screens' } },
+    { id: 'fonctionnalites', label: { fr: 'Fonctionnalités', en: 'Features' } },
+  ];
+  groups.forEach((group) => {
+    const container = document.getElementById(group.id);
+    if (!container) return;
+    const block = el('div', 'nav-group');
+    block.appendChild(el('span', 'nav-title', t(group.label)));
+    const list = el('div', 'nav-links');
+    container.querySelectorAll('section.panel').forEach((panel) => {
+      const heading = panel.querySelector('h3');
+      if (!heading) return;
+      const link = el('a', null, heading.textContent);
+      link.href = `#${panel.id}`;
+      list.appendChild(link);
+    });
+    block.appendChild(list);
+    nav.appendChild(block);
   });
-  return row;
 }
 
-function mapLegend() {
-  const legend = el('p', 'legend');
-  Object.keys(COLOUR_LABEL).forEach((colour) => {
-    const chip = el('span', `chip chip-${colour}`, t(COLOUR_LABEL[colour]));
-    legend.appendChild(chip);
-  });
-  const note = el('span', 'legend-note',
+/* --------------------------------------------------------------- the panels */
+
+/** Fallback: the panel's own label and summary, so nothing is ever blank. */
+function renderFallback(panel, data) {
+  const body = panel.querySelector('.panel-body');
+  if (!body) return;
+  clear(body);
+  body.appendChild(el('p', 'demo-flag-inline',
+    LANG === 'fr' ? 'données d’exemple' : 'sample data'));
+  if (!data) {
+    body.appendChild(el('p', 'pending',
+      LANG === 'fr'
+        ? 'Données en cours de génération — lance `MAJ_DEMO=1 npx vitest run tests/site`.'
+        : 'Data being generated — run `MAJ_DEMO=1 npx vitest run tests/site`.'));
+    return;
+  }
+  if (data.label) body.appendChild(el('p', 'panel-label', t(data.label)));
+  if (data.summary) body.appendChild(el('p', 'panel-summary', t(data.summary)));
+  body.appendChild(el('p', 'pending',
     LANG === 'fr'
-      ? ' Chaque case porte l’effectif des deux bras. Le gris est une réponse, pas un vide.'
-      : ' Each cell carries the sample size of both arms. Grey is an answer, not a blank.');
-  legend.appendChild(note);
-  return legend;
+      ? 'Le rendu détaillé de ce panneau arrive avec le lot des rendus.'
+      : 'The detailed rendering of this panel arrives with the renderer lot.'));
 }
 
-/* ---------------------------------------------------------- the cohort detail */
+/** Maps a panel id to its key in the dataset. */
+function keyForPanel(id) {
+  const screens = {
+    'ecran-carte-ticket': 'carteTicket',
+    'ecran-carte-delegation': 'carteDelegation',
+    'ecran-cohorte': 'cohorte',
+    'ecran-sprint': 'sprint',
+    'ecran-reglages': 'reglages',
+    'ecran-couverture': 'couverture',
+    'ecran-calibration': 'calibration',
+    'ecran-gadget': 'gadget',
+  };
+  const features = {
+    'feat-implication': 'implication',
+    'feat-mentions': 'mentions',
+    'feat-ecart-etabli': 'ecartEtabli',
+    'feat-survie': 'survie',
+    'feat-multiplicite': 'multiplicite',
+    'feat-appariement': 'appariement',
+    'feat-puissance': 'puissance',
+    'feat-sequentiel': 'sequentiel',
+    'feat-essai': 'essai',
+    'feat-naive': 'naive',
+    'feat-calibration-fine': 'calibrationFine',
+    'feat-conditions': 'conditions',
+    'feat-priorite': 'priorite',
+    'feat-jira-seul': 'jiraSeul',
+    'feat-epoques': 'epoques',
+    'feat-anonymat': 'anonymat',
+  };
+  return screens[id] || features[id] || null;
+}
 
-function renderCohort() {
-  const root = document.getElementById('cohorte');
-  if (!root) return;
+/** Every panel gets content: the dedicated renderer, or the fallback. */
+function renderPanels() {
+  const helpers = { t, el, clear, pct, rateWithEvidence, lang: () => LANG };
+  const screens = window.DEMO_ECRANS;
+  const panels = window.DEMO_PANNEAUX;
+  document.querySelectorAll('section.panel').forEach((panel) => {
+    const key = keyForPanel(panel.id);
+    if (!key) return;
+    const data = panelData(null, key);
+    const renderer = panel.id.startsWith('ecran-') ? screens : panels;
+    let done = false;
+    if (renderer && typeof renderer.mountOne === 'function') {
+      try {
+        done = renderer.mountOne(panel, key, data, helpers) !== false;
+      } catch (error) {
+        done = false;
+      }
+    }
+    if (!done) renderFallback(panel, data);
+  });
+  if (screens && typeof screens.mount === 'function' && DATA) {
+    try { screens.mount(DATA, helpers); } catch (error) { /* le repli suffit */ }
+  }
+  if (panels && typeof panels.mount === 'function' && DATA) {
+    try { panels.mount(DATA, helpers); } catch (error) { /* le repli suffit */ }
+  }
+}
+
+/* ------------------------------------------------------- static sections */
+
+/** The eight honesty rules, from the frozen sample module. */
+function renderRules() {
+  const root = document.getElementById('regles');
+  const source = window.DONNEES;
+  if (!root || !source) return;
   clear(root);
-  const c = D.COHORT_DETAIL;
-  const box = el('div', 'card');
-  box.appendChild(el('h3', null,
-    `${t(MAP_NATURES.find((n) => n.id === c.nature).label)} · `
-    + `${t(MAP_ZONES.find((z) => z.id === c.zone).label)} · ${LANG === 'fr' ? 'taille' : 'size'} ${c.size}`));
-  box.appendChild(el('p', 'muted', `${t(c.epoch)} · ${LANG === 'fr' ? 'conclusion' : 'conclusion'} : ${t(c.conclusionText)}`));
-
-  const table = el('table', 'arms');
-  table.appendChild(armRow(LANG === 'fr' ? 'avec agent' : 'with agent', c.arms.agent, c.medianLeadH.agent, c.reviewLoad.agent));
-  table.appendChild(armRow(LANG === 'fr' ? 'sans agent' : 'without agent', c.arms.human, c.medianLeadH.human, c.reviewLoad.human));
-  box.appendChild(table);
-
-  box.appendChild(el('p', 'line',
-    `${LANG === 'fr' ? 'Bras équilibrés' : 'Balanced arms'} : ${c.balance.ok ? '✓' : '✗'} · `
-    + `${LANG === 'fr' ? 'personnes distinctes' : 'distinct people'} : ${c.peopleCount} `
-    + `(${LANG === 'fr' ? '≥ 3, la cohorte est affichée' : '≥ 3, so the cohort is shown'})`));
-
-  const causes = el('p', 'line');
-  causes.append(`${LANG === 'fr' ? 'Ce qui ferait passer la case à l’orange' : 'What would move the cell to orange'} : `);
-  causes.append(t(c.causes).join(' · '));
-  box.appendChild(causes);
-  box.appendChild(el('p', 'line muted',
-    `${LANG === 'fr' ? 'Fondement' : 'Evidence'} : ${c.tickets.join(', ')}`));
-  root.appendChild(box);
-}
-
-function armRow(label, stat, medianH, review) {
-  const row = el('tr');
-  row.appendChild(el('th', null, label));
-  row.appendChild(el('td', null, rateWithEvidence(stat)));
-  row.appendChild(el('td', null, `${(medianH / 24).toFixed(1)} ${LANG === 'fr' ? 'j' : 'd'}`));
-  row.appendChild(el('td', null, review.toFixed(1)));
-  return row;
-}
-
-/* -------------------------------------------------------- calibration, epochs */
-
-function renderCalibration() {
-  const root = document.getElementById('calibration');
-  if (!root) return;
-  clear(root);
-  const box = el('div', 'card');
-  box.appendChild(el('p', D.CALIBRATION_VERDICT.ok ? 'verdict ok' : 'verdict bad', t(D.CALIBRATION_VERDICT.text)));
-  const table = el('table', 'calibration');
-  const head = el('tr');
-  [
-    LANG === 'fr' ? 'recommandation donnée' : 'recommendation given',
-    LANG === 'fr' ? 'clôture propre constatée' : 'clean close observed',
-    LANG === 'fr' ? 'effectif' : 'sample size',
-  ].forEach((label) => head.appendChild(el('th', null, label)));
-  table.appendChild(head);
-  D.CALIBRATION.forEach((row) => table.appendChild(calibrationRow(row)));
-  box.appendChild(table);
-  root.appendChild(box);
-}
-
-function calibrationRow(row) {
-  const tr = el('tr');
-  tr.appendChild(el('td', null, t(RECOMMENDATION_LABEL[row.recommendation] || { en: row.recommendation, fr: row.recommendation })));
-  tr.appendChild(el('td', null, `${row.clean} / 100`));
-  tr.appendChild(el('td', null, String(row.n)));
-  return tr;
-}
-
-function renderEpochs() {
-  const root = document.getElementById('epoques');
-  if (!root) return;
-  clear(root);
-  const list = el('ul', 'epochs');
-  D.EPOCHS.forEach((epoch) => {
+  source.HONESTY_RULES.forEach((rule) => {
     const item = el('li');
-    item.appendChild(el('strong', null, t(epoch.label)));
-    item.append(` — ${epoch.from} · ${t(epoch.note)}`);
-    list.appendChild(item);
+    item.setAttribute('data-fr', rule.fr);
+    item.setAttribute('data-en', rule.en);
+    item.textContent = t(rule);
+    root.appendChild(item);
   });
-  root.appendChild(list);
 }
 
-/* ------------------------------------------------------------ coverage, tools */
-
-function renderCoverage() {
-  const root = document.getElementById('couverture');
-  if (!root) return;
-  clear(root);
-  const box = el('div', 'card');
-  box.appendChild(el('p', 'line',
-    `${LANG === 'fr' ? 'Implication connue' : 'Known involvement'} : ${pct(D.COVERAGE.knownInvolvementShare)} `
-    + `· ${LANG === 'fr' ? 'dernière collecte' : 'last collection'} : ${t(D.COVERAGE.lastCollection)}`));
-  const list = el('ul', 'permissions');
-  D.COVERAGE.permissions.forEach((permission) => {
-    const item = el('li', `permission permission-${permission.state}`);
-    item.appendChild(el('strong', null, t(permission.object)));
-    item.append(` — ${permission.state === 'ok' ? (LANG === 'fr' ? 'droit accordé' : 'granted') : (LANG === 'fr' ? 'droit manquant' : 'missing right')} · ${permission.probe}`);
-    list.appendChild(item);
-  });
-  box.appendChild(list);
-  box.appendChild(el('p', 'advice',
-    LANG === 'fr'
-      ? 'Un droit manquant vide le résultat sans erreur : l’écran de couverture sonde chaque type d’objet sur un ticket connu pour le dire, au lieu d’afficher un zéro silencieux.'
-      : 'A missing right empties the result without an error: the coverage screen probes each object type on a known ticket to say so, instead of showing a silent zero.'));
-  root.appendChild(box);
-}
-
+/** The nine MCP tools: the generated call examples win, the sample module backs up. */
 function renderTools() {
   const root = document.getElementById('outils-mcp');
   if (!root) return;
   clear(root);
+  const tools = (DATA && DATA.mcp && DATA.mcp.tools) || (window.DONNEES && window.DONNEES.MCP_TOOLS) || [];
   const table = el('table', 'tools');
   const head = el('tr');
   ['clé / key', 'verbe / verb', 'entrées / inputs', 'retour / output'].forEach((label) => head.appendChild(el('th', null, label)));
   table.appendChild(head);
-  D.MCP_TOOLS.forEach((tool) => {
-    const row = el('tr');
-    row.appendChild(el('td', null, tool.key));
-    row.appendChild(el('td', `verb verb-${tool.verb.toLowerCase()}`, tool.verb));
-    row.appendChild(el('td', null, tool.input));
-    row.appendChild(el('td', null, t(tool.output)));
-    table.appendChild(row);
-  });
+  tools.forEach((tool) => table.appendChild(toolRow(tool)));
   root.appendChild(table);
 }
 
-/* --------------------------------------------------------- Wilson calculator */
+function toolRow(tool) {
+  const row = el('tr');
+  row.appendChild(el('td', null, tool.key));
+  row.appendChild(el('td', `verb verb-${String(tool.verb).toLowerCase()}`, tool.verb));
+  row.appendChild(el('td', null, tool.input || tool.inputs || ''));
+  row.appendChild(el('td', null, t(tool.output)));
+  return row;
+}
 
+/** A real MCP call, rendered as the orchestrator would receive it. */
+function renderSampleCalls() {
+  const panel = document.getElementById('mcp-appels');
+  if (!panel) return;
+  const body = panel.querySelector('.panel-body');
+  clear(body);
+  const calls = (DATA && DATA.mcp && DATA.mcp.sampleCalls) || [];
+  if (!calls.length) {
+    body.appendChild(el('p', 'pending',
+      LANG === 'fr' ? 'Aucun appel d’exemple généré pour l’instant.' : 'No sample call generated yet.'));
+    return;
+  }
+  calls.forEach((call) => {
+    const block = el('div', 'call');
+    block.appendChild(el('p', 'call-name', `${call.tool}(${JSON.stringify(call.input || {})})`));
+    const pre = el('pre', 'call-output');
+    pre.textContent = JSON.stringify(call.output, null, 2);
+    block.appendChild(pre);
+    body.appendChild(block);
+  });
+}
+
+/** The three reference games, computed with the same Wilson function. */
 function renderGames() {
   const root = document.getElementById('jeux-de-chiffres');
-  if (!root) return;
+  const source = window.DONNEES;
+  if (!root || !source) return;
   clear(root);
   const list = el('ul', 'games');
-  D.REFERENCE_GAMES.forEach((game) => {
-    const stat = D.wilson(game.successes, game.n);
+  source.REFERENCE_GAMES.forEach((game) => {
+    const stat = source.wilson(game.successes, game.n);
     const item = el('li');
     item.append(`${t(game.label)} : `);
     item.appendChild(el('code', null, `${game.successes}/${game.n}`));
@@ -315,27 +270,46 @@ function renderGames() {
   root.appendChild(list);
 }
 
-/** Reads the two inputs and prints the interval; used by the calculator form. */
+/** The Wilson calculator: same formula as the app, recomputed in the browser. */
 function computeWilson() {
+  const source = window.DONNEES;
+  const output = document.getElementById('wilson-sortie');
+  if (!source || !output) return;
   const successes = Number(document.getElementById('wilson-succes').value);
   const total = Number(document.getElementById('wilson-total').value);
-  const out = document.getElementById('wilson-sortie');
   if (!Number.isFinite(successes) || !Number.isFinite(total) || total <= 0) {
-    out.textContent = LANG === 'fr' ? 'effectif invalide' : 'invalid sample size';
+    output.textContent = LANG === 'fr' ? 'effectif invalide' : 'invalid sample size';
     return;
   }
   if (successes < 0 || successes > total) {
-    out.textContent = LANG === 'fr' ? 'succès hors bornes' : 'successes out of bounds';
+    output.textContent = LANG === 'fr' ? 'succès hors bornes' : 'successes out of bounds';
     return;
   }
-  const stat = D.wilson(successes, total);
-  out.textContent = rateWithEvidence(stat)
-    + (stat.n < 20 ? (LANG === 'fr' ? ' — sous le seuil : pas assez de recul' : ' — below the threshold: not enough history') : '');
+  const stat = source.wilson(successes, total);
+  const threshold = LANG === 'fr' ? ' — sous le seuil : pas assez de recul' : ' — below the threshold: not enough history';
+  output.textContent = rateWithEvidence(stat) + (stat.n < 20 ? threshold : '');
 }
 
-/* ------------------------------------------------------------------- language */
+/** Provenance of the figures, in the footer: which commit, when, how many tickets. */
+function renderMeta() {
+  const node = document.getElementById('pied-meta');
+  if (!node) return;
+  clear(node);
+  if (!DATA || !DATA.meta) {
+    node.textContent = LANG === 'fr'
+      ? 'Jeu d’exemple non généré sur cette publication.'
+      : 'Sample dataset not generated in this publication.';
+    return;
+  }
+  const meta = DATA.meta;
+  node.textContent = (LANG === 'fr'
+    ? `Jeu d’exemple · ${meta.tickets || '?'} tickets · généré le ${(meta.generatedAt || '').slice(0, 10)} · commit ${meta.commit || '?'} · démonstration : ${meta.demo ? 'oui' : 'non'}`
+    : `Sample dataset · ${meta.tickets || '?'} tickets · generated ${(meta.generatedAt || '').slice(0, 10)} · commit ${meta.commit || '?'} · demo: ${meta.demo ? 'yes' : 'no'}`);
+}
 
-/** Swaps every [data-fr]/[data-en] text and re-renders the dynamic parts. */
+/* ----------------------------------------------------------------- language */
+
+/** Swaps every [data-fr]/[data-en] text, then re-renders everything dynamic. */
 function applyLanguage() {
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-fr][data-en]').forEach((node) => {
@@ -348,25 +322,25 @@ function applyLanguage() {
 }
 
 function renderAll() {
-  renderTicketCard();
-  renderMap();
-  renderCohort();
-  renderCalibration();
-  renderEpochs();
-  renderCoverage();
-  renderTools();
+  buildNav();
+  renderRules();
   renderGames();
+  renderTools();
+  renderSampleCalls();
+  renderPanels();
+  renderMeta();
   computeWilson();
 }
 
-function bindSwitch() {
+function bindUi() {
   const button = document.getElementById('bascule-langue');
-  if (!button) return;
-  button.addEventListener('click', () => {
-    LANG = LANG === 'fr' ? 'en' : 'fr';
-    button.textContent = LANG === 'fr' ? 'EN' : 'FR';
-    applyLanguage();
-  });
+  if (button) {
+    button.addEventListener('click', () => {
+      LANG = LANG === 'fr' ? 'en' : 'fr';
+      button.textContent = LANG === 'fr' ? 'EN' : 'FR';
+      applyLanguage();
+    });
+  }
   const form = document.getElementById('calculette');
   if (form) {
     form.addEventListener('input', computeWilson);
@@ -374,7 +348,10 @@ function bindSwitch() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  bindSwitch();
+async function boot() {
+  bindUi();
+  DATA = await loadDemoData();
   applyLanguage();
-});
+}
+
+document.addEventListener('DOMContentLoaded', boot);
