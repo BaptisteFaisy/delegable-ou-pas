@@ -1,0 +1,2075 @@
+{
+  "ecrans": {
+    "calibration": {
+      "byRecommendation": [
+        {
+          "clean": 0,
+          "interval": {
+            "ciHigh": 1,
+            "ciLow": 0,
+            "n": 0,
+            "rate": 0
+          },
+          "n": 0,
+          "recommendation": "delegate"
+        },
+        {
+          "clean": 0,
+          "interval": {
+            "ciHigh": 1,
+            "ciLow": 0,
+            "n": 0,
+            "rate": 0
+          },
+          "n": 0,
+          "recommendation": "delegate-with-review"
+        },
+        {
+          "clean": 0,
+          "interval": {
+            "ciHigh": 1,
+            "ciLow": 0,
+            "n": 0,
+            "rate": 0
+          },
+          "n": 0,
+          "recommendation": "keep-human"
+        }
+      ],
+      "label": {
+        "en": "Can you trust this app?",
+        "fr": "Peut-on croire cette app ?"
+      },
+      "summary": {
+        "en": "The accuracy of past recommendations, with the sample size and interval of every row. If “delegate” does not clearly beat “keep”, the app says so at the top of the page.",
+        "fr": "La justesse des recommandations passées, avec l’effectif et la fourchette de chaque ligne. Si « à confier » ne fait pas nettement mieux que « à garder », l’app l’écrit en tête de page."
+      },
+      "tickets": 5
+    },
+    "carteDelegation": {
+      "cells": 12,
+      "greyShare": 0.75,
+      "label": {
+        "en": "The delegation map",
+        "fr": "La carte de délégation"
+      },
+      "matrix": {
+        "cells": [
+          {
+            "col": 0,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 283,
+            "row": 1
+          },
+          {
+            "col": 0,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 112,
+            "row": 0
+          },
+          {
+            "col": 1,
+            "colour": "review-hardened",
+            "conclusion": "worse",
+            "n": 99,
+            "row": 2
+          },
+          {
+            "col": 3,
+            "colour": "delegate",
+            "conclusion": "better",
+            "n": 80,
+            "row": 6
+          },
+          {
+            "col": 2,
+            "colour": "delegate",
+            "conclusion": "better",
+            "n": 70,
+            "row": 2
+          },
+          {
+            "col": 3,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 53,
+            "row": 5
+          },
+          {
+            "col": 3,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 39,
+            "row": 7
+          },
+          {
+            "col": 0,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 33,
+            "row": 0
+          },
+          {
+            "col": 0,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 25,
+            "row": 3
+          },
+          {
+            "col": 0,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 20,
+            "row": 3
+          },
+          {
+            "col": 2,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 19,
+            "row": 2
+          },
+          {
+            "col": 0,
+            "colour": "unknown",
+            "conclusion": "not-enough-data",
+            "n": 13,
+            "row": 6
+          }
+        ],
+        "columns": [
+          "api",
+          "billing",
+          "data-pipeline",
+          "web-ui"
+        ],
+        "rows": [
+          "bugfix",
+          "configuration",
+          "data-migration",
+          "external-integration",
+          "no-code",
+          "refactor",
+          "tests",
+          "ui-change"
+        ]
+      },
+      "summary": {
+        "en": "jira:projectPage — the natures × zones matrix in four colours. Grey has the same standing as green: “we do not know” is a conclusion.",
+        "fr": "jira:projectPage — la matrice natures × zones aux quatre couleurs. Le gris a la même dignité que le vert : « on ne sait pas » est une conclusion."
+      }
+    },
+    "carteTicket": {
+      "card": {
+        "agent": {
+          "ciHigh": 0.8349887906020732,
+          "ciLow": 0.5001138848576876,
+          "n": 26,
+          "rate": 0.6923076923076923
+        },
+        "agentLeadTime": {
+          "medianH": 36,
+          "n": 26
+        },
+        "balance": {
+          "balanced": true,
+          "signals": [
+            {
+              "agentShare": 1,
+              "criterion": "size-mix",
+              "difference": 0,
+              "humanShare": 1
+            },
+            {
+              "agentShare": 1,
+              "criterion": "nature-mix",
+              "difference": 0,
+              "humanShare": 1
+            },
+            {
+              "agentShare": 0.8387096774193549,
+              "criterion": "volume-gap",
+              "difference": 0.16129032258064513,
+              "humanShare": 1
+            }
+          ]
+        },
+        "cohort": {
+          "level": "nature-zone-size",
+          "nature": "data-migration",
+          "size": "M",
+          "zone": "billing"
+        },
+        "computedAt": "2026-11-30T12:00:00Z",
+        "conclusion": "not-enough-data",
+        "conditions": [],
+        "confidence": "low",
+        "demo": true,
+        "epochId": "epoch-3",
+        "failureCauses": [
+          "5 réouvertures sur 8 pour une migration non rejouable"
+        ],
+        "guardrails": [],
+        "human": {
+          "ciHigh": 0.9486579883535523,
+          "ciLow": 0.7114724304561465,
+          "n": 31,
+          "rate": 0.8709677419354839
+        },
+        "humanLeadTime": {
+          "medianH": 72,
+          "n": 31
+        },
+        "issueId": "proj-demo-001-412",
+        "issueKey": "PROJ-412",
+        "reasons": [
+          "Cohorte : data-migration · billing · taille M (26 tickets avec agent, 31 sans)",
+          "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 83 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
+          "écart non établi"
+        ],
+        "referenceIssueKeys": [
+          "PROJ-207",
+          "PROJ-233",
+          "PROJ-301"
+        ],
+        "value": "not-enough-data"
+      },
+      "label": {
+        "en": "The card on the ticket",
+        "fr": "La carte sur le ticket"
+      },
+      "summary": {
+        "en": "jira:issuePanel — the recommendation, the cohort, both arms with sample sizes and intervals, reference tickets, conditions, confidence, the decision taken and the detected involvement with its source.",
+        "fr": "jira:issuePanel — la recommandation, la cohorte, les deux bras avec effectifs et fourchettes, les tickets de référence, les conditions, la confiance, la décision prise et l’implication relevée avec sa source."
+      },
+      "tickets": 5
+    },
+    "cohorte": {
+      "arms": {
+        "agent": {
+          "ciHigh": 0.685892525250887,
+          "ciLow": 0.41245213738758246,
+          "n": 47,
+          "rate": 0.5531914893617021
+        },
+        "human": {
+          "ciHigh": 0.9332320300570737,
+          "ciLow": 0.7472642307950509,
+          "n": 52,
+          "rate": 0.8653846153846154
+        }
+      },
+      "cohorte": "data-migration|billing|M",
+      "difference": {
+        "ciHigh": -0.1345361808120678,
+        "ciLow": -0.46843280367181156,
+        "diff": -0.31219312602291327,
+        "established": true,
+        "nA": 47,
+        "nB": 52,
+        "rateA": 0.5531914893617021,
+        "rateB": 0.8653846153846154
+      },
+      "label": {
+        "en": "One cohort in detail",
+        "fr": "Le détail d’une cohorte"
+      },
+      "medianLeadH": {
+        "agent": {
+          "medianH": 36,
+          "n": 46
+        },
+        "human": {
+          "medianH": 72,
+          "n": 52
+        }
+      },
+      "summary": {
+        "en": "Both arms, their sample sizes, their intervals, the interval of the difference, the median lead times and the evidence tickets.",
+        "fr": "Les deux bras, leurs effectifs, leurs fourchettes, l’intervalle de la différence, les délais médians et les tickets du fondement."
+      },
+      "unknown": 0
+    },
+    "couverture": {
+      "capability": {
+        "available": [
+          "declared-involvement — the involvement level declared by the team — le niveau d'implication déclaré par l'équipe",
+          "lead-time — the delay read from the ticket history — le délai lu dans l'historique du ticket",
+          "clean-closure — the clean closure from the reopenings and the incidents — la clôture propre par les réouvertures et les incidents",
+          "acceptance-criteria — the acceptance criteria of the description — les critères d'acceptation de la description",
+          "adoption-involvement — the involvement deduced from the adoption date — l'implication déduite de la date d'adoption"
+        ],
+        "consequences": [
+          "review load: not measurable here, announced absent and never rendered as a zero — charge de relecture : non mesurable ici, annoncée absente et jamais rendue comme un zéro",
+          "involvement: falls back on the declared field or the adoption date, so the share of unknown levels explodes — implication : repli sur le champ déclaré ou la date d'adoption, donc la part de niveaux inconnus explose",
+          "graph: no commit, no pull request, no signature — the outcome is emptied, not wrong — graphe : aucun commit, aucune pull request, aucune signature — le résultat est vidé, pas faux",
+          "minimum arm size: widened by half, so the app refuses to conclude where it no longer has the material — minimum par bras : élargi de moitié, l'app refuse de conclure là où elle n'a plus la matière"
+        ],
+        "level": "jira-only",
+        "unavailable": [
+          "commit-involvement — the involvement read in the commits and the pull requests — l’implication lue dans les commits et les pull requests",
+          "review-load — the review load of the pull requests — la charge de relecture des pull requests",
+          "commit-signatures — the signatures of the commits — les signatures des commits",
+          "tickets-without-commit — the tickets without any commit — les tickets sans commit"
+        ]
+      },
+      "knownInvolvementShare": 0.5816326530612245,
+      "label": {
+        "en": "Coverage",
+        "fr": "La couverture"
+      },
+      "lastCollection": "2026-11-30",
+      "permissions": [
+        {
+          "granted": true,
+          "object": "jira",
+          "probed": true
+        },
+        {
+          "granted": true,
+          "object": "issue",
+          "probed": true
+        },
+        {
+          "granted": true,
+          "object": "commit",
+          "probed": true
+        },
+        {
+          "granted": false,
+          "object": "pull-request",
+          "probed": true
+        },
+        {
+          "granted": false,
+          "object": "user",
+          "probed": true
+        }
+      ],
+      "summary": {
+        "en": "Share of known involvement, state of every graph permission, capability level, last collection. A missing right is stated, never a silent zero.",
+        "fr": "Part d’implication connue, état de chaque droit sur le graphe, niveau de capacité, dernière collecte. Un droit manquant est dit, jamais un zéro silencieux."
+      },
+      "unknown": {
+        "ciHigh": 0.4512081731892925,
+        "ciLow": 0.38623454794730816,
+        "n": 882,
+        "rate": 0.41836734693877553
+      }
+    },
+    "gadget": {
+      "cells": 12,
+      "greyShare": 0.75,
+      "label": {
+        "en": "The dashboard gadget",
+        "fr": "Le gadget de tableau de bord"
+      },
+      "summary": {
+        "en": "jira:dashboardGadget — the reduced map, with the share of grey as the main indicator.",
+        "fr": "jira:dashboardGadget — la carte réduite et la part de gris comme indicateur principal."
+      }
+    },
+    "reglages": {
+      "label": {
+        "en": "Project settings",
+        "fr": "Les réglages du projet"
+      },
+      "seenMentions": [
+        "agent-bot-1"
+      ],
+      "settings": {
+        "adoptionDate": "2026-01-12",
+        "demo": true,
+        "hardenedReview": {
+          "evidencePerCriterion": true,
+          "label": "deux relecteurs, un responsable de zone, une preuve par critère / two reviewers, a zone owner, one proof per criterion",
+          "minReviewers": 2,
+          "zoneOwnerRequired": true
+        },
+        "minArmSize": 20,
+        "natures": [
+          "bugfix",
+          "ui-change",
+          "data-migration",
+          "refactor",
+          "tests",
+          "configuration",
+          "external-integration",
+          "no-code"
+        ],
+        "projectId": "proj-demo-001",
+        "projectKey": "PROJ",
+        "sensitiveZones": [
+          "data-pipeline"
+        ],
+        "sizes": [
+          "S",
+          "M",
+          "L"
+        ],
+        "updatedAt": "2026-11-30T12:00:00Z",
+        "waitingStatuses": [
+          "Blocked"
+        ],
+        "zones": [
+          "api",
+          "web-ui",
+          "billing",
+          "data-pipeline"
+        ]
+      },
+      "signaturePatterns": [
+        {
+          "agentName": "Copilot (agent autonome)",
+          "enabled": true,
+          "expression": "co[-\\s]*authored[-\\s]*by\\s*:[^\\n]*(copilot[^\\n]*agent|agent[^\\n]*copilot)",
+          "id": "copilot-agent",
+          "note": "à confirmer par l’équipe",
+          "seenCount": 0
+        },
+        {
+          "agentName": "Claude Code",
+          "enabled": true,
+          "expression": "co[-\\s]*authored[-\\s]*by\\s*:[^\\n]*claude",
+          "id": "claude-code",
+          "note": "à confirmer par l’équipe",
+          "seenCount": 0
+        },
+        {
+          "agentName": "Codex",
+          "enabled": true,
+          "expression": "co[-\\s]*authored[-\\s]*by\\s*:[^\\n]*codex",
+          "id": "codex",
+          "note": "à confirmer par l’équipe",
+          "seenCount": 0
+        },
+        {
+          "agentName": "Cursor",
+          "enabled": true,
+          "expression": "co[-\\s]*authored[-\\s]*by\\s*:[^\\n]*cursor",
+          "id": "cursor",
+          "note": "à confirmer par l’équipe",
+          "seenCount": 0
+        },
+        {
+          "agentName": "Copilot",
+          "enabled": true,
+          "expression": "co[-\\s]*authored[-\\s]*by\\s*:[^\\n]*copilot",
+          "id": "copilot",
+          "note": "à confirmer par l’équipe",
+          "seenCount": 0
+        }
+      ],
+      "summary": {
+        "en": "jira:projectSettingsPage — threshold, adoption date, natures, zones, sizes, sensitive zones, the definition of hardened review, epochs, and the mention catalogue with the mentions actually seen.",
+        "fr": "jira:projectSettingsPage — seuil, date d’adoption, natures, zones, tailles, zones sensibles, définition de la relecture renforcée, époques, et le catalogue de mentions avec les mentions réellement vues."
+      }
+    },
+    "sprint": {
+      "byRecommendation": [
+        {
+          "recommendation": "not-enough-data",
+          "tickets": 5
+        }
+      ],
+      "delegablePointsShare": 0,
+      "label": {
+        "en": "The sprint breakdown",
+        "fr": "La répartition du sprint"
+      },
+      "summary": {
+        "en": "jira:sprintAction — tickets by recommendation and the delegable share.",
+        "fr": "jira:sprintAction — les tickets par recommandation et la part délégable."
+      },
+      "tickets": 5
+    }
+  },
+  "features": {
+    "anonymat": {
+      "forbiddenFields": [
+        "account",
+        "accountid",
+        "accountids",
+        "actor",
+        "actoraccountid",
+        "assignee",
+        "assigneeaccountid",
+        "author",
+        "authoraccountid",
+        "avatar",
+        "avatarurl",
+        "displayname",
+        "email",
+        "emailaddress",
+        "firstname",
+        "fullname",
+        "givenname",
+        "lastname",
+        "mail",
+        "member",
+        "members",
+        "people",
+        "person",
+        "personid",
+        "personname",
+        "profileurl",
+        "reporter",
+        "reporteraccountid",
+        "reviewer",
+        "revieweraccountid",
+        "reviewers",
+        "user",
+        "userid",
+        "username"
+      ],
+      "label": {
+        "en": "Never per person",
+        "fr": "Jamais par personne"
+      },
+      "masked": {
+        "masked": true,
+        "reason": "fewer-than-3-people"
+      },
+      "notMasked": {
+        "masked": false,
+        "reason": null
+      },
+      "summary": {
+        "en": "No individual statistic, no ranking. A cohort carried by fewer than three people is masked — and says so.",
+        "fr": "Aucune statistique individuelle, aucun classement. Une cohorte portée par moins de trois personnes est masquée — et le dit."
+      }
+    },
+    "appariement": {
+      "balance": {
+        "balanced": true,
+        "criteria": [
+          {
+            "after": 0,
+            "before": 0,
+            "name": "leadTimeH",
+            "ok": true
+          }
+        ]
+      },
+      "cohorte": "configuration|api|S",
+      "exact": {
+        "matchedShare": 0,
+        "pairs": 0,
+        "unmatchedAgent": 0,
+        "unmatchedHuman": 0
+      },
+      "label": {
+        "en": "Concluding despite unbalanced arms",
+        "fr": "Conclure malgré des bras déséquilibrés"
+      },
+      "propensity": {
+        "matchedShare": 0,
+        "pairs": 0,
+        "unmatchedAgent": 0,
+        "unmatchedHuman": 0
+      },
+      "summary": {
+        "en": "Exact matching on nature × zone × size, then nearest neighbour on a propensity score: the before/after balance says whether matching helped, and the number of dropped tickets is shown.",
+        "fr": "Appariement exact nature × zone × taille, puis plus proche voisin sur score de propension : la balance avant/après dit si l’appariement a servi, et le nombre de tickets jetés est affiché."
+      }
+    },
+    "calibrationFine": {
+      "fine": {
+        "auc": 0.5,
+        "brier": 0.25,
+        "logLoss": 0.6931471805599453,
+        "reliability": [
+          {
+            "bin": 0,
+            "n": 0,
+            "observed": {
+              "ciHigh": 1,
+              "ciLow": 0,
+              "n": 0,
+              "rate": 0
+            },
+            "predictedHigh": 0.1,
+            "predictedLow": 0
+          },
+          {
+            "bin": 1,
+            "n": 0,
+            "observed": {
+              "ciHigh": 1,
+              "ciLow": 0,
+              "n": 0,
+              "rate": 0
+            },
+            "predictedHigh": 0.2,
+            "predictedLow": 0.1
+          },
+          {
+            "bin": 2,
+            "n": 0,
+            "observed": {
+              "ciHigh": 1,
+              "ciLow": 0,
+              "n": 0,
+              "rate": 0
+            },
+            "predictedHigh": 0.3,
+            "predictedLow": 0.2
+          },
+          {
+            "bin": 3,
+            "n": 0,
+            "observed": {
+              "ciHigh": 1,
+              "ciLow": 0,
+              "n": 0,
+              "rate": 0
+            },
+            "predictedHigh": 0.4,
+            "predictedLow": 0.3
+          },
+          {
+            "bin": 4,
+            "n": 0,
+            "observed": {
+              "ciHigh": 1,
+              "ciLow": 0,
+              "n": 0,
+              "rate": 0
+            },
+            "predictedHigh": 0.5,
+            "predictedLow": 0.4
+          },
+          {
+            "bin": 5,
+            "n": 5,
+            "observed": {
+              "ciHigh": 0.8823817688407467,
+              "ciLow": 0.23071993220883708,
+              "n": 5,
+              "rate": 0.6
+            },
+            "predictedHigh": 0.6,
+            "predictedLow": 0.5
+          },
+          {
+            "bin": 6,
+            "n": 0,
+            "observed": {
+              "ciHigh": 1,
+              "ciLow": 0,
+              "n": 0,
+              "rate": 0
+            },
+            "predictedHigh": 0.7,
+            "predictedLow": 0.6
+          },
+          {
+            "bin": 7,
+            "n": 0,
+            "observed": {
+              "ciHigh": 1,
+              "ciLow": 0,
+              "n": 0,
+              "rate": 0
+            },
+            "predictedHigh": 0.8,
+            "predictedLow": 0.7
+          },
+          {
+            "bin": 8,
+            "n": 0,
+            "observed": {
+              "ciHigh": 1,
+              "ciLow": 0,
+              "n": 0,
+              "rate": 0
+            },
+            "predictedHigh": 0.9,
+            "predictedLow": 0.8
+          },
+          {
+            "bin": 9,
+            "n": 0,
+            "observed": {
+              "ciHigh": 1,
+              "ciLow": 0,
+              "n": 0,
+              "rate": 0
+            },
+            "predictedHigh": 1,
+            "predictedLow": 0.9
+          }
+        ]
+      },
+      "label": {
+        "en": "Fine-grained calibration",
+        "fr": "La calibration fine"
+      },
+      "records": 5,
+      "summary": {
+        "en": "Brier, log loss, AUC, reliability curve with its empty bins visible, by cohort and by policy version — and the verdict that widens “not enough history” when the advice adds nothing.",
+        "fr": "Brier, log-loss, AUC, courbe de fiabilité avec ses bins vides visibles, par cohorte et par version de politique — et le verdict qui élargit « pas assez de recul » quand les avis n’apportent rien."
+      },
+      "verdict": {
+        "auc": 0.5,
+        "brier": 0.25,
+        "informative": false,
+        "reason": "Aucun ticket « à confier » ni « à garder » à comparer : rien à mesurer, l’app ne peut pas se noter. AUC à 0,5 : le pronostic ne classe rien, une seule issue a été observée partout.",
+        "widenUnknown": true
+      }
+    },
+    "conditions": {
+      "checks": {
+        "allSatisfied": false,
+        "checks": [
+          {
+            "checkedAt": "2026-11-30",
+            "evidence": "3 critères dans la description",
+            "kind": "acceptance-criteria",
+            "satisfied": true
+          },
+          {
+            "checkedAt": "2026-11-30",
+            "evidence": "aucun fichier de test visible dans la PR",
+            "kind": "migration-test",
+            "satisfied": null
+          },
+          {
+            "checkedAt": "2026-11-30",
+            "evidence": "not verifiable — non vérifiable",
+            "kind": "zone-owner-review",
+            "satisfied": null
+          },
+          {
+            "checkedAt": "2026-11-30",
+            "evidence": "not verifiable — non vérifiable",
+            "kind": "two-reviewers",
+            "satisfied": null
+          },
+          {
+            "checkedAt": "2026-11-30",
+            "evidence": "not verifiable — non vérifiable",
+            "kind": "evidence-per-criterion",
+            "satisfied": null
+          }
+        ],
+        "unknownCount": 4
+      },
+      "derived": [
+        {
+          "kind": "acceptance-criteria",
+          "label": "acceptance-criteria — the ticket states acceptance criteria — le ticket énonce des critères d'acceptation",
+          "required": true
+        },
+        {
+          "kind": "migration-test",
+          "label": "migration-test — a replayable migration test ships with the change — un test de migration rejouable accompagne le changement",
+          "required": true
+        },
+        {
+          "kind": "zone-owner-review",
+          "label": "zone-owner-review — the zone owner reviewed the change — le propriétaire de la zone a relu le changement",
+          "required": false
+        },
+        {
+          "kind": "two-reviewers",
+          "label": "two-reviewers — two distinct reviewers read the change — deux relecteurs distincts ont lu le changement",
+          "required": true
+        },
+        {
+          "kind": "evidence-per-criterion",
+          "label": "evidence-per-criterion — each criterion carries its evidence — chaque critère porte sa preuve",
+          "required": true
+        }
+      ],
+      "label": {
+        "en": "Executable conditions",
+        "fr": "Des conditions exécutables"
+      },
+      "summary": {
+        "en": "Conditions derive from the recommendation and the cohort’s failure causes, then are checked on the pull request. Not verifiable is null: unknown is neither failure nor success.",
+        "fr": "Les conditions dérivent de la recommandation et des causes d’échec de la cohorte, puis sont vérifiées sur la PR. Non vérifiable vaut null : l’inconnu n’est ni un échec ni une réussite."
+      },
+      "unknownCount": 4
+    },
+    "ecartEtabli": {
+      "avecAgent": {
+        "ciHigh": 0.9052426214366236,
+        "ciLow": 0.7153653834518579,
+        "n": 59,
+        "rate": 0.8305084745762712
+      },
+      "cohorte": "bugfix|api|M",
+      "counterExample": {
+        "established": true,
+        "label": {
+          "en": "Counter-example: 60/100 against 45/100",
+          "fr": "Contre-exemple : 60/100 contre 45/100"
+        },
+        "newcombe": {
+          "ciHigh": 0.2804507626218012,
+          "ciLow": 0.011721416663672518,
+          "diff": 0.14999999999999997,
+          "established": true,
+          "nA": 100,
+          "nB": 100,
+          "rateA": 0.6,
+          "rateB": 0.45
+        },
+        "overlap": true,
+        "wilsonA": {
+          "ciHigh": 0.6906002538863971,
+          "ciLow": 0.5020007846184025,
+          "n": 100,
+          "rate": 0.6
+        },
+        "wilsonB": {
+          "ciHigh": 0.5475557296835656,
+          "ciLow": 0.3561437510640346,
+          "n": 100,
+          "rate": 0.45
+        }
+      },
+      "difference": {
+        "ciHigh": 0.10085097904212367,
+        "ciLow": -0.17043182106742139,
+        "diff": -0.03741605372561563,
+        "established": false,
+        "nA": 59,
+        "nB": 53,
+        "rateA": 0.8305084745762712,
+        "rateB": 0.8679245283018868
+      },
+      "equivalence": {
+        "ciHigh": 0.10085097904212367,
+        "ciLow": -0.17043182106742139,
+        "diff": -0.03741605372561563,
+        "equivalent": false,
+        "margin": 0.1
+      },
+      "label": {
+        "en": "Established gap, tested on the difference",
+        "fr": "Écart établi, testé sur la différence"
+      },
+      "sansAgent": {
+        "ciHigh": 0.9345222979931043,
+        "ciLow": 0.7515949119376506,
+        "n": 53,
+        "rate": 0.8679245283018868
+      },
+      "summary": {
+        "en": "Two overlapping Wilson intervals do not prove there is no difference: the app tests the Newcombe interval of the difference, and “same” through equivalence (TOST).",
+        "fr": "Deux intervalles de Wilson qui se recouvrent ne prouvent pas l’absence de différence : l’app teste l’intervalle de Newcombe sur la différence, et « pareil » par équivalence (TOST)."
+      }
+    },
+    "epoques": {
+      "epochs": [
+        {
+          "client": "code-agent",
+          "id": "epoch-1",
+          "instructionsVersion": "v1",
+          "label": "outils initiaux, consignes v1 / first tools, rules v1",
+          "model": "model-a-2025",
+          "projectId": "proj-demo-001",
+          "startsAt": "2025-12-01"
+        },
+        {
+          "client": "code-agent",
+          "id": "epoch-2",
+          "instructionsVersion": "v2",
+          "label": "consignes partagées v2 / shared rules v2",
+          "model": "model-a-2025",
+          "projectId": "proj-demo-001",
+          "startsAt": "2026-04-06"
+        },
+        {
+          "client": "code-agent",
+          "id": "epoch-3",
+          "instructionsVersion": "v2",
+          "label": "nouveau modèle, 14 septembre / new model, 14 September",
+          "model": "model-b-2026",
+          "projectId": "proj-demo-001",
+          "startsAt": "2026-09-14"
+        }
+      ],
+      "label": {
+        "en": "The epochs",
+        "fr": "Les époques"
+      },
+      "summary": {
+        "en": "Figures of two epochs are never mixed; the old ones stay visible, greyed out.",
+        "fr": "On ne mélange jamais les chiffres de deux époques ; les anciens restent visibles, grisés."
+      },
+      "window": {
+        "end": "2026-11-30",
+        "start": "2025-12-01"
+      }
+    },
+    "essai": {
+      "label": {
+        "en": "The controlled trial",
+        "fr": "L’essai contrôlé"
+      },
+      "summary": {
+        "en": "Chance decides who takes the ticket, the draw is reproducible, an unrespected draw removes the ticket from the trial. The only figure called “proven”.",
+        "fr": "Le sort décide qui prend le ticket, le tirage est reproductible, un tirage non respecté sort le ticket de l’essai. C’est le seul chiffre qualifié de « prouvé »."
+      },
+      "trial": {
+        "cohort": {
+          "level": "nature-zone-size",
+          "nature": "external-integration",
+          "size": "M",
+          "zone": "api"
+        },
+        "endsAt": "2026-12-15",
+        "epochId": "epoch-3",
+        "id": "trial-demo-001",
+        "projectId": "proj-demo-001",
+        "seed": "demo-trial-seed-01",
+        "startsAt": "2026-11-02",
+        "state": "running",
+        "stopReason": ""
+      }
+    },
+    "implication": {
+      "label": {
+        "en": "Recognising an agent’s work",
+        "fr": "Reconnaître le travail d’un agent"
+      },
+      "levels": [
+        "none",
+        "assisted",
+        "driven",
+        "autonomous",
+        "unknown"
+      ],
+      "sources": [
+        {
+          "source": "mcp-declaration",
+          "tickets": 75
+        },
+        {
+          "source": "bot-author",
+          "tickets": 69
+        },
+        {
+          "source": "commit-mention",
+          "tickets": 63
+        },
+        {
+          "source": "closure-field",
+          "tickets": 297
+        },
+        {
+          "source": "adoption-date",
+          "tickets": 378
+        }
+      ],
+      "summary": {
+        "en": "Five sources, from the safest to the least safe; the best available wins and is shown. Unknown is never counted as “without agent”.",
+        "fr": "Cinq sources, de la plus sûre à la moins sûre ; la meilleure disponible est retenue et affichée. L’inconnu n’est jamais compté « sans agent »."
+      },
+      "tickets": 882,
+      "unknownShare": {
+        "ciHigh": 0.4512081731892925,
+        "ciLow": 0.38623454794730816,
+        "n": 882,
+        "rate": 0.41836734693877553
+      }
+    },
+    "jiraSeul": {
+      "label": {
+        "en": "The fallback with no graph permission",
+        "fr": "Le repli sans aucun droit sur le graphe"
+      },
+      "levels": [
+        {
+          "available": 9,
+          "level": "full",
+          "threshold": 20,
+          "unavailable": 0
+        },
+        {
+          "available": [
+            "declared-involvement — the involvement level declared by the team — le niveau d'implication déclaré par l'équipe",
+            "lead-time — the delay read from the ticket history — le délai lu dans l'historique du ticket",
+            "clean-closure — the clean closure from the reopenings and the incidents — la clôture propre par les réouvertures et les incidents",
+            "acceptance-criteria — the acceptance criteria of the description — les critères d'acceptation de la description",
+            "adoption-involvement — the involvement deduced from the adoption date — l'implication déduite de la date d'adoption"
+          ],
+          "consequences": [
+            "review load: not measurable here, announced absent and never rendered as a zero — charge de relecture : non mesurable ici, annoncée absente et jamais rendue comme un zéro",
+            "involvement: falls back on the declared field or the adoption date, so the share of unknown levels explodes — implication : repli sur le champ déclaré ou la date d'adoption, donc la part de niveaux inconnus explose",
+            "graph: no commit, no pull request, no signature — the outcome is emptied, not wrong — graphe : aucun commit, aucune pull request, aucune signature — le résultat est vidé, pas faux",
+            "minimum arm size: widened by half, so the app refuses to conclude where it no longer has the material — minimum par bras : élargi de moitié, l'app refuse de conclure là où elle n'a plus la matière"
+          ],
+          "level": "jira-only",
+          "threshold": 30,
+          "unavailable": [
+            "commit-involvement — the involvement read in the commits and the pull requests — l’implication lue dans les commits et les pull requests",
+            "review-load — the review load of the pull requests — la charge de relecture des pull requests",
+            "commit-signatures — the signatures of the commits — les signatures des commits",
+            "tickets-without-commit — the tickets without any commit — les tickets sans commit"
+          ]
+        }
+      ],
+      "project": "PROJ",
+      "summary": {
+        "en": "Three capability levels. The threshold widens as measurement gets poorer, and every missing capability produces a written consequence instead of a silent hole.",
+        "fr": "Trois niveaux de capacité. Le seuil s’élargit quand la mesure s’appauvrit, et chaque capacité manquante produit une conséquence écrite plutôt qu’un trou silencieux."
+      }
+    },
+    "mentions": {
+      "commits": 1715,
+      "example": {
+        "agentName": "Claude Code",
+        "found": true,
+        "patternId": "claude-code"
+      },
+      "label": {
+        "en": "The commit mention catalogue",
+        "fr": "Le catalogue de mentions de commit"
+      },
+      "patterns": [
+        {
+          "agentName": "Copilot (agent autonome)",
+          "enabled": true,
+          "id": "copilot-agent"
+        },
+        {
+          "agentName": "Claude Code",
+          "enabled": true,
+          "id": "claude-code"
+        },
+        {
+          "agentName": "Codex",
+          "enabled": true,
+          "id": "codex"
+        },
+        {
+          "agentName": "Cursor",
+          "enabled": true,
+          "id": "cursor"
+        },
+        {
+          "agentName": "Copilot",
+          "enabled": true,
+          "id": "copilot"
+        }
+      ],
+      "signedShare": 0.160932944606414,
+      "summary": {
+        "en": "Adjustable patterns, each marked “to be confirmed by the team”. From a message the app keeps one fact only: whether a mention was found, and the agent name — the message is never stored.",
+        "fr": "Motifs réglables, chacun marqué « à confirmer par l’équipe ». Du message, l’app ne garde qu’un fait : mention trouvée ou non, et le nom de l’agent — le message n’est jamais stocké."
+      }
+    },
+    "multiplicite": {
+      "cells": [
+        {
+          "key": "data-migration|billing|M",
+          "pValue": 0.000572836168251993,
+          "qValue": 0.005728361682519931,
+          "rank": 1,
+          "significant": true
+        },
+        {
+          "key": "tests|web-ui|M",
+          "pValue": 0.012282738972377331,
+          "qValue": 0.06141369486188666,
+          "rank": 2,
+          "significant": false
+        },
+        {
+          "key": "data-migration|data-pipeline|M",
+          "pValue": 0.02328578255853829,
+          "qValue": 0.07761927519512764,
+          "rank": 3,
+          "significant": false
+        },
+        {
+          "key": "bugfix|api|S",
+          "pValue": 0.0755605675259415,
+          "qValue": 0.18890141881485373,
+          "rank": 4,
+          "significant": false
+        },
+        {
+          "key": "tests|api|S",
+          "pValue": 0.3352344137959594,
+          "qValue": 0.6377946184716997,
+          "rank": 5,
+          "significant": false
+        },
+        {
+          "key": "external-integration|api|L",
+          "pValue": 0.38267677108301984,
+          "qValue": 0.6377946184716997,
+          "rank": 6,
+          "significant": false
+        },
+        {
+          "key": "bugfix|api|M",
+          "pValue": 0.5816397014774904,
+          "qValue": 0.8309138592535578,
+          "rank": 7,
+          "significant": false
+        },
+        {
+          "key": "external-integration|api|M",
+          "pValue": 0.7952497535349383,
+          "qValue": 0.9156050105391479,
+          "rank": 8,
+          "significant": false
+        },
+        {
+          "key": "data-migration|data-pipeline|S",
+          "pValue": 0.911008439507264,
+          "qValue": 0.9156050105391479,
+          "rank": 9,
+          "significant": false
+        },
+        {
+          "key": "ui-change|web-ui|S",
+          "pValue": 0.9156050105391479,
+          "qValue": 0.9156050105391479,
+          "rank": 10,
+          "significant": false
+        }
+      ],
+      "label": {
+        "en": "Multiplicity correction",
+        "fr": "Correction de multiplicité"
+      },
+      "note": {
+        "expectedFalse": 1.75,
+        "method": "benjamini-hochberg",
+        "surviving": 1,
+        "tested": 10
+      },
+      "summary": {
+        "en": "A 35-cell map tested at 5 % mechanically yields 1.75 false positives: every cell carries its q-value and the map states how many survive.",
+        "fr": "Une carte de 35 cases testées à 5 % produit mécaniquement 1,75 faux positif : chaque case porte sa q-valeur et la carte dit combien survivent."
+      }
+    },
+    "naive": {
+      "breakdown": {
+        "cells": [
+          {
+            "agent": {
+              "ciHigh": 0.9052426214366236,
+              "ciLow": 0.7153653834518579,
+              "n": 59,
+              "rate": 0.8305084745762712
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 0.9345222979931043,
+              "ciLow": 0.7515949119376506,
+              "n": 53,
+              "rate": 0.8679245283018868
+            },
+            "key": "bugfix|api|M"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.685892525250887,
+              "ciLow": 0.41245213738758246,
+              "n": 47,
+              "rate": 0.5531914893617021
+            },
+            "conclusion": "worse",
+            "human": {
+              "ciHigh": 0.9332320300570737,
+              "ciLow": 0.7472642307950509,
+              "n": 52,
+              "rate": 0.8653846153846154
+            },
+            "key": "data-migration|billing|M"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9293890829149256,
+              "ciLow": 0.7092737396097997,
+              "n": 40,
+              "rate": 0.85
+            },
+            "conclusion": "better",
+            "human": {
+              "ciHigh": 0.7365188938759863,
+              "ciLow": 0.445956198273935,
+              "n": 40,
+              "rate": 0.6
+            },
+            "key": "tests|web-ui|M"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9212965937143589,
+              "ciLow": 0.6810888526532568,
+              "n": 36,
+              "rate": 0.8333333333333334
+            },
+            "conclusion": "better",
+            "human": {
+              "ciHigh": 0.7363426221431113,
+              "ciLow": 0.42221304146519273,
+              "n": 34,
+              "rate": 0.5882352941176471
+            },
+            "key": "data-migration|data-pipeline|M"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9486333993289995,
+              "ciLow": 0.5230138624217553,
+              "n": 11,
+              "rate": 0.8181818181818182
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 0.9433190520193067,
+              "ciLow": 0.49015684672072335,
+              "n": 10,
+              "rate": 0.8
+            },
+            "key": "ui-change|web-ui|S"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9637768390302125,
+              "ciLow": 0.3755282641185388,
+              "n": 5,
+              "rate": 0.8
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 1,
+              "ciLow": 0.7961107336956521,
+              "n": 15,
+              "rate": 1
+            },
+            "key": "bugfix|api|S"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9525108273576373,
+              "ciLow": 0.6666458812053,
+              "n": 22,
+              "rate": 0.8636363636363636
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 0.9385096847238394,
+              "ciLow": 0.20765495512648796,
+              "n": 3,
+              "rate": 0.6666666666666666
+            },
+            "key": "external-integration|api|L"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9025411942607853,
+              "ciLow": 0.4343497069897537,
+              "n": 11,
+              "rate": 0.7272727272727273
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 0.9367762376877729,
+              "ciLow": 0.45258334367280534,
+              "n": 9,
+              "rate": 0.7777777777777778
+            },
+            "key": "external-integration|api|M"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.8731950283838191,
+              "ciLow": 0.4236888781333764,
+              "n": 13,
+              "rate": 0.6923076923076923
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 0.9032306674407831,
+              "ciLow": 0.29998832134152864,
+              "n": 6,
+              "rate": 0.6666666666666666
+            },
+            "key": "data-migration|data-pipeline|S"
+          },
+          {
+            "agent": {
+              "ciHigh": 0.9999999999999999,
+              "ciLow": 0.6096569663469354,
+              "n": 6,
+              "rate": 1
+            },
+            "conclusion": "not-enough-data",
+            "human": {
+              "ciHigh": 0.9743210440510252,
+              "ciLow": 0.4868654966809701,
+              "n": 7,
+              "rate": 0.8571428571428571
+            },
+            "key": "tests|api|S"
+          }
+        ],
+        "contradicts": false,
+        "explanation": "the naive total establishes no direction, so no cohort can contradict it (0 of 3 decisive) — le total naïf n'établit aucune direction, aucune cohorte ne peut le contredire (0 sur 3 décisives)",
+        "naive": {
+          "agent": {
+            "ciHigh": 0.8232824859392568,
+            "ciLow": 0.7203636303789512,
+            "n": 250,
+            "rate": 0.776
+          },
+          "conclusion": "same",
+          "difference": {
+            "ciHigh": 0.07829543122883698,
+            "ciLow": -0.07139297407046111,
+            "diff": 0.0030742358078602594,
+            "established": false,
+            "nA": 250,
+            "nB": 229,
+            "rateA": 0.776,
+            "rateB": 0.7729257641921398
+          },
+          "human": {
+            "ciHigh": 0.8224228320088499,
+            "ciLow": 0.7144228175657966,
+            "n": 229,
+            "rate": 0.7729257641921398
+          },
+          "labelled": "naive figure — chiffre naïf"
+        }
+      },
+      "contradicts": false,
+      "label": {
+        "en": "The naive figure against its breakdown",
+        "fr": "Le chiffre naïf contre sa décomposition"
+      },
+      "naive": {
+        "agent": {
+          "ciHigh": 0.8232824859392568,
+          "ciLow": 0.7203636303789512,
+          "n": 250,
+          "rate": 0.776
+        },
+        "conclusion": "same",
+        "difference": {
+          "ciHigh": 0.07829543122883698,
+          "ciLow": -0.07139297407046111,
+          "diff": 0.0030742358078602594,
+          "established": false,
+          "nA": 250,
+          "nB": 229,
+          "rateA": 0.776,
+          "rateB": 0.7729257641921398
+        },
+        "human": {
+          "ciHigh": 0.8224228320088499,
+          "ciLow": 0.7144228175657966,
+          "n": 229,
+          "rate": 0.7729257641921398
+        },
+        "labelled": "naive figure — chiffre naïf"
+      },
+      "paradox": false,
+      "selectionBias": {
+        "biased": false,
+        "detail": "easy-ticket share 15 % in the agent arm against 17 % in the human arm (gap 1 points, tolerance 20 points); 0 of 10 cohort(s) above tolerance; worst cohort external-integration|api|L (gap 7 points) — part des tickets faciles : 15 % dans le bras agent contre 17 % dans le bras humain (écart 1 points, tolérance 20 points) ; 0 cohorte(s) sur 10 au-delà de la tolérance ; pire cohorte external-integration|api|L (écart 7 points)"
+      },
+      "simpson": {
+        "detail": "the naive total establishes no direction, so no cohort can contradict it (0 of 3 decisive) — le total naïf n'établit aucune direction, aucune cohorte ne peut le contredire (0 sur 3 décisives)",
+        "paradox": false
+      },
+      "summary": {
+        "en": "The figure everybody quotes, labelled as such, next to the cohorts that contradict it — and the numeric evidence of selection bias.",
+        "fr": "Le total que tout le monde cite, étiqueté comme tel, à côté des cohortes qui le contredisent — et la preuve chiffrée du biais de sélection."
+      },
+      "tickets": 882
+    },
+    "priorite": {
+      "explanation": "Slice: 4 ticket(s) for 4 min of session. / Tranche : 4 ticket(s) pour 4 min de session.\n1. proj-demo-001-1 (gain 2) — Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (human). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (human).\n2. proj-demo-001-10 (gain 2) — Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n3. proj-demo-001-11 (gain 2) — Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n4. proj-demo-001-12 (gain 2) — Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).",
+      "label": {
+        "en": "Collection by information value",
+        "fr": "La collecte par valeur d’information"
+      },
+      "needs": [
+        {
+          "agentCount": 0,
+          "cohortKey": "bugfix|api|S",
+          "humanCount": 0,
+          "threshold": 20
+        },
+        {
+          "agentCount": 0,
+          "cohortKey": "configuration|api|S",
+          "humanCount": 0,
+          "threshold": 20
+        },
+        {
+          "agentCount": 0,
+          "cohortKey": "refactor|api|M",
+          "humanCount": 0,
+          "threshold": 20
+        },
+        {
+          "agentCount": 0,
+          "cohortKey": "tests|api|S",
+          "humanCount": 0,
+          "threshold": 20
+        },
+        {
+          "agentCount": 0,
+          "cohortKey": "ui-change|web-ui|S",
+          "humanCount": 0,
+          "threshold": 20
+        }
+      ],
+      "rationale": [
+        {
+          "gain": 2,
+          "issueId": "proj-demo-001-1",
+          "reason": "Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (human). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (human)."
+        },
+        {
+          "gain": 2,
+          "issueId": "proj-demo-001-10",
+          "reason": "Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
+        },
+        {
+          "gain": 2,
+          "issueId": "proj-demo-001-11",
+          "reason": "Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
+        },
+        {
+          "gain": 2,
+          "issueId": "proj-demo-001-12",
+          "reason": "Cohort bugfix|api|S: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte bugfix|api|S : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent)."
+        }
+      ],
+      "slice": {
+        "budgetMinutes": 4,
+        "issueIds": [
+          "proj-demo-001-1",
+          "proj-demo-001-10",
+          "proj-demo-001-11",
+          "proj-demo-001-12"
+        ]
+      },
+      "summary": {
+        "en": "The graph is read only in a user session, in slices: the order maximises the cells leaving grey, and every chosen ticket says why.",
+        "fr": "Le graphe ne se lit qu’en session utilisateur, par tranches : l’ordre maximise les cases qui sortent du gris, et chaque ticket choisi dit pourquoi."
+      }
+    },
+    "puissance": {
+      "detectable": {
+        "baselineRate": 0.85,
+        "effect": 0.15000000000000002,
+        "nPerArm": 60,
+        "power": 0.30354225043688,
+        "sampleSizePerArm": 181
+      },
+      "infeasible": {
+        "alpha": 0.05,
+        "baselineRate": 0.85,
+        "detectableEffect": 0.049975593647198786,
+        "feasible": false,
+        "nPerArm": 765,
+        "power": 0.8004155453314495,
+        "weeksNeeded": 510
+      },
+      "label": {
+        "en": "Power computed before the trial",
+        "fr": "La puissance calculée avant l’essai"
+      },
+      "plan": {
+        "alpha": 0.05,
+        "baselineRate": 0.85,
+        "detectableEffect": 0.09975250035651713,
+        "feasible": true,
+        "nPerArm": 181,
+        "power": 0.8023697600074668,
+        "weeksNeeded": 10
+      },
+      "summary": {
+        "en": "The required sample size is computed first, and the app says “this trial is not feasible for you” when the ticket rate is too low — rather than running an underpowered trial.",
+        "fr": "L’effectif nécessaire est calculé avant, et l’app dit « cet essai n’est pas réalisable chez vous » quand le rythme de tickets ne suffit pas — plutôt que de lancer un essai sous-puissant."
+      }
+    },
+    "sequentiel": {
+      "boundaries": [
+        {
+          "alphaSpent": 0.000011726446842559615,
+          "informationFraction": 0.2,
+          "look": 1,
+          "zBoundary": 4.382612702882906
+        },
+        {
+          "alphaSpent": 0.0019301865498983393,
+          "informationFraction": 0.4,
+          "look": 2,
+          "zBoundary": 3.0989751615228065
+        },
+        {
+          "alphaSpent": 0.009454505468572271,
+          "informationFraction": 0.6,
+          "look": 3,
+          "zBoundary": 2.530302623763319
+        },
+        {
+          "alphaSpent": 0.01703321228775964,
+          "informationFraction": 0.8,
+          "look": 4,
+          "zBoundary": 2.191306351441453
+        },
+        {
+          "alphaSpent": 0.021570369246927353,
+          "informationFraction": 1,
+          "look": 5,
+          "zBoundary": 1.9599639845400532
+        }
+      ],
+      "label": {
+        "en": "Looking every day without cheating",
+        "fr": "Regarder tous les jours sans tricher"
+      },
+      "looks": [
+        {
+          "alphaSpentTotal": 0.000011726446842559615,
+          "boundary": 4.382612702882906,
+          "reason": "le regard 1 ne franchit pas la frontière : z = 1.80 contre 4.38",
+          "stop": "continue",
+          "zObserved": 1.8
+        },
+        {
+          "alphaSpentTotal": 0.0019419129967408989,
+          "boundary": 3.0989751615228065,
+          "reason": "le regard 2 ne franchit pas la frontière : z = 1.80 contre 3.10",
+          "stop": "continue",
+          "zObserved": 1.8
+        },
+        {
+          "alphaSpentTotal": 0.01139641846531317,
+          "boundary": 2.530302623763319,
+          "reason": "le regard 3 ne franchit pas la frontière : z = 1.80 contre 2.53",
+          "stop": "continue",
+          "zObserved": 1.8
+        },
+        {
+          "alphaSpentTotal": 0.02842963075307281,
+          "boundary": 2.191306351441453,
+          "reason": "le regard 4 ne franchit pas la frontière : z = 1.80 contre 2.19",
+          "stop": "continue",
+          "zObserved": 1.8
+        },
+        {
+          "alphaSpentTotal": 0.05000000000000016,
+          "boundary": 1.9599639845400532,
+          "reason": "le regard 5 ne franchit pas la frontière : z = 1.80 contre 1.96",
+          "stop": "continue",
+          "zObserved": 1.8
+        }
+      ],
+      "safetyStop": {
+        "notTriggered": false,
+        "threshold": 3,
+        "triggered": true
+      },
+      "summary": {
+        "en": "Five looks at z ≈ 1.8 would conclude without correction; with O’Brien-Fleming boundaries none does. The safety stop watches the agent arm’s reopenings.",
+        "fr": "Cinq regards à z ≈ 1,8 concluraient sans correction ; avec les frontières d’O’Brien-Fleming, aucun ne conclut. L’arrêt de sécurité surveille les réouvertures du bras agent."
+      }
+    },
+    "survie": {
+      "label": {
+        "en": "Lead time through survival analysis",
+        "fr": "Délai par analyse de survie"
+      },
+      "summary": {
+        "en": "Tickets still open are censored, not ignored: without that, lead time artificially favours agents that leave tickets open.",
+        "fr": "Les tickets encore ouverts sont censurés, pas ignorés : sans ça, le délai favorise artificiellement les agents qui laissent des tickets ouverts."
+      },
+      "survival": {
+        "curves": [
+          {
+            "arm": "agent",
+            "censored": 0,
+            "censoredShare": 0,
+            "medianH": 29.357142857142858,
+            "points": [
+              [
+                4,
+                0.9961977186311787
+              ],
+              [
+                5,
+                0.9923954372623575
+              ],
+              [
+                8,
+                0.9847908745247149
+              ],
+              [
+                9,
+                0.9733840304182511
+              ],
+              [
+                10,
+                0.9657794676806085
+              ],
+              [
+                11,
+                0.9619771863117872
+              ],
+              [
+                12,
+                0.9581749049429659
+              ],
+              [
+                13,
+                0.920152091254753
+              ],
+              [
+                14,
+                0.8973384030418251
+              ],
+              [
+                15,
+                0.8174904942965779
+              ],
+              [
+                16,
+                0.752851711026616
+              ],
+              [
+                17,
+                0.7490494296577946
+              ],
+              [
+                18,
+                0.6653992395437262
+              ],
+              [
+                20,
+                0.5817490494296578
+              ],
+              [
+                22,
+                0.5779467680608364
+              ],
+              [
+                24,
+                0.5665399239543726
+              ],
+              [
+                25,
+                0.55893536121673
+              ],
+              [
+                26,
+                0.5513307984790875
+              ],
+              [
+                27,
+                0.5399239543726236
+              ],
+              [
+                28,
+                0.5361216730038023
+              ],
+              [
+                30,
+                0.4828897338403042
+              ],
+              [
+                32,
+                0.47908745247148293
+              ],
+              [
+                33,
+                0.47528517110266166
+              ],
+              [
+                34,
+                0.4638783269961978
+              ],
+              [
+                36,
+                0.4600760456273765
+              ],
+              [
+                38,
+                0.44106463878327
+              ],
+              [
+                39,
+                0.4030418250950571
+              ],
+              [
+                42,
+                0.37262357414448677
+              ],
+              [
+                45,
+                0.2965779467680609
+              ],
+              [
+                48,
+                0.2281368821292776
+              ],
+              [
+                50,
+                0.2243346007604563
+              ],
+              [
+                51,
+                0.22053231939163503
+              ],
+              [
+                54,
+                0.14068441064638787
+              ],
+              [
+                58,
+                0.13688212927756657
+              ],
+              [
+                60,
+                0.05703422053231941
+              ],
+              [
+                62,
+                0.05323193916349812
+              ],
+              [
+                72,
+                0.04562737642585553
+              ],
+              [
+                75,
+                0.03802281368821294
+              ],
+              [
+                90,
+                0
+              ]
+            ]
+          },
+          {
+            "arm": "human",
+            "censored": 0,
+            "censoredShare": 0,
+            "medianH": 35.67857142857144,
+            "points": [
+              [
+                4,
+                0.9959349593495935
+              ],
+              [
+                6,
+                0.991869918699187
+              ],
+              [
+                7,
+                0.9878048780487805
+              ],
+              [
+                8,
+                0.983739837398374
+              ],
+              [
+                10,
+                0.9796747967479675
+              ],
+              [
+                11,
+                0.9715447154471546
+              ],
+              [
+                12,
+                0.9593495934959351
+              ],
+              [
+                13,
+                0.9552845528455286
+              ],
+              [
+                14,
+                0.9471544715447155
+              ],
+              [
+                15,
+                0.9227642276422765
+              ],
+              [
+                18,
+                0.9186991869918699
+              ],
+              [
+                19,
+                0.8821138211382115
+              ],
+              [
+                21,
+                0.878048780487805
+              ],
+              [
+                22,
+                0.7967479674796749
+              ],
+              [
+                24,
+                0.7886178861788619
+              ],
+              [
+                26,
+                0.7804878048780489
+              ],
+              [
+                28,
+                0.6910569105691058
+              ],
+              [
+                29,
+                0.6829268292682928
+              ],
+              [
+                30,
+                0.6138211382113823
+              ],
+              [
+                32,
+                0.6097560975609758
+              ],
+              [
+                33,
+                0.6016260162601629
+              ],
+              [
+                36,
+                0.48780487804878075
+              ],
+              [
+                38,
+                0.4837398373983743
+              ],
+              [
+                39,
+                0.4796747967479678
+              ],
+              [
+                40,
+                0.47560975609756134
+              ],
+              [
+                42,
+                0.47154471544715487
+              ],
+              [
+                44,
+                0.4634146341463418
+              ],
+              [
+                45,
+                0.4390243902439028
+              ],
+              [
+                46,
+                0.43495934959349625
+              ],
+              [
+                48,
+                0.4308943089430897
+              ],
+              [
+                50,
+                0.4268292682926832
+              ],
+              [
+                54,
+                0.41463414634146367
+              ],
+              [
+                57,
+                0.3780487804878051
+              ],
+              [
+                58,
+                0.3617886178861791
+              ],
+              [
+                62,
+                0.3577235772357726
+              ],
+              [
+                66,
+                0.2804878048780489
+              ],
+              [
+                72,
+                0.2723577235772359
+              ],
+              [
+                78,
+                0.2642276422764229
+              ],
+              [
+                84,
+                0.1829268292682928
+              ],
+              [
+                87,
+                0.1747967479674798
+              ],
+              [
+                90,
+                0.10975609756097568
+              ],
+              [
+                96,
+                0.10569105691056917
+              ],
+              [
+                108,
+                0.004065040650406506
+              ],
+              [
+                144,
+                0
+              ]
+            ]
+          }
+        ],
+        "logRank": {
+          "censoredA": 0,
+          "censoredB": 0,
+          "censoredShareA": 0,
+          "censoredShareB": 0,
+          "chi2": 53.56655125387862,
+          "established": true,
+          "nA": 263,
+          "nB": 246,
+          "pValue": 2.4997948242241095e-13,
+          "reason": null
+        }
+      }
+    }
+  },
+  "mcp": {
+    "label": {
+      "en": "The nine MCP tools",
+      "fr": "Les neuf outils MCP"
+    },
+    "sampleCalls": [
+      {
+        "input": {
+          "issueKey": "PROJ-412"
+        },
+        "output": {
+          "agent": {
+            "ciHigh": 0.8349887906020732,
+            "ciLow": 0.5001138848576876,
+            "n": 26,
+            "rate": 0.6923076923076923
+          },
+          "agentLeadTime": {
+            "medianH": 36,
+            "n": 26
+          },
+          "balance": {
+            "balanced": true,
+            "signals": [
+              {
+                "agentShare": 1,
+                "criterion": "size-mix",
+                "difference": 0,
+                "humanShare": 1
+              },
+              {
+                "agentShare": 1,
+                "criterion": "nature-mix",
+                "difference": 0,
+                "humanShare": 1
+              },
+              {
+                "agentShare": 0.8387096774193549,
+                "criterion": "volume-gap",
+                "difference": 0.16129032258064513,
+                "humanShare": 1
+              }
+            ]
+          },
+          "cohort": {
+            "level": "nature-zone-size",
+            "nature": "data-migration",
+            "size": "M",
+            "zone": "billing"
+          },
+          "computedAt": "2026-11-30T12:00:00Z",
+          "conclusion": "not-enough-data",
+          "conditions": [],
+          "confidence": "low",
+          "demo": true,
+          "epochId": "epoch-3",
+          "failureCauses": [
+            "5 réouvertures sur 8 pour une migration non rejouable"
+          ],
+          "guardrails": [],
+          "human": {
+            "ciHigh": 0.9486579883535523,
+            "ciLow": 0.7114724304561465,
+            "n": 31,
+            "rate": 0.8709677419354839
+          },
+          "humanLeadTime": {
+            "medianH": 72,
+            "n": 31
+          },
+          "issueId": "proj-demo-001-412",
+          "issueKey": "PROJ-412",
+          "reasons": [
+            "Cohorte : data-migration · billing · taille M (26 tickets avec agent, 31 sans)",
+            "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 83 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
+            "écart non établi"
+          ],
+          "referenceIssueKeys": [
+            "PROJ-207",
+            "PROJ-233",
+            "PROJ-301"
+          ],
+          "value": "not-enough-data"
+        },
+        "tool": "should-delegate"
+      },
+      {
+        "input": {
+          "jql": "project = PROJ AND status = Ready",
+          "limit": 5
+        },
+        "output": [],
+        "tool": "list-delegable-work"
+      }
+    ],
+    "summary": {
+      "en": "The first six are GET: an automation rule can call them. None accepts a person’s name as input, none returns one.",
+      "fr": "Les six premiers sont des GET : une règle d’automatisation peut les appeler. Aucun n’accepte un nom de personne en entrée, aucun n’en renvoie."
+    },
+    "tickets": 882
+  },
+  "meta": {
+    "cohorts": 12,
+    "commit": "local",
+    "demo": true,
+    "generatedAt": "2026-11-30",
+    "generator": "tests/site/demo-data.test.ts",
+    "project": "PROJ",
+    "referenceDate": "2026-11-30",
+    "tickets": 882
+  }
+}
