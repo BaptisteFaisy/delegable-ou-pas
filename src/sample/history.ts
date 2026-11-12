@@ -170,10 +170,12 @@ export function statusHistoryOf(seed: Seed): StatusHistory {
     changes.push({ from: 'En cours', to: 'Blocked', at: blockedAt });
     changes.push({ from: 'Blocked', to: 'En cours', at: addHours(blockedAt, 6) });
   }
-  if (seed.failure.reopened) {
-    const firstClose = addHours(seed.closedAt, -24);
+  if (seed.reopenedAt !== '') {
+    // The reopening lasts as long as the scenario says: eight minutes for an
+    // administrative one (SPEC §6 "Réouvertures administratives").
+    const firstClose = addHours(seed.closedAt, -(seed.reopenDurationMin / 60) * 1.5);
     changes.push({ from: 'En cours', to: 'Terminé', at: firstClose });
-    changes.push({ from: 'Terminé', to: 'En cours', at: addHours(firstClose, 6) });
+    changes.push({ from: 'Terminé', to: 'En cours', at: seed.reopenedAt });
   } else {
     changes.push({ from: 'En cours', to: 'En relecture', at: addHours(seed.closedAt, -6) });
   }

@@ -15,15 +15,21 @@
  */
 import type { Balance, DurationStat, ProportionStat } from '../types.js';
 import type { IssueLink, JiraTicket, ReopeningFact, StatusHistory } from '../types-graph.js';
-import type { Confidence, Guardrail, Recommendation, RecommendationCard, Trial } from '../types-advice.js';
+import type { Confidence, Coverage, Guardrail, Recommendation, RecommendationCard, Trial, TrialAssignment } from '../types-advice.js';
 import type { CommitFact, IssueClass, Involvement, Outcome, ReviewFact } from '../types.js';
+import type { Arm } from '../types.js';
 import type { ArmComposition } from '../domain/balance.js';
 import { compareBalance, composition } from '../domain/balance.js';
 import { conclude, wording } from '../domain/conclusion.js';
 import { confidenceOf, conditionsFor, guardrails, recommendFrom } from '../domain/recommendation.js';
+// Résolution du conflit : l'union des deux côtés. `percentCeil`/`percentFloor`
+// viennent du lot L10 (intégration), `enforceCompliance`/`draw`/`seededRandom`
+// du lot D1 (base de référence) ; tous les deux sont utilisés dans le fichier.
+import { enforceCompliance, draw } from '../domain/trial.js';
 import { median, percent, percentCeil, percentFloor, wilsonInterval } from '../domain/stats.js';
+import { seededRandom } from '../deps.js';
 import type { Seed } from './issues.js';
-import { SAMPLE_PINS } from './issues.js';
+import { CAS_LIMITES } from './cas-limites.js';
 import { EPOCH_3 } from './epochs.js';
 import { ticketSeeds } from './builder.js';
 import {
@@ -235,9 +241,9 @@ function failureCausesOf(figures: CohortFigures, nature: string): readonly strin
 /** The past tickets the advice rests on (SPEC §4 "Fondement", SPEC §8). */
 function referenceKeysOf(seed: Seed, cohort: readonly Seed[]): readonly string[] {
   const family = cohort[0]?.family ?? '';
-  const pinned = SAMPLE_PINS
-    .filter((pin) => pin.familyId === family && pin.key !== seed.key)
-    .map((pin) => pin.key)
+  const pinned = CAS_LIMITES
+    .filter((cas) => cas.familyId === family && cas.reference === true && cas.key !== seed.key)
+    .map((cas) => cas.key)
     .sort();
   if (pinned.length > 0) return pinned;
   return cohort
@@ -300,7 +306,10 @@ function cardOf(seed: Seed, cohort: readonly Seed[], openIncident: boolean): Rec
 }
 
 /** The tickets the demo shows a card for: the SPEC card and the guardrails. */
-const SHOWCASE_KEYS: readonly string[] = ['PROJ-412', 'PROJ-455', 'PROJ-457', 'PROJ-458', 'PROJ-460'];
+const SHOWCASE_KEYS: readonly string[] = [
+  'PROJ-412', 'PROJ-455', 'PROJ-457', 'PROJ-458', 'PROJ-460',
+  'PROJ-509', 'PROJ-517', 'PROJ-523',
+];
 
 /**
  * The recommendation cards of the demo (SPEC §8, SPEC §24.1).
@@ -341,6 +350,55 @@ export function sampleTrial(): Trial {
     stopReason: '',
   };
 }
+
+/**
+ * The assignments of the running trial, one per ticket of its cohort.
+ *
+ * The draw comes from the seed of the trial (SPEC §11 step 2); a ticket whose
+ * draw was not respected leaves the trial with its reason (recipe 16).
+ */
+export function sampleTrialAssignments(): readonly TrialAssignment[] {
+  const trial = sampleTrial();
+  const cohort = SEEDS.filter((seed) =>
+    seed.epochId === trial.epochId &&
+    seed.nature === trial.cohort.nature &&
+    seed.zone === trial.cohort.zone &&
+    seed.size === trial.cohort.size);
+  return cohort
+    .filter((seed) => seed.arm === 'agent' || seed.arm === 'human')
+    .map((seed) => {
+      const actual: Arm = seed.arm === 'agent' ? 'agent' : 'human';
+      return enforceCompliance(draw(trial, seed.id, seededRandom()), actual);
+    });
+}
+
+/**
+ * The coverage of the demo project (SPEC §16.6, §19 "Droits", recipe 15).
+ *
+ * Two rights are missing on the graph: the pull requests and the people. The
+ * screen says so out loud instead of showing a silent zero (recipe 15).
+ */
+export function sampleCoverage(): Coverage {
+  const known = SEEDS.filter((seed) => seed.level !== 'unknown').length;
+  return {
+    projectId: SAMPLE_PROJECT_ID,
+    knownIssues: known,
+    totalIssues: SEEDS.length,
+    permissions: [
+      { objectType: 'issue', state: 'granted', testedAt: SAMPLE_REFERENCE_DATE },
+      { objectType: 'commit', state: 'granted', testedAt: SAMPLE_REFERENCE_DATE },
+      { objectType: 'pull-request', state: 'missing', testedAt: SAMPLE_REFERENCE_DATE },
+      { objectType: 'user', state: 'missing', testedAt: SAMPLE_REFERENCE_DATE },
+    ],
+    lastCollectionAt: SAMPLE_REFERENCE_DATE,
+    lastCollectionOk: false,
+    demo: SAMPLE_IS_MARKED_AS_DEMO,
+  };
+}
+
+/** The scenarios of the base, and the named cases they carry (SPEC §21). */
+export { SCENARIOS, FILLERS, ALL_SCENARIOS } from './scenarios.js';
+export { CAS_LIMITES } from './cas-limites.js';
 
 /** The reference date the demo figures are computed on (SPEC §24.1). */
 export { SAMPLE_REFERENCE_DATE };
