@@ -15,6 +15,7 @@ import type { IssueLink } from '../types-graph.js';
 import { judgeableAt } from '../domain/maturity.js';
 import type { Seed } from './issues.js';
 import { OPEN_SHOWCASE } from './issues.js';
+import { CAS_LIMITES } from './cas-limites.js';
 import { SAMPLE_PROJECT_ID, addDays, issueIdOfKey } from './project.js';
 
 /** The family whose tickets are the bugs the dataset links to (SPEC §6). */
@@ -101,10 +102,35 @@ function bugLinks(seeds: readonly Seed[], bugs: readonly Seed[]): readonly Issue
   return links;
 }
 
+/**
+ * The links the named tickets declare (SPEC §6, SPEC §21).
+ *
+ * A ticket linked to an open incident carries the guardrail of SPEC §8; the
+ * link points to a ticket of the base, never to a person.
+ */
+function casLinks(seeds: readonly Seed[]): readonly IssueLink[] {
+  const links: IssueLink[] = [];
+  for (const cas of CAS_LIMITES) {
+    const seed = seeds.find((candidate) => candidate.key === cas.key);
+    if (seed === undefined) continue;
+    for (const link of cas.adjust.links ?? []) {
+      links.push({
+        issueId: seed.id,
+        linkedIssueId: issueIdOfKey(link.to),
+        type: link.type,
+        linkedIsIncident: link.linkedIsIncident,
+        linkedIsBug: link.linkedIsBug,
+        createdAt: seed.createdAt,
+      });
+    }
+  }
+  return links;
+}
+
 /** Every link between the tickets of the demo dataset. */
 export function sampleLinks(seeds: readonly Seed[]): readonly IssueLink[] {
   const bugs = seeds.filter((seed) => seed.family === BUG_FAMILY);
-  return [...incidentLinks(seeds), ...bugLinks(seeds, bugs)];
+  return [...incidentLinks(seeds), ...casLinks(seeds), ...bugLinks(seeds, bugs)];
 }
 
 /** The internal id of the project every demo fact carries (SPEC §18). */

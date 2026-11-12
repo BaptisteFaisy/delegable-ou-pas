@@ -14,18 +14,27 @@ import { addHours, contentHash, instantOf } from './project.js';
 /**
  * The commit-mention catalogue the demo project declares (SPEC §5, DP-02).
  *
- * Four public agents, one pattern each; `seenCount` is what the settings screen
- * shows so the team can confirm the catalogue (docs/research/R3).
+ * The four tools the team uses, one pattern each, plus one mention seen in the
+ * wild that nobody recognised yet: it stays disabled and the settings screen
+ * says it has to be confirmed (SPEC §5 "à confirmer par l'équipe").
  */
 export function sampleSignaturePatterns(): readonly SignaturePattern[] {
-  const names: readonly string[] = ['code-agent', 'assistant-agent', 'pilot-agent', 'pair-agent'];
-  return names.map((name, index) => ({
+  const tools: readonly string[] = ['Claude Code', 'Codex', 'Cursor', 'Copilot'];
+  const patterns: SignaturePattern[] = tools.map((name, index) => ({
     id: `sig-${index + 1}`,
-    expression: `Co-authored-by: ${name}`,
+    expression: `Co-authored-by: ${name}${name === 'Copilot' ? ' [agent]' : ''}`,
     agentName: ROBOT_ACCOUNT,
     enabled: true,
     seenCount: 0,
   }));
+  patterns.push({
+    id: 'sig-5',
+    expression: 'Co-authored-by: (mention non reconnue / unrecognised mention)',
+    agentName: '',
+    enabled: false,
+    seenCount: 0,
+  });
+  return patterns;
 }
 
 /** A stable commit reference: the ticket key and a fingerprint of its place. */
@@ -50,19 +59,23 @@ function signedOf(seed: Seed): boolean {
  * The commit facts of one ticket (SPEC §18 table `commit_fact`).
  *
  * A ticket without code has no commit at all: an empty list, never an error
- * (SPEC §21 "Ticket sans commit").
+ * (SPEC §21 "Ticket sans commit"). A ticket may mix signed and unsigned
+ * commits: only the first ones carry the mention (SPEC §5, recipe 6).
  */
 export function commitsOf(seed: Seed): readonly CommitFact[] {
   if (seed.commits <= 0) return [];
   const signed = signedOf(seed);
-  return Array.from({ length: seed.commits }, (_unused, index) => ({
-    issueId: seed.id,
-    commitRef: commitRefOf(seed, index),
-    hasSignature: signed,
-    agentName: signed ? ROBOT_ACCOUNT : '',
-    authorIsBot: seed.source === 'bot-author',
-    committedAt: committedAtOf(seed, index),
-  }));
+  return Array.from({ length: seed.commits }, (_unused, index) => {
+    const hasSignature = seed.signedCommits > 0 ? index < seed.signedCommits : signed;
+    return {
+      issueId: seed.id,
+      commitRef: commitRefOf(seed, index),
+      hasSignature,
+      agentName: hasSignature ? ROBOT_ACCOUNT : '',
+      authorIsBot: seed.source === 'bot-author',
+      committedAt: committedAtOf(seed, index),
+    };
+  });
 }
 
 /** Every commit fact of the demo dataset. */
@@ -73,6 +86,12 @@ export function sampleCommitFacts(seeds: readonly Seed[]): readonly CommitFact[]
 /** How many times each pattern of the catalogue was seen (SPEC §18 `seen_count`). */
 export function seenCounts(facts: readonly CommitFact[]): readonly SignaturePattern[] {
   const patterns = sampleSignaturePatterns();
-  const seen = facts.filter((fact) => fact.hasSignature).length;
-  return patterns.map((pattern, index) => ({ ...pattern, seenCount: index === 0 ? seen : 0 }));
+  const signed = facts.filter((fact) => fact.hasSignature);
+  const enabled = patterns.filter((pattern) => pattern.enabled);
+  return patterns.map((pattern) => {
+    if (!pattern.enabled) return { ...pattern, seenCount: 0 };
+    const rank = enabled.findIndex((item) => item.id === pattern.id);
+    const seen = signed.filter((_fact, position) => position % enabled.length === rank).length;
+    return { ...pattern, seenCount: seen };
+  });
 }

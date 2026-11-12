@@ -219,7 +219,11 @@ export function contentHash(text: string): string {
 /* --------------------------------------------------------------- identities */
 
 /** The numbers the SPEC quotes by name; the generator never hands them out. */
-const RESERVED: readonly number[] = [207, 233, 301, 412, 455, 456, 457, 458, 459, 460];
+/** The keys the base reserves: the named tickets of SPEC §21, §22 and §24.1. */
+export const RESERVED: readonly number[] = [
+  118, 207, 233, 301, 412, 455, 456, 457, 458, 459, 460,
+  509, 517, 523, 531, 540, 548, 555, 562, 571, 611, 701, 706, 812, 820, 902, 950,
+];
 
 /** The internal id of a ticket key (SPEC §18 table `issue`). */
 export function issueIdOfKey(key: string): string {
