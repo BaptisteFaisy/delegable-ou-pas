@@ -31,19 +31,18 @@ interface Expected {
 /**
  * The ten cohorts of the brief, with their figures.
  *
- * The conclusion is the one the merged domain gives (SPEC §7 rule 4). Two of
- * them differ from the colour the brief announces: the difference is neither
- * established nor equivalent at ten points, so the app answers "we do not
- * know" — see `docs/DEMO-DATA.md` §6.
+ * The conclusion is the one the merged domain gives (SPEC §7 rule 4): a gap
+ * that is not established is "same" ("pareil"), a cohort under the threshold
+ * or with unbalanced arms is "we do not know".
  */
 const EXPECTED: readonly Expected[] = [
   {
     id: 'e3-orange-migration-m', cohort: 'data-migration|billing|M',
-    agent: [26, 18, 36], human: [31, 27, 72], open: [2, 2], conclusion: 'not-enough-data',
+    agent: [26, 18, 36], human: [31, 27, 72], open: [2, 2], conclusion: 'same',
   },
   {
     id: 'e2-scenario-bugfix-api-s', cohort: 'bugfix|api|S',
-    agent: [60, 55, 30], human: [55, 47, 40], open: [4, 4], conclusion: 'not-enough-data',
+    agent: [60, 55, 30], human: [55, 47, 40], open: [4, 4], conclusion: 'same',
   },
   {
     id: 'e2-scenario-tests-web-m', cohort: 'tests|web-ui|M',
@@ -55,7 +54,7 @@ const EXPECTED: readonly Expected[] = [
   },
   {
     id: 'e2-scenario-ui-data-m', cohort: 'ui-change|data-pipeline|M',
-    agent: [34, 22, 28], human: [30, 24, 44], open: [3, 3], conclusion: 'not-enough-data',
+    agent: [34, 22, 28], human: [30, 24, 44], open: [3, 3], conclusion: 'same',
   },
   {
     id: 'e2-scenario-config-api-s', cohort: 'configuration|api|S',
@@ -67,11 +66,11 @@ const EXPECTED: readonly Expected[] = [
   },
   {
     id: 'e2-scenario-refactor-api-m', cohort: 'refactor|api|M',
-    agent: [22, 18, 40], human: [24, 20, 44], open: [2, 2], conclusion: 'not-enough-data',
+    agent: [22, 18, 40], human: [24, 20, 44], open: [2, 2], conclusion: 'same',
   },
   {
     id: 'e3-scenario-bugfix-web-s', cohort: 'bugfix|web-ui|S',
-    agent: [29, 25, 22], human: [28, 24, 26], open: [16, 12], conclusion: 'not-enough-data',
+    agent: [29, 25, 22], human: [28, 24, 26], open: [16, 12], conclusion: 'same',
   },
 ];
 
