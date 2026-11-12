@@ -11,7 +11,7 @@
  * never write a number by hand, the tests compare them with what the builder
  * produces (SPEC §24.1, DP-20).
  */
-import type { Level, Source } from '../types.js';
+import type { Level, Nature, Size, Source, Zone } from '../types.js';
 import type { ArmPlan, FamilyPlan, OpenTicketSpec, Seed, SeedArm, SeedFailure } from './issues.js';
 import { AGENT_LEVELS, AGENT_SOURCES, FAMILIES, SAMPLE_PINS, issueTypeOf } from './issues.js';
 import {
@@ -99,20 +99,29 @@ interface SeedInput {
   readonly level: Level;
   readonly source: Source;
   readonly commits: number;
+  /** Overrides for the open tickets the demo declares by hand (SPEC §8). */
+  readonly nature?: Nature;
+  readonly zone?: Zone;
+  readonly size?: Size;
+  readonly summary?: string;
+  readonly hasDescription?: boolean;
 }
 
 /** One seed of the demo dataset (SPEC §24.1). */
 function seedOf(input: SeedInput): Seed {
   const closed = input.closedAt !== '';
   const status = input.failure.abandoned ? 'Abandonné' : 'Terminé';
+  const nature = input.nature ?? input.family.nature;
+  const zone = input.zone ?? input.family.zone;
+  const size = input.size ?? input.family.size;
   return {
     id: issueIdOfKey(input.key),
     key: input.key,
     family: input.family.id,
     epochId: input.family.epochId,
-    nature: input.family.nature,
-    zone: input.family.zone,
-    size: input.family.size,
+    nature,
+    zone,
+    size,
     arm: input.arm,
     level: input.level,
     source: input.source,
@@ -127,12 +136,12 @@ function seedOf(input: SeedInput): Seed {
     reopenedAt: input.failure.reopened && closed ? addHours(input.closedAt, -24) : '',
     reopenDurationMin: input.failure.reopened ? 120 : 0,
     sprintId: sprintOf(input.createdAt),
-    storyPoints: storyPointsOf(input.family.size),
-    issueType: input.family.issueType ?? issueTypeOf(input.family.nature),
-    summary: input.family.summary,
-    hasDescription: (input.family.description ?? 'full') === 'full',
-    component: input.family.zone,
-    labels: ['demo', input.family.nature, ...(input.family.labels ?? [])],
+    storyPoints: storyPointsOf(size),
+    issueType: input.family.issueType ?? issueTypeOf(nature),
+    summary: input.summary ?? input.family.summary,
+    hasDescription: input.hasDescription ?? (input.family.description ?? 'full') === 'full',
+    component: zone,
+    labels: ['demo', nature, ...(input.family.labels ?? [])],
     classifiedBy: input.family.classifiedBy ?? 'rules',
     sizeEstimated: input.family.sizeEstimated ?? false,
     commits: input.commits,
@@ -209,6 +218,11 @@ function openSeed(spec: OpenTicketSpec, family: FamilyPlan): Seed {
     level: spec.level,
     source: spec.source,
     commits: spec.commits,
+    nature: spec.nature,
+    zone: spec.zone,
+    size: spec.size,
+    summary: spec.summary,
+    hasDescription: spec.acceptance,
   });
 }
 

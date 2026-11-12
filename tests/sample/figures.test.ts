@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { percent } from '../../src/domain/stats.js';
 import { wording } from '../../src/domain/conclusion.js';
 import { EPOCH_1, EPOCH_2, EPOCH_3, sampleEpochs } from '../../src/sample/epochs.js';
-import { sampleCards, sampleTrial } from '../../src/sample/index.js';
+import { sampleCards, sampleCommitFacts, sampleTrial } from '../../src/sample/index.js';
 import {
   SEEDS,
   balanceOf,
@@ -167,6 +167,36 @@ describe('SPEC §12 — les époques', () => {
     const now = figuresOf(PROJ_412_COHORT);
     expect(conclusionOf(red)).toBe('worse');
     expect(conclusionOf(now)).toBe('not-enough-data');
+  });
+});
+
+describe('SPEC §8 — les garde-fous et les cas limites', () => {
+  it('un incident ouvert interdit de confier le ticket', () => {
+    const card = sampleCards().find((candidate) => candidate.issueKey === 'PROJ-455');
+    expect(card?.guardrails).toEqual(['open-incident']);
+  });
+
+  it('une zone sensible interdit de confier le ticket', () => {
+    const card = sampleCards().find((candidate) => candidate.issueKey === 'PROJ-457');
+    expect(card?.guardrails).toEqual(['sensitive-zone']);
+  });
+
+  it('des critères d\'acceptation absents interdisent de confier le ticket', () => {
+    const card = sampleCards().find((candidate) => candidate.issueKey === 'PROJ-458');
+    expect(card?.guardrails).toEqual(['missing-acceptance-criteria']);
+  });
+
+  it('un garde-fou qui tombe empêche « à confier à un agent »', () => {
+    for (const card of sampleCards()) {
+      if (card.guardrails.length > 0) expect(card.value, card.issueKey).not.toBe('delegate');
+    }
+  });
+
+  it('un ticket sans commit reste hors des cohortes de code (SPEC §21)', () => {
+    const seed = SEEDS.find((candidate) => candidate.key === 'PROJ-459');
+    expect(seed?.nature).toBe('no-code');
+    expect(seed?.commits).toBe(0);
+    expect(sampleCommitFacts().filter((fact) => fact.issueId === seed?.id)).toEqual([]);
   });
 });
 

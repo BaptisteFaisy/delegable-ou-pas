@@ -50,8 +50,9 @@ function armFigures(arm: readonly Seed[]): { rate: ProportionStat | null; lead: 
 
 /** The figures of a list of tickets, split in the three arms (DP-03). */
 export function figuresOf(tickets: readonly Seed[], key?: CohortKey): CohortFigures {
-  const agentTickets = tickets.filter((seed) => seed.arm === 'agent');
-  const humanTickets = tickets.filter((seed) => seed.arm === 'human');
+  const closed = tickets.filter((seed) => seed.closedAt !== '');
+  const agentTickets = closed.filter((seed) => seed.arm === 'agent');
+  const humanTickets = closed.filter((seed) => seed.arm === 'human');
   const agent = armFigures(agentTickets);
   const human = armFigures(humanTickets);
   return {
@@ -62,7 +63,7 @@ export function figuresOf(tickets: readonly Seed[], key?: CohortKey): CohortFigu
     humanLead: human.lead,
     agentTickets,
     humanTickets,
-    unknownTickets: tickets.filter((seed) => seed.arm === 'unknown'),
+    unknownTickets: closed.filter((seed) => seed.arm === 'unknown'),
   };
 }
 
