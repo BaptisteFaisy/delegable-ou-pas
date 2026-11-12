@@ -1,7 +1,7 @@
 # Site public — « Délégable ou pas ? »
 
 Site statique du projet, **publié sur GitHub Pages** et lisible par tout le monde,
-sans compte ni installation : <https://baptistefaisy.github.io/delegable-ou-pas/>
+sans compte ni installation : <https://tradoooo.github.io/delegable-ou-pas/>
 
 Il n'y a ni serveur, ni build, ni dépendance externe, ni appel réseau, ni cookie.
 

@@ -473,7 +473,7 @@ jobs:
           # v28 — `0` rend la réparation d'un test rouge au balayeur (le
           # workflow `triage-rouge` la prend sinon, avec l'indice du triage).
           TRIAGE_TEST: ${{ vars.TRIAGE_TEST }}
-          REPO: BaptisteFaisy/delegable-ou-pas
+          REPO: Tradoooo/delegable-ou-pas
           PR: ${{ matrix.pr }}
           SHA: ${{ matrix.sha }}
           BRANCH: ${{ matrix.branch }}
