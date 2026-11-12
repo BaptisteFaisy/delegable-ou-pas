@@ -11,6 +11,10 @@
 import type { Arm, Zone } from '../types.js';
 import type { Trial, TrialAssignment } from '../types-advice.js';
 import type { Randomness } from '../ports.js';
+import type { PowerPlan, TrialPlanInput } from './power.js';
+import { trialPlan } from './power.js';
+import type { LookDecision } from './sequential.js';
+import { evaluateLook, obrienFlemingBoundaries } from './sequential.js';
 
 /** A trial stops when one arm piles up this many reopenings (SPEC §11 step 4). */
 export const REOPENING_STOP_THRESHOLD: number = 3;
@@ -81,4 +85,53 @@ export function stopReason(
   const worst = ARMS.filter((arm) => reopenings[arm] >= REOPENING_STOP_THRESHOLD);
   if (worst.length > 0) return `réouvertures excessives : bras ${worst[0]}`;
   return '';
+}
+
+/* ------------------------------------------------- sized and corrected trial */
+
+/** What one look at a running trial brings (SPEC §11 step 4). */
+export interface TrialLook {
+  /** How many looks the trial planned, so the boundaries are the planned ones. */
+  readonly plannedLooks: number;
+  /** Test statistics of the previous looks, oldest first. */
+  readonly looks: readonly number[];
+  /** Test statistic observed at the current look. */
+  readonly zObserved: number;
+  /** Share of the planned information available now, in [0, 1]. */
+  readonly informationFraction: number;
+  readonly reopeningsAgent: number;
+  readonly reopeningsHuman: number;
+}
+
+/**
+ * Whether the team's ticket flow can carry an honest trial: with the effect
+ * the trial must detect, the plan says the size it needs and says "not
+ * feasible here" when the flow is too slow; without it, the window sets the
+ * size and the plan reports the effect that size can detect (SPEC §11, DP-27).
+ */
+export function planTrial(
+  baselineRate: number,
+  ticketsPerWeek: number,
+  mde?: number,
+  weeks?: number,
+): PowerPlan {
+  const sized: TrialPlanInput = mde === undefined ? { baselineRate, ticketsPerWeek } : { baselineRate, ticketsPerWeek, mde };
+  return trialPlan(weeks === undefined ? sized : { ...sized, weeks });
+}
+
+/**
+ * One corrected look at the trial: the O'Brien-Fleming boundaries make daily
+ * looks honest (efficacy only past the boundary of the current look), and the
+ * safety stop on the agent arm has priority over everything (SPEC §11 step 4).
+ */
+export function lookAtTrial(look: TrialLook): LookDecision {
+  return evaluateLook({
+    looks: look.looks,
+    zObserved: look.zObserved,
+    informationFraction: look.informationFraction,
+    boundaries: obrienFlemingBoundaries(look.plannedLooks),
+    reopeningsAgent: look.reopeningsAgent,
+    reopeningsHuman: look.reopeningsHuman,
+    safetyThreshold: REOPENING_STOP_THRESHOLD,
+  });
 }

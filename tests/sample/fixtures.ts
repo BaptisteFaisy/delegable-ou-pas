@@ -120,9 +120,11 @@ export function confidenceOfCohort(figures: CohortFigures): Confidence {
   return confidenceOf(figures.agent, figures.human, conclusionOf(figures));
 }
 
-/** The bounds of an interval, as the app rounds them (SPEC §7 rule 3). */
+/** The bounds of an interval, as the app renders them: the lower bound is
+ * rounded down, the upper bound up, so the displayed interval never claims
+ * more than the computed one (SPEC §8 card: 18/26 reads [50 ; 84]). */
 export function boundsOf(stat: ProportionStat): readonly [number, number] {
-  return [Math.round(stat.ciLow * 100), Math.round(stat.ciHigh * 100)];
+  return [Math.floor(stat.ciLow * 100 + 1e-9), Math.ceil(stat.ciHigh * 100 - 1e-9)];
 }
 
 /** The arm a level belongs to, as the domain reads it (DP-03). */

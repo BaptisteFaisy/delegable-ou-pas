@@ -21,7 +21,7 @@ import type { ArmComposition } from '../domain/balance.js';
 import { compareBalance, composition } from '../domain/balance.js';
 import { conclude, wording } from '../domain/conclusion.js';
 import { confidenceOf, conditionsFor, guardrails, recommendFrom } from '../domain/recommendation.js';
-import { median, percent, wilsonInterval } from '../domain/stats.js';
+import { median, percent, percentCeil, percentFloor, wilsonInterval } from '../domain/stats.js';
 import type { Seed } from './issues.js';
 import { SAMPLE_PINS } from './issues.js';
 import { EPOCH_3 } from './epochs.js';
@@ -209,11 +209,6 @@ function compositionOf(arm: readonly Seed[]): ArmComposition {
   return composition(arm.length, sizes, natures);
 }
 
-/** A percentage the way the app renders a bound (SPEC §7 rule 3). */
-function bound(value: number): string {
-  return `${Math.round(value * 100)} %`;
-}
-
 /** The reason line of the clean closure, as the card shows it (SPEC §8). */
 function cleanLine(figures: CohortFigures): string {
   const agent = figures.agent;
@@ -221,8 +216,9 @@ function cleanLine(figures: CohortFigures): string {
   if (agent === null || human === null) return 'Clôture propre : pas assez de recul';
   return (
     `Clôture propre : ${percent(agent.rate)} avec agent ` +
-    `(${agent.n} tickets, entre ${bound(agent.ciLow)} et ${bound(agent.ciHigh)}), ` +
-    `${percent(human.rate)} sans (${human.n} tickets, entre ${bound(human.ciLow)} et ${bound(human.ciHigh)})`
+    `(${agent.n} tickets, entre ${percentFloor(agent.ciLow)} et ${percentCeil(agent.ciHigh)}), ` +
+    `${percent(human.rate)} sans ` +
+    `(${human.n} tickets, entre ${percentFloor(human.ciLow)} et ${percentCeil(human.ciHigh)})`
   );
 }
 

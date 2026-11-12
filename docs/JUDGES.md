@@ -26,19 +26,22 @@ Ce qu'il faut regarder, dans cet ordre :
 1. **La carte sur le ticket `PROJ-412`** — « Migration du champ « montant » en
    centimes ». On y lit : la cohorte (migration de données · facturation ·
    taille M), les deux bras avec leurs effectifs et leurs fourchettes
-   (26 avec agent, 31 sans ; 69 % entre 50 et 83 contre 87 % entre 71 et 95),
+   (26 avec agent, 31 sans ; 69 % entre 50 et 84 contre 87 % entre 71 et 95),
    les délais médians (1,5 jour contre 3 jours), ce qui a mal tourné
    (5 réouvertures sur 8 pour une migration non rejouable), les tickets de
-   référence (PROJ-207, PROJ-233, PROJ-301) et la confiance.
+   référence (PROJ-207, PROJ-233, PROJ-301), la recommandation — « agent,
+   relecture renforcée », confiance moyenne, la carte du SPEC §8.
 2. **La carte de délégation** — la matrice natures × zones. Les quatre couleurs
-   y sont : une case **verte** (tests · web-ui), une **orange** (migration en
-   zone sensible), une **rouge** (migration · facturation, époque 2) et beaucoup
-   de **gris** : 23 cohortes sur 26 disent « on ne sait pas ». Changez d'époque
+   y sont : une case **verte** (tests · web-ui), des **orange** (la migration en
+   zone sensible ; la migration de facturation à l'époque 3, la carte du §8),
+   une **rouge** (migration · facturation, époque 2) et beaucoup de
+   **gris** : 21 cohortes sur 26 disent « on ne sait pas ». Changez d'époque
    et regardez la case des migrations bouger.
 3. **Le détail d'une cohorte** — ouvrez la case rouge : l'écart est **établi**
-   (40 % contre 86 %, fourchettes disjointes). Ouvrez la case du §7 (corrections
+   (40 % contre 86 %). Ouvrez la case du §7 (corrections
    · api · M) : 83 % contre 86 %, fourchettes largement chevauchantes → l'app
-   dit « écart non établi », et **ne conclut pas**.
+   dit « écart **non établi** » : « pareil », et avec le délai meilleur
+   (30 h contre 44 h) elle recommande « agent, relecture renforcée ».
 4. **Le cas « bras déséquilibrés »** — intégration externe · api · L, époque 2 :
    22 tickets avec agent, 3 sans. L'app affiche « bras déséquilibrés » et ne
    conclut pas (SPEC §7 règle 5).

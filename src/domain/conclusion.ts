@@ -1,7 +1,7 @@
 /**
  * The four conclusions of a comparison, and the order in which they are
- * arbitrated: sample size, then unbalanced arms, then the difference interval,
- * then the equivalence test.
+ * arbitrated: sample size, then unbalanced arms, then the difference interval
+ * — established gap (`better`/`worse`) or not (`same`).
  *
  * Realises SPEC §7 rule 4 (better, same, worse, and "we do not know", which is
  * a conclusion in its own right, never an error case), SPEC §7 rule 5 (arms
@@ -12,16 +12,21 @@
  *
  * Corrects the merged defect: "same" used to be concluded whenever two Wilson
  * intervals overlapped; overlapping intervals can still hide an established
- * difference. The arbiter is now the Newcombe interval on `rateA - rateB`
- * (established or not), then a TOST equivalence test for "same". When neither
- * is met the honest answer is "we do not know" — which also means "not enough
- * data to call it the same" (see `difference.ts`, METHODE.md).
+ * difference. The arbiter is the Newcombe interval on `rateA - rateB`: when it
+ * excludes 0 the gap is established (`better`/`worse`); when it contains 0 the
+ * gap is not established and the conclusion is `same` (SPEC §7 rule 4: the
+ * vocabulary is "écart établi" / "écart non établi"). "We do not know" is
+ * reserved for the cases of SPEC §8 row 4 — an arm below the threshold or
+ * unbalanced arms — never for a wide interval centred on 0: the SPEC §8 card
+ * (PROJ-412, 69 % [50 ; 84] vs 87 % [71 ; 95], median delay 1,5 d vs 3 d)
+ * recommends "agent, relecture renforcée" with "confiance moyenne", which only
+ * a `same` conclusion produces (see `difference.ts`, METHODE.md §6, §12).
  *
  * The domain is pure: no `@forge/*`, no `node:fs`, no network, no clock.
  */
 
 import type { Balance, Conclusion, ProportionStat } from '../types.js';
-import { DEFAULT_EQUIVALENCE_MARGIN, newcombeDifference, tostEquivalence } from './difference.js';
+import { newcombeDifference } from './difference.js';
 import { DEFAULT_MIN_ARM_SIZE } from './stats.js';
 import type { DurationInterval } from './stats.js';
 
@@ -89,26 +94,27 @@ export function intervalsOverlap(a: ProportionStat, b: ProportionStat): boolean 
  * Compares two arms of one cohort (SPEC §7 rules 2, 4 and 5).
  *
  * Arbitration order, non negotiable: sample size first, then balance of the
- * arms, then the difference interval, then equivalence. An interval of the
- * difference that excludes 0 is `better`/`worse` by its sign; otherwise a TOST
- * inside `[-equivMargin, +equivMargin]` is `same`; otherwise the honest answer
- * is `not-enough-data` — which also covers "not enough data to call it the
- * same" (SPEC §20, recipe 6). `equivMargin` defaults to 10 points and is
- * adjustable per project.
+ * arms, then the difference interval (Newcombe). An interval of the difference
+ * that excludes 0 is `better`/`worse` by its sign — an established gap; an
+ * interval that contains 0 is `same` — "écart non établi" (SPEC §7 rule 4).
+ * `not-enough-data` answers the cases of SPEC §8 row 4 only: an arm missing or
+ * below the threshold (SPEC §7 rule 2, recipe 6), or unbalanced arms (rule 5,
+ * recipe 7) — never a wide interval centred on 0, which the SPEC §8 card
+ * (PROJ-412) recommends as "agent, relecture renforcée" via `same`. TOST
+ * equivalence (`difference.ts`) stays available to word a project's own
+ * equivalence margin; it does not gate the conclusion.
  */
 export function conclude(
   agent: ProportionStat | null,
   human: ProportionStat | null,
   minArmSize: number = DEFAULT_MIN_ARM_SIZE,
   balance: Balance,
-  equivMargin: number = DEFAULT_EQUIVALENCE_MARGIN,
 ): Conclusion {
   if (!isUsable(agent, minArmSize) || !isUsable(human, minArmSize)) return 'not-enough-data';
   if (!balance.balanced) return 'not-enough-data';
   const difference = newcombeDifference(agent, human);
   if (difference.established) return difference.diff > 0 ? 'better' : 'worse';
-  if (tostEquivalence(agent, human, equivMargin).equivalent) return 'same';
-  return 'not-enough-data';
+  return 'same';
 }
 
 /**
