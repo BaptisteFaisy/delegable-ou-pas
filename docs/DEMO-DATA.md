@@ -30,7 +30,7 @@ voisin, incident), son classement et son résultat.
 | FIG-10 | clôtures propres | 2544 |
 | FIG-11 | réouvertures | 52 |
 | FIG-12 | cohortes (nature · zone · taille · époque) | 36 |
-| FIG-13 | cohortes où l'app dit « on ne sait pas » | 31 |
+| FIG-13 | cohortes où l'app dit « on ne sait pas » | 25 |
 | FIG-14 | cartes de recommandation produites | 8 |
 | FIG-15 | essai contrôlé en cours | 1 |
 | FIG-16 | sprints couverts | 25 |
@@ -90,18 +90,18 @@ réimplémente aucune règle.
 
 | Clé | Cohorte (nature · zone · taille · époque) | Bras | Effectif | Clôture propre | Fourchette | Délai médian |
 |---|---|---|---|---|---|---|
-| FIG-20 | bugfix · api · M · époque 2 | avec agent | 41 | 83 % | [69 ; 91] | 30 h |
-| FIG-21 | bugfix · api · M · époque 2 | sans agent | 37 | 86 % | [72 ; 94] | 44 h |
-| FIG-22 | data-migration · billing · M · époque 2 | avec agent | 20 | 40 % | [22 ; 61] | 36 h |
-| FIG-23 | data-migration · billing · M · époque 2 | sans agent | 21 | 86 % | [65 ; 95] | 72 h |
-| FIG-24 | data-migration · billing · M · époque 3 | avec agent | 26 | 69 % | [50 ; 83] | 36 h |
+| FIG-20 | bugfix · api · M · époque 2 | avec agent | 41 | 83 % | [68 ; 92] | 30 h |
+| FIG-21 | bugfix · api · M · époque 2 | sans agent | 37 | 86 % | [72 ; 95] | 44 h |
+| FIG-22 | data-migration · billing · M · époque 2 | avec agent | 20 | 40 % | [21 ; 62] | 36 h |
+| FIG-23 | data-migration · billing · M · époque 2 | sans agent | 21 | 86 % | [65 ; 96] | 72 h |
+| FIG-24 | data-migration · billing · M · époque 3 | avec agent | 26 | 69 % | [50 ; 84] | 36 h |
 | FIG-25 | data-migration · billing · M · époque 3 | sans agent | 31 | 87 % | [71 ; 95] | 72 h |
 | FIG-26 | tests · web-ui · M · époque 2 | avec agent | 88 | 89 % | [80 ; 94] | 40 h |
 | FIG-27 | tests · web-ui · M · époque 2 | sans agent | 82 | 76 % | [65 ; 84] | 54 h |
-| FIG-28 | data-migration · data-pipeline · M · époque 2 | avec agent | 36 | 83 % | [68 ; 92] | 32 h |
+| FIG-28 | data-migration · data-pipeline · M · époque 2 | avec agent | 36 | 83 % | [68 ; 93] | 32 h |
 | FIG-29 | data-migration · data-pipeline · M · époque 2 | sans agent | 34 | 59 % | [42 ; 74] | 60 h |
-| FIG-30 | external-integration · api · L · époque 2 | avec agent | 22 | 86 % | [67 ; 95] | 60 h |
-| FIG-31 | external-integration · api · L · époque 2 | sans agent | 3 | 67 % | [21 ; 94] | 96 h |
+| FIG-30 | external-integration · api · L · époque 2 | avec agent | 22 | 86 % | [66 ; 96] | 60 h |
+| FIG-31 | external-integration · api · L · époque 2 | sans agent | 3 | 67 % | [20 ; 94] | 96 h |
 
 Lecture :
 
@@ -138,7 +138,7 @@ non établi) — voir la divergence annoncée au §6.
 | Écran | Ce que le juge voit avec le jeu |
 |---|---|
 | Carte sur le ticket (`PROJ-412`) | la cohorte, les deux bras avec effectifs et fourchettes, les délais médians, les causes d'échec, les tickets de référence, la confiance, le bandeau de démo |
-| Carte de délégation | la matrice natures × zones : une case verte, une orange, une rouge, et beaucoup de gris honnête (31 cohortes sur 36) ; le filtre par époque |
+| Carte de délégation | la matrice natures × zones : une case verte, une orange, une rouge, et beaucoup de gris honnête (25 cohortes sur 36) ; le filtre par époque |
 | Détail de cohorte | les deux bras, l'écart et son intervalle, la composition comparée, les causes d'échec, le cas « bras déséquilibrés » |
 | Calibration | les recommandations données et les clôtures propres observées ensuite (SPEC §10) |
 | Couverture | les droits sur le graphe ; sur le site de démo, aucun dépôt → ni commit ni PR (SPEC §24) |
@@ -212,7 +212,7 @@ PR (ils relèvent d'une PR `CONTRACT-CHANGE`, pas de ce lot) :
    meilleur, mais clôture propre en retrait ou relecture nettement plus lourde →
    agent, relecture renforcée ». `recommendFrom` (L1–L4) rend
    `not-enough-data` dès que l'écart n'est ni établi ni équivalent : avec
-   69 % [50 ; 83] contre 87 % [71 ; 95], la différence n'est pas établie mais
+   69 % [50 ; 84] contre 87 % [71 ; 95], la différence n'est pas établie mais
    n'est pas non plus équivalente à 10 points près. Même cause pour la phrase du
    §12 : la case « migrations de données » de l'époque 3 sort **grise** et non
    orange. `CONTRACT-NEEDED: src/domain/recommendation.ts.recommendFrom`.
