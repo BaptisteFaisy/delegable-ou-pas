@@ -172,10 +172,16 @@ function figuresOf(arm: readonly Seed[]): { rate: ProportionStat | null; lead: D
   };
 }
 
-/** The figures of one cohort, arm by arm (SPEC §7). */
+/**
+ * The figures of one cohort, arm by arm (SPEC §7).
+ *
+ * Only the closed tickets enter a rate: an open ticket has no outcome yet
+ * (SPEC §6). Every quoted cohort is mature at the demo's reference date.
+ */
 function cohortFigures(cohort: readonly Seed[]): CohortFigures {
-  const agentTickets = cohort.filter((seed) => seed.arm === 'agent');
-  const humanTickets = cohort.filter((seed) => seed.arm === 'human');
+  const closed = cohort.filter((seed) => seed.closedAt !== '');
+  const agentTickets = closed.filter((seed) => seed.arm === 'agent');
+  const humanTickets = closed.filter((seed) => seed.arm === 'human');
   const agent = figuresOf(agentTickets);
   const human = figuresOf(humanTickets);
   const failures = agentTickets.filter((seed) => !cleanOf(seed)).length;
@@ -231,11 +237,17 @@ function failureCausesOf(figures: CohortFigures, nature: string): readonly strin
 }
 
 /** The past tickets the advice rests on (SPEC §4 "Fondement", SPEC §8). */
-function referenceKeysOf(cohort: readonly Seed[]): readonly string[] {
+function referenceKeysOf(seed: Seed, cohort: readonly Seed[]): readonly string[] {
   const family = cohort[0]?.family ?? '';
-  const pinned = SAMPLE_PINS.filter((pin) => pin.familyId === family).map((pin) => pin.key);
+  const pinned = SAMPLE_PINS
+    .filter((pin) => pin.familyId === family && pin.key !== seed.key)
+    .map((pin) => pin.key)
+    .sort();
   if (pinned.length > 0) return pinned;
-  return cohort.filter((seed) => seed.closedAt !== '').slice(0, 3).map((seed) => seed.key);
+  return cohort
+    .filter((candidate) => candidate.closedAt !== '' && candidate.key !== seed.key)
+    .slice(0, 3)
+    .map((candidate) => candidate.key);
 }
 
 /** The guardrails that fire on one ticket (SPEC §8 "Les garde-fous", DP-12). */
@@ -284,7 +296,7 @@ function cardOf(seed: Seed, cohort: readonly Seed[], openIncident: boolean): Rec
     ],
     conditions: conditionsFor(value, sampleSettings()),
     guardrails: fired,
-    referenceIssueKeys: referenceKeysOf(cohort),
+    referenceIssueKeys: referenceKeysOf(seed, cohort),
     failureCauses: failureCausesOf(figures, seed.nature),
     demo: SAMPLE_IS_MARKED_AS_DEMO,
     computedAt: SAMPLE_NOW,

@@ -248,7 +248,7 @@ export const FAMILIES: readonly FamilyPlan[] = [
   {
     id: 'e2-green-bugfix-m', epochId: EPOCH_2, nature: 'bugfix', zone: 'api', size: 'M',
     agent: arm(41, 34, 30, { reopened: 2, causedBugs: 5, incidents: 1, takeover: 1 }),
-    human: humanArm(37, 32, 44, { reopened: 1, causedBugs: 3, incidents: 1 }),
+    human: humanArm(37, 32, 44, { reopened: 1, causedBugs: 4, incidents: 1 }),
     unknown: 0, open: [], from: '2026-04-07', to: '2026-09-11',
     summary: 'Correction du parcours de commande / Checkout path fix',
   },
