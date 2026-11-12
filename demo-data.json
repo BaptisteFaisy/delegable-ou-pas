@@ -14,14 +14,14 @@
           "recommendation": "delegate"
         },
         {
-          "clean": 0,
+          "clean": 50,
           "interval": {
-            "ciHigh": 1,
-            "ciLow": 0,
-            "n": 0,
-            "rate": 0
+            "ciHigh": 0.9054713451991339,
+            "ciLow": 0.09452865480086614,
+            "n": 2,
+            "rate": 0.5
           },
-          "n": 0,
+          "n": 2,
           "recommendation": "delegate-with-review"
         },
         {
@@ -204,9 +204,13 @@
           "zone": "billing"
         },
         "computedAt": "2026-11-30T12:00:00Z",
-        "conclusion": "not-enough-data",
-        "conditions": [],
-        "confidence": "low",
+        "conclusion": "same",
+        "conditions": [
+          "relecture renforcée : au moins 2 relecteurs",
+          "un relecteur responsable de la zone est requis",
+          "une preuve par critère d'acceptation"
+        ],
+        "confidence": "medium",
         "demo": true,
         "epochId": "epoch-3",
         "failureCauses": [
@@ -227,7 +231,7 @@
         "issueKey": "PROJ-412",
         "reasons": [
           "Cohorte : data-migration · billing · taille M (26 tickets avec agent, 31 sans)",
-          "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 83 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
+          "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 84 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
           "écart non établi"
         ],
         "referenceIssueKeys": [
@@ -235,7 +239,7 @@
           "PROJ-233",
           "PROJ-301"
         ],
-        "value": "not-enough-data"
+        "value": "delegate-with-review"
       },
       "label": {
         "en": "The card on the ticket",
@@ -471,11 +475,15 @@
     "sprint": {
       "byRecommendation": [
         {
+          "recommendation": "delegate-with-review",
+          "tickets": 2
+        },
+        {
           "recommendation": "not-enough-data",
-          "tickets": 5
+          "tickets": 3
         }
       ],
-      "delegablePointsShare": 0,
+      "delegablePointsShare": 0.4,
       "label": {
         "en": "The sprint breakdown",
         "fr": "La répartition du sprint"
@@ -578,9 +586,9 @@
     },
     "calibrationFine": {
       "fine": {
-        "auc": 0.5,
-        "brier": 0.25,
-        "logLoss": 0.6931471805599453,
+        "auc": 0.4166666666666667,
+        "brier": 0.27304,
+        "logLoss": 0.7455240564860734,
         "reliability": [
           {
             "bin": 0,
@@ -644,12 +652,12 @@
           },
           {
             "bin": 5,
-            "n": 5,
+            "n": 3,
             "observed": {
-              "ciHigh": 0.8823817688407467,
-              "ciLow": 0.23071993220883708,
-              "n": 5,
-              "rate": 0.6
+              "ciHigh": 0.9385096847238394,
+              "ciLow": 0.20765495512648796,
+              "n": 3,
+              "rate": 0.6666666666666666
             },
             "predictedHigh": 0.6,
             "predictedLow": 0.5
@@ -668,12 +676,12 @@
           },
           {
             "bin": 7,
-            "n": 0,
+            "n": 2,
             "observed": {
-              "ciHigh": 1,
-              "ciLow": 0,
-              "n": 0,
-              "rate": 0
+              "ciHigh": 0.9054713451991339,
+              "ciLow": 0.09452865480086614,
+              "n": 2,
+              "rate": 0.5
             },
             "predictedHigh": 0.8,
             "predictedLow": 0.7
@@ -714,10 +722,10 @@
         "fr": "Brier, log-loss, AUC, courbe de fiabilité avec ses bins vides visibles, par cohorte et par version de politique — et le verdict qui élargit « pas assez de recul » quand les avis n’apportent rien."
       },
       "verdict": {
-        "auc": 0.5,
-        "brier": 0.25,
+        "auc": 0.4166666666666667,
+        "brier": 0.27304,
         "informative": false,
-        "reason": "Aucun ticket « à confier » ni « à garder » à comparer : rien à mesurer, l’app ne peut pas se noter. AUC à 0,5 : le pronostic ne classe rien, une seule issue a été observée partout.",
+        "reason": "Pas assez de recul pour noter l’app : 2 tickets « à confier » et 0 « à garder », sous le seuil de 20 par seau.",
         "widenUnknown": true
       }
     },
@@ -2012,9 +2020,13 @@
             "zone": "billing"
           },
           "computedAt": "2026-11-30T12:00:00Z",
-          "conclusion": "not-enough-data",
-          "conditions": [],
-          "confidence": "low",
+          "conclusion": "same",
+          "conditions": [
+            "relecture renforcée : au moins 2 relecteurs",
+            "un relecteur responsable de la zone est requis",
+            "une preuve par critère d'acceptation"
+          ],
+          "confidence": "medium",
           "demo": true,
           "epochId": "epoch-3",
           "failureCauses": [
@@ -2035,7 +2047,7 @@
           "issueKey": "PROJ-412",
           "reasons": [
             "Cohorte : data-migration · billing · taille M (26 tickets avec agent, 31 sans)",
-            "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 83 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
+            "Clôture propre : 69 % avec agent (26 tickets, entre 50 % et 84 %), 87 % sans (31 tickets, entre 71 % et 95 %)",
             "écart non établi"
           ],
           "referenceIssueKeys": [
@@ -2043,7 +2055,7 @@
             "PROJ-233",
             "PROJ-301"
           ],
-          "value": "not-enough-data"
+          "value": "delegate-with-review"
         },
         "tool": "should-delegate"
       },
