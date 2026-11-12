@@ -334,7 +334,7 @@ jobs:
           # `--jq '…'` ferme le guillemet simple et gh meurt sur « unknown
           # arguments » (vécu le 29/10 : `discover` rendait une matrice vide en
           # silence et plus aucune PR n'était balayée).
-          FILTRE='[.[] | select(.headRepository.nameWithOwner == "BaptisteFaisy/delegable-ou-pas")
+          FILTRE='[.[] | select(.headRepository.nameWithOwner == "Tradoooo/delegable-ou-pas")
             | {pr: .number, sha: .headRefOid, branch: .headRefName,
                state: .mergeStateStatus, draft: (.isDraft | tostring),
                main: .baseRefOid, maj: .updatedAt}]
@@ -473,7 +473,7 @@ jobs:
           # v28 — `0` rend la réparation d'un test rouge au balayeur (le
           # workflow `triage-rouge` la prend sinon, avec l'indice du triage).
           TRIAGE_TEST: ${{ vars.TRIAGE_TEST }}
-          REPO: BaptisteFaisy/delegable-ou-pas
+          REPO: Tradoooo/delegable-ou-pas
           PR: ${{ matrix.pr }}
           SHA: ${{ matrix.sha }}
           BRANCH: ${{ matrix.branch }}
