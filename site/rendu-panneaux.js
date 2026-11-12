@@ -82,7 +82,7 @@
         ? 'Paradoxe de Simpson : le signe s’inverse une fois les cohortes séparées — c’est le biais de sélection, pas un effet des agents.'
         : 'Simpson’s paradox: the sign flips once cohorts are separated — that is selection bias, not an agent effect.');
     }
-    const plan = data.plan || data;
+    const plan = data.infeasible && data.infeasible.feasible === false ? data.infeasible : (data.plan || data);
     if (plan.feasible === false) {
       notes.push(lang === 'fr'
         ? 'Essai non réalisable : au rythme de tickets de cette équipe, la puissance visée n’est pas atteignable dans la fenêtre. Mieux vaut le dire que lancer un essai sous-puissant.'
