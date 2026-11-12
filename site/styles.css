@@ -305,3 +305,21 @@ footer .small { color: var(--ink-soft); font-size: 0.82rem; }
   .sticky-nav { top: 0; position: static; }
   .kv { grid-template-columns: 1fr; }
 }
+
+/* ------------------------------------------- v3 : blocs du rendu générique
+   Le rendu structural découpe chaque panneau en blocs titrés ; les verdicts
+   qui doivent être lus avant les chiffres portent la classe `strong`. */
+
+.block { margin: 14px 0; }
+.block > h4 {
+  margin: 0 0 6px; font: 600 0.78rem var(--mono); text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--ink-soft);
+}
+table.data { font-size: 0.88rem; }
+table.data td, table.data th { padding: 5px 8px; }
+table.data caption.truncated { caption-side: bottom; color: var(--ink-soft); font-size: 0.8rem; padding-top: 4px; }
+.note.strong {
+  border-left: 4px solid var(--accent); background: #deebff; color: #0747a6;
+  padding: 8px 12px; border-radius: 0 6px 6px 0; font-weight: 600; font-style: normal;
+}
+.gauge > span { transition: width 200ms ease-out; }
