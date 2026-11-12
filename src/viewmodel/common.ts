@@ -29,7 +29,7 @@ import type {
   Recommendation,
 } from '../types-advice.js';
 import { MAP_COLOR_OF } from '../types-advice.js';
-import { percent } from '../domain/stats.js';
+import { percent, percentCeil, percentFloor } from '../domain/stats.js';
 import { gapEstablished } from '../domain/conclusion.js';
 import type { Translate } from '../i18n/index.js';
 
@@ -55,8 +55,10 @@ export interface RateLine {
 export function rateLine(stat: ProportionStat | null, t: Translate): RateLine | null {
   if (stat === null) return null;
   const rate = percent(stat.rate);
-  const low = percent(stat.ciLow);
-  const high = percent(stat.ciHigh);
+  // Conservative bounds: the displayed interval never claims more than the
+  // computed one (SPEC §8 card: 18/26 reads "[50 % ; 84 %]").
+  const low = percentFloor(stat.ciLow);
+  const high = percentCeil(stat.ciHigh);
   return {
     rate,
     n: stat.n,

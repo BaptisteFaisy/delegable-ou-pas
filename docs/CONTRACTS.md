@@ -496,3 +496,5 @@ Ces fichiers ne portent **aucune logique métier** : ils construisent `Deps`
 (`src/deps.ts`) et appellent le domaine ou `src/actions/`. Écrire une ligne
 ici **ne crée pas** de fichier : elle déclare une souche attendue — le fichier
 arrive avec le lot qui le porte.
+
+(L10) Écarts constatés à l’intégration : voir `docs/INTEGRATION-L10.md`.

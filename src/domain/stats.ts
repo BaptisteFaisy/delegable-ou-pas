@@ -149,3 +149,18 @@ export function share(part: number, whole: number): number {
 export function percent(value: number): string {
   return `${Math.round(clamp01(value) * 100)} %`;
 }
+
+/**
+ * Formats the lower bound of an interval, rounded down: a displayed interval
+ * never claims more than the computed one (SPEC §8 card: 18/26 reads
+ * "entre 50 et 84 %"). The epsilon absorbs the float representation of exact
+ * hundredths (0.69 * 100 = 69.00000000000001), never a real figure.
+ */
+export function percentFloor(value: number): string {
+  return `${Math.floor(clamp01(value) * 100 + 1e-9)} %`;
+}
+
+/** Formats the upper bound of an interval, rounded up (see `percentFloor`). */
+export function percentCeil(value: number): string {
+  return `${Math.ceil(clamp01(value) * 100 - 1e-9)} %`;
+}

@@ -15,6 +15,8 @@
 import type { Balance, BalanceCriterion, BalanceSignal, Nature, Size } from '../types.js';
 import { BALANCE_CRITERIA } from '../types.js';
 import { share } from './stats.js';
+import type { MatchingResult, MatchableTicket } from './matching.js';
+import { balanceBeforeAfter, exactMatch, nearestNeighbourMatch } from './matching.js';
 
 /** Tolerance on a composition difference before the arms are called unbalanced. */
 export const DEFAULT_BALANCE_TOLERANCE: number = 0.2;
@@ -127,4 +129,53 @@ export function compareBalance(
   tolerance: number = DEFAULT_BALANCE_TOLERANCE,
 ): Balance {
   return compareBalanceDetailed(agent, human, tolerance).balance;
+}
+
+/* ------------------------------------------------------- the matching rescue */
+
+/**
+ * Minimal share of the two arms a matching must keep for the rescue to be an
+ * answer: a matching that throws away most of the tickets is not one (A3).
+ */
+export const MIN_MATCHED_SHARE: number = 0.5;
+
+/** A rescue that holds: the matched pairs, and the ids of the matched subset. */
+export interface MatchedRescue {
+  readonly matched: MatchingResult;
+  readonly agentIds: readonly string[];
+  readonly humanIds: readonly string[];
+}
+
+/** One matching attempt, kept only when it rebalances and keeps enough. */
+function keepIfHonest(
+  agent: readonly MatchableTicket[],
+  human: readonly MatchableTicket[],
+  matched: MatchingResult,
+): MatchedRescue | null {
+  if (matched.pairs.length === 0) return null;
+  if (matched.matchedShare < MIN_MATCHED_SHARE) return null;
+  if (!balanceBeforeAfter(agent, human, matched).balanced) return null;
+  return {
+    matched,
+    agentIds: matched.pairs.map((pair) => pair[0].issueId),
+    humanIds: matched.pairs.map((pair) => pair[1].issueId),
+  };
+}
+
+/**
+ * The fallback of unbalanced arms (SPEC §7 rule 5, DP-10): one-to-one exact
+ * matching first, nearest neighbour on the propensity score second. The rescue
+ * is returned only when the matched subset is balanced again and keeps at
+ * least `MIN_MATCHED_SHARE` of the two arms; otherwise `null`, and the cohort
+ * stays "we do not know" (recipe 7). No person identifier travels through the
+ * matching (DP-17).
+ */
+export function matchedRescue(
+  agent: readonly MatchableTicket[],
+  human: readonly MatchableTicket[],
+): MatchedRescue | null {
+  if (agent.length === 0 || human.length === 0) return null;
+  const exact = keepIfHonest(agent, human, exactMatch(agent, human));
+  if (exact !== null) return exact;
+  return keepIfHonest(agent, human, nearestNeighbourMatch(agent, human, {}));
 }

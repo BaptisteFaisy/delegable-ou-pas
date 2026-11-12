@@ -26,30 +26,30 @@ import {
 const PROJ_412_COHORT = cohort('data-migration', 'billing', 'M', EPOCH_3);
 
 describe('SPEC §7 — les trois jeux de chiffres tombent juste', () => {
-  it('83 % sur 41 tickets [69 ; 91] contre 86 % sur 37 [72 ; 94]', () => {
+  it('83 % sur 41 tickets [68 ; 92] contre 86 % sur 37 [72 ; 95]', () => {
     const figures = figuresOf(cohort('bugfix', 'api', 'M', EPOCH_2));
     expect(figures.agent?.n).toBe(41);
     expect(percent(figures.agent?.rate ?? 0)).toBe('83 %');
-    expect(boundsOf(figures.agent ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([69, 91]);
+    expect(boundsOf(figures.agent ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([68, 92]);
     expect(figures.human?.n).toBe(37);
     expect(percent(figures.human?.rate ?? 0)).toBe('86 %');
-    expect(boundsOf(figures.human ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([72, 94]);
+    expect(boundsOf(figures.human ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([72, 95]);
   });
 
-  it('cet écart n\'est pas établi : la conclusion est « on ne sait pas »', () => {
+  it('cet écart n\'est pas établi : la conclusion est « pareil » (SPEC §7 règle 4)', () => {
     const figures = figuresOf(cohort('bugfix', 'api', 'M', EPOCH_2));
-    expect(conclusionOf(figures)).toBe('not-enough-data');
+    expect(conclusionOf(figures)).toBe('same');
     expect(wording(conclusionOf(figures)).gap).toBe('écart non établi');
     expect(wording(conclusionOf(figures)).proven).toBe(false);
   });
 
-  it('la cohorte rouge : 40 % [22 ; 61] contre 86 % [65 ; 95], écart établi', () => {
+  it('la cohorte rouge : 40 % [21 ; 62] contre 86 % [65 ; 96], écart établi', () => {
     const figures = figuresOf(cohort('data-migration', 'billing', 'M', EPOCH_2));
     expect(figures.agent?.n).toBe(20);
     expect(percent(figures.agent?.rate ?? 0)).toBe('40 %');
-    expect(boundsOf(figures.agent ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([22, 61]);
+    expect(boundsOf(figures.agent ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([21, 62]);
     expect(percent(figures.human?.rate ?? 0)).toBe('86 %');
-    expect(boundsOf(figures.human ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([65, 95]);
+    expect(boundsOf(figures.human ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([65, 96]);
     expect(conclusionOf(figures)).toBe('worse');
     expect(wording(conclusionOf(figures)).gap).toBe('écart établi');
   });
@@ -63,10 +63,10 @@ describe('SPEC §8 — la carte de PROJ-412', () => {
     expect(PROJ_412_COHORT.some((seed) => seed.key === 'PROJ-412')).toBe(true);
   });
 
-  it('69 % [50 ; 83] contre 87 % [71 ; 95]', () => {
+  it('69 % [50 ; 84] contre 87 % [71 ; 95]', () => {
     const figures = figuresOf(PROJ_412_COHORT);
     expect(percent(figures.agent?.rate ?? 0)).toBe('69 %');
-    expect(boundsOf(figures.agent ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([50, 83]);
+    expect(boundsOf(figures.agent ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([50, 84]);
     expect(percent(figures.human?.rate ?? 0)).toBe('87 %');
     expect(boundsOf(figures.human ?? { n: 0, rate: 0, ciLow: 0, ciHigh: 0 })).toEqual([71, 95]);
   });
@@ -162,11 +162,14 @@ describe('SPEC §12 — les époques', () => {
     expect(epochs[2].model).not.toBe(epochs[1].model);
   });
 
-  it('la migration de facturation passe du rouge à l\'époque 2 au gris à l\'époque 3', () => {
+  it('la migration de facturation passe du rouge à l\'époque 2 à l\'orange à l\'époque 3', () => {
     const red = figuresOf(cohort('data-migration', 'billing', 'M', EPOCH_2));
     const now = figuresOf(PROJ_412_COHORT);
     expect(conclusionOf(red)).toBe('worse');
-    expect(conclusionOf(now)).toBe('not-enough-data');
+    // SPEC §8 card: the gap is not established ("pareil"), the delay is
+    // better → "agent, relecture renforcée" — the cell moves red → orange.
+    expect(conclusionOf(now)).toBe('same');
+    expect(recommendationOf(now, PROJ_412_COHORT[0])).toBe('delegate-with-review');
   });
 });
 

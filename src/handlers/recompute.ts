@@ -22,14 +22,15 @@
  * Rule: files < 500 lines, functions < 50 lines.
  */
 import type { Deps } from '../deps.js';
-import type { IssueClass, Outcome } from '../types.js';
+import type { IssueClass, Outcome, Arm } from '../types.js';
 import type { CohortStat, ProjectSettings, RecommendationCard } from '../types-advice.js';
 import type { CohortKey, Epoch, ProportionStat } from '../types.js';
-import type { CohortTicket } from '../domain/cohort.js';
+import type { CohortTicket, CohortArms } from '../domain/cohort.js';
 import type { ArmComposition } from '../domain/balance.js';
+import type { MatchableTicket } from '../domain/matching.js';
 import { buildArms, cohortKeyOf, groupByCohort, isInCohort, widen } from '../domain/cohort.js';
 import { splitByEpoch, currentEpoch } from '../domain/epochs.js';
-import { compareBalance, composition } from '../domain/balance.js';
+import { compareBalance, composition, matchedRescue } from '../domain/balance.js';
 import { conclude } from '../domain/conclusion.js';
 import { medianOrNull, wilsonInterval } from '../domain/stats.js';
 import { reviewLoad } from '../domain/review.js';
@@ -92,6 +93,34 @@ function armFigures(
   };
 }
 
+/** One arm as matchable tickets: nature, zone, size, delay — never a person (A3, DP-17). */
+function matchableOf(tickets: readonly CohortTicket[], arm: Arm, facts: ProjectFacts): MatchableTicket[] {
+  return tickets.map((ticket) => ({
+    issueId: ticket.issueId,
+    arm,
+    nature: ticket.issueClass.nature,
+    zone: ticket.issueClass.zone,
+    size: ticket.issueClass.size,
+    leadTimeH: facts.outcomes.get(ticket.issueId)?.leadTimeH ?? null,
+  }));
+}
+
+/** The matching rescue (A3): the matched subset of both arms, or `null`. */
+function rescuedArms(arms: CohortArms, facts: ProjectFacts): CohortArms | null {
+  const rescue = matchedRescue(
+    matchableOf(arms.agent, 'agent', facts),
+    matchableOf(arms.human, 'human', facts),
+  );
+  if (rescue === null) return null;
+  const agentIds = new Set(rescue.agentIds);
+  const humanIds = new Set(rescue.humanIds);
+  return {
+    ...arms,
+    agent: arms.agent.filter((ticket) => agentIds.has(ticket.issueId)),
+    human: arms.human.filter((ticket) => humanIds.has(ticket.issueId)),
+  };
+}
+
 /** One cohort of one epoch becomes its two cached arm rows (SPEC §7). */
 export function cohortStatRows(
   settings: ProjectSettings,
@@ -102,11 +131,20 @@ export function cohortStatRows(
   computedAt: string,
 ): CohortStat[] {
   const arms = buildArms(tickets);
-  const agent = armFigures(arms.agent, facts);
-  const human = armFigures(arms.human, facts);
-  const balance = compareBalance(compositionOf(arms.agent), compositionOf(arms.human));
-  const agentStat = arms.agent.length === 0 ? null : agent.clean;
-  const humanStat = arms.human.length === 0 ? null : human.clean;
+  const rawBalance = compareBalance(compositionOf(arms.agent), compositionOf(arms.human));
+  // Arms too different: the matching rescue is attempted (A3); when it is not
+  // honest, nothing changes and the cohort stays "we do not know" (recipe 7).
+  const rescued = rawBalance.balanced ? null : rescuedArms(arms, facts);
+  const agentTickets = rescued === null ? arms.agent : rescued.agent;
+  const humanTickets = rescued === null ? arms.human : rescued.human;
+  const balance =
+    rescued === null
+      ? rawBalance
+      : compareBalance(compositionOf(agentTickets), compositionOf(humanTickets));
+  const agent = armFigures(agentTickets, facts);
+  const human = armFigures(humanTickets, facts);
+  const agentStat = agentTickets.length === 0 ? null : agent.clean;
+  const humanStat = humanTickets.length === 0 ? null : human.clean;
   const conclusion = conclude(agentStat, humanStat, settings.minArmSize, balance);
   return (['agent', 'human'] as const).map((arm) => {
     const figures = arm === 'agent' ? agent : human;

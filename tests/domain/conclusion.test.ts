@@ -71,15 +71,15 @@ describe('conclusion honnête', () => {
     expect(conclude(agent, human, 20, UNBALANCED)).toBe('not-enough-data');
   });
 
-  it('ne dit plus « pareil » sur le seul recouvrement : la différence décide (34/41 vs 32/41)', () => {
+  it('l\'arbitre est la différence, pas le recouvrement : contient 0 → « pareil » (34/41 vs 32/41)', () => {
     const agent = proportion(34, 41);
     const human = proportion(32, 41);
     // The raw intervals still overlap (corrected arbiter: see difference.ts).
     expect(intervalsOverlap(agent, human)).toBe(true);
-    // The difference interval (≈ [-0,125 ; 0,219]) contains 0 and is wider than
-    // the 10-point equivalence margin: neither a gap nor equivalence → honest
-    // "we do not know", where the old rule wrongly said "same".
-    expect(conclude(agent, human, 20, BALANCED)).toBe('not-enough-data');
+    // The difference interval (≈ [-0,125 ; 0,219]) contains 0: the gap is not
+    // established → `same` (SPEC §7 rule 4). An established gap hiding behind
+    // an overlap is caught by the two tests below.
+    expect(conclude(agent, human, 20, BALANCED)).toBe('same');
   });
 
   it('ne dit plus « pareil » sur des fourchettes qui se touchent : la différence exclut 0', () => {
@@ -101,18 +101,25 @@ describe('conclusion honnête', () => {
     expect(conclude(agent, human, 20, BALANCED)).toBe('better');
   });
 
-  it('répond honnêtement « on ne sait pas » pour 34/41 vs 32/37 (SPEC §7 règle 3)', () => {
+  it('un écart non établi est « pareil », pas « on ne sait pas » (34/41 vs 32/37, SPEC §7 règle 3)', () => {
     const agent = proportion(34, 41);
     const human = proportion(32, 37);
-    // Difference ≈ -0,036, its interval contains 0 → no established gap; TOST
-    // at 0,10 does not establish equivalence → not-enough-data.
-    expect(conclude(agent, human, 20, BALANCED)).toBe('not-enough-data');
+    // Difference ≈ -0,036 and its interval ≈ [-0,197 ; +0,132] contains 0: the
+    // gap is not established → `same` (SPEC §7 rule 4). "We do not know" is
+    // reserved for the sample threshold and unbalanced arms (SPEC §8 row 4),
+    // never for a wide interval centred on 0 (SPEC §8 card PROJ-412).
+    expect(conclude(agent, human, 20, BALANCED)).toBe('same');
+    expect(wording('same').gap).toBe('écart non établi');
   });
 
-  it('accepte une marge d\'équivalence personnalisée pour conclure « pareil »', () => {
-    const agent = proportion(34, 41);
-    const human = proportion(32, 37);
-    expect(conclude(agent, human, 20, BALANCED, 0.30)).toBe('same');
+  it('arbitre la carte du SPEC §8 : 18/26 contre 27/31, écart non établi → « pareil »', () => {
+    const agent = proportion(18, 26);
+    const human = proportion(27, 31);
+    // Newcombe on the difference ≈ [-0,386 ; +0,035]: it contains 0, so the
+    // gap is not established. The SPEC §8 card (PROJ-412) recommends "agent,
+    // relecture renforcée" with "confiance moyenne" from this `same` plus the
+    // better median delay — a verdict `not-enough-data` could never carry.
+    expect(conclude(agent, human, 20, BALANCED)).toBe('same');
   });
 
   it('conclut « pire »/« mieux » sur des taux extrêmes 0 contre 1', () => {
