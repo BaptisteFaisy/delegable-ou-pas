@@ -71,6 +71,9 @@
   const RECO_LABEL = {
     delegate: { fr: 'à confier à un agent', en: 'delegate to an agent' },
     'review-hardened': { fr: 'agent, relecture renforcée', en: 'agent, hardened review' },
+    // Valeur réellement produite par le domaine (`Recommendation` dans
+    // src/types-advice.ts) : les deux orthographes doivent parler à l'écran.
+    'delegate-with-review': { fr: 'agent, relecture renforcée', en: 'agent, hardened review' },
     'keep-human': { fr: 'à garder pour un humain', en: 'keep with a human' },
     'not-enough-data': { fr: 'pas assez de recul', en: 'not enough history' },
   };
@@ -190,7 +193,7 @@
     columns.forEach((key) => {
       const td = helpers.el('td');
       const value = isPlainObject(row) ? row[key] : row;
-      if (typeof value === 'string' && /^(delegate|review-hardened|keep-human|unknown|ok|missing|masked|efficacy|futility|safety|continue)$/.test(value)) {
+      if (typeof value === 'string' && /^(delegate|delegate-with-review|review-hardened|keep-human|not-enough-data|unknown|ok|missing|masked|efficacy|futility|safety|continue)$/.test(value)) {
         td.appendChild(helpers.el('span', `badge badge-${value}`, text(value, helpers.lang())));
       } else {
         td.appendChild(scalarNode(value, helpers));
