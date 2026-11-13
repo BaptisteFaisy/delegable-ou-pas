@@ -9,7 +9,10 @@ n'écrive une ligne.
 
 ---
 
-# Sonde 2026-11-13 — variante A
+# Sonde 2026-11-13 — variantes A et B
 
 Cette ligne vient de la branche A. Elle affirme qu'aucune automatisation ne peut
 réconcilier deux intentions contraires : un humain doit toujours trancher.
+
+Cette ligne vient de la branche B. Elle affirme qu'un agent peut réconcilier deux
+intentions contraires, pousser la résolution et laisser la file merger seule.
