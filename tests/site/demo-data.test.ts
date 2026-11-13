@@ -18,6 +18,7 @@ import {
 } from './panneaux-stats.js';
 import { panneauxFeatures } from './panneaux-features.js';
 import { panneauDonneesReelles } from './panneaux-opencode.js';
+import { panneauPreuves } from './panneaux-preuves.js';
 import {
   allTickets, ecranCalibration, ecranCarteDelegation, ecranCarteTicket, ecranCohorte,
   ecranCouverture, ecranGadget, ecranReglages, ecranSprint, mainTotals,
@@ -74,6 +75,7 @@ function buildDataset(): Record<string, unknown> {
       anonymat: panneauAnonymat(),
       ...panneauxFeatures(joined, totals),
       donneesReelles: panneauDonneesReelles(),
+      preuves: panneauPreuves(),
     },
     mcp: outilsMcp(tickets),
   };
@@ -147,11 +149,11 @@ describe('données du site public', () => {
     expect(current, 'site/demo-data.json est absent ou périmé : MAJ_DEMO=1 npx vitest run tests/site').toBe(`${serialised}\n`);
   });
 
-  it('couvre les 8 écrans et les 27 panneaux de fonctionnalités', () => {
+  it('couvre les 8 écrans et les 28 panneaux de fonctionnalités', () => {
     const ecrans = Object.keys(payload.ecrans as Record<string, unknown>);
     const features = Object.keys(payload.features as Record<string, unknown>);
     expect(ecrans).toHaveLength(8);
-    expect(features).toHaveLength(27);
+    expect(features).toHaveLength(28);
     [...ecrans, ...features].forEach((key) => {
       const panel = (ecrans.includes(key)
         ? (payload.ecrans as Record<string, Record<string, unknown>>)[key]
