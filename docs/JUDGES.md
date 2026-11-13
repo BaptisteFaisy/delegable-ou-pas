@@ -48,6 +48,37 @@ Ce qu'il faut regarder, dans cet ordre :
 6. **La calibration** — les avis donnés, et ce qui s'est réellement passé
    ensuite (SPEC §10).
 
+### Les panneaux du site public
+
+Le site public rend le même jeu, écran par écran, puis **panneau par
+panneau** : vingt-sept panneaux de fonctionnalités, tous produits par le vrai
+domaine. Ce sont les dix panneaux du lot E11b qu'un juge peut ouvrir en
+premier :
+
+| Panneau | Ce qu'il montre | Données réelles |
+|---|---|---|
+| La règle, rejouée | la simulation d'une autre règle sur le même passé | non — jeu d'exemple |
+| L'inférence causale, et ses limites | l'E-value de l'écart, la borne de Rosenbaum, et le refus de dire « causal » | non — jeu d'exemple |
+| Le pooling | une cohorte mince rapprochée de ses voisines, force empruntée à l'appui | non — jeu d'exemple |
+| L'incertitude, mesurée | l'implication inconnue en bits, les tickets à lever, la probabilité de bascule | non — jeu d'exemple |
+| La preuve reproductible | les empreintes d'une décision, et le rejeu qui dit ce qui a bougé | non — jeu d'exemple |
+| Le coût comparé | ce que coûte chaque option, hypothèses affichées | non — jeu d'exemple |
+| Le contrat de fraîcheur | l'âge de chaque lecture, et ce que la prochaine collecte prend | non — jeu d'exemple |
+| Les signaux faibles, calibrés | la précision de chaque signal, mesurée sur les tickets étiquetés | non — jeu d'exemple |
+| Le coordinateur | la file de nuit, chaque exclusion nommée, et le bilan du matin | non — jeu d'exemple |
+| L'API et le kit | la version du schéma et le cycle de compatibilité | non — jeu d'exemple |
+| **La donnée réelle** | les sessions OpenCode réellement exécutées : volume, coût, jetons, heures, répartition par modèle | **oui — récoltées, anonymisées à la source** |
+
+Le dernier panneau est le seul qui ne vienne pas du jeu d'exemple : il publie
+les **sessions d'agent réellement exécutées** sur un poste de travail, réduites
+à des agrégats et marquées « données réelles, anonymisées ». Aucun titre, aucun
+chemin, aucun identifiant n'y paraît : la récolte les a effacés avant, et le
+panneau ne publie que ce que le domaine calcule.
+
+Deux zéros y sont **dits**, pas masqués : le coût est nul (les modèles
+utilisés étaient gratuits) et aucune session n'est rattachée à un ticket (le
+relevé n'en a trouvé aucune). Un chiffre absent reste absent.
+
 ## Étape 2 — l'agent Rovo et ses quatre questions (3 minutes)
 
 Dans Rovo Chat, ouvrez l'agent **« Conseiller de délégation »**

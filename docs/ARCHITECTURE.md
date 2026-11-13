@@ -193,3 +193,38 @@ Les écrans « Détail d'une cohorte » (§16.3), « Couverture » (§16.6) et �
 croire cette app ? » (§16.7) sont des vues de la page projet, pas des modules
 séparés : un module de plus, c'est une surface d'installation et de droits en
 plus, pour aucun écran de plus.
+
+## 9. Les dix modules du domaine et où le site les appelle
+
+Le domaine est écrit comme une boîte noire pure : pas de `@forge/*`, pas de
+réseau, pas d'horloge (`now` est injecté). Le site public ne réécrit aucune de
+ces formules — il **appelle** les mêmes modules, sur le même jeu d'exemple, et
+sérialise ce qu'ils rendent.
+
+| Module | Ce qu'il calcule | Appelé par le site depuis |
+|---|---|---|
+| `src/domain/simulation.ts` | le rejeu d'une règle sur un passé, par cohorte et par seuil | `tests/site/panneaux-features.ts` → panneau « La règle, rejouée » |
+| `src/domain/causal.ts` | l'E-value, le facteur de confusion, la borne de Rosenbaum, la readiness | idem → panneau « L'inférence causale, et ses limites » |
+| `src/domain/pooling.ts` | le prior empirique d'une nature et le taux regroupé d'une cohorte | idem → panneau « Le pooling » |
+| `src/domain/uncertainty.ts` | l'entropie de l'implication inconnue, les tickets à lever, la probabilité de bascule | idem → panneau « L'incertitude, mesurée » |
+| `src/domain/proof.ts` | les empreintes d'une décision et le verdict d'un rejeu | idem → panneau « La preuve reproductible » |
+| `src/domain/cost.ts` | le coût d'une cohorte sous les deux options, et le portefeuille | idem → panneau « Le coût comparé » |
+| `src/domain/freshness.ts` | l'état de fraîcheur de chaque lecture et l'ordre de la prochaine collecte | idem → panneau « Le contrat de fraîcheur » |
+| `src/domain/signals.ts` | la précision d'un signal faible, le score d'implication, le plan de collecte | idem → panneau « Les signaux faibles, calibrés » |
+| `src/domain/coordinator.ts` | la file de nuit et le bilan du matin | idem → panneau « Le coordinateur » |
+| `src/mcp/schema.ts` | la version du schéma et le verdict de compatibilité | idem → panneau « L'API et le kit » |
+
+Les projections du jeu d'exemple vers les entrées de ces modules vivent dans
+`tests/site/panneaux-features-base.ts` ; les panneaux eux-mêmes dans
+`tests/site/panneaux-features.ts`. La récolte OpenCode, elle, passe par
+`src/collect/opencode.ts` (`parseDataset`, `summarise`) et alimente le onzième
+panneau, « la donnée réelle ».
+
+Deux conséquences d'architecture, volontairement :
+
+- le site **ne peut pas** diverger de l'app : `site/demo-data.json` est
+  régénéré par `MAJ_DEMO=1 npx vitest run tests/site`, et un second passage
+  vérifie que le fichier commité est encore identique à un calcul frais — un
+  changement du domaine non répercuté sur le site fait rougir la CI ;
+- le site **ne peut pas** afficher un chiffre que l'app n'afficherait pas : il
+  n'y a aucun calcul dans `tests/site/`, seulement des appels au domaine.

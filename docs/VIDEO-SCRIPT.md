@@ -33,13 +33,18 @@ scripted »* · *« No way, it's not replayable »* · *« Depends who's reviewi
 **À l'écran.** Un titre plein écran : *« Agents close tickets faster »* (le
 chiffre naïf, étiqueté `naive figure — chiffre naïf`). Puis la carte par
 cohorte qui se déplie : la même mesure, cohorte par cohorte, et une case qui
-contredit les autres.
+contredit les autres. Puis le panneau du site public qui met les deux côte à
+côte : **le comparateur naïf / honnête** — à gauche le total que tout le monde
+cite, à droite sa décomposition par cohorte, et la preuve chiffrée du biais de
+sélection.
 
 **Voix off.**
 > “Here is the number everyone quotes: agents close tickets faster. And here is
 > the same number, split by cohort — same nature, same zone, same size. The
 > total is not wrong. It is just not the whole story: the easy tickets went to
-> the agents. We never show a total without its breakdown.”
+> the agents. We never show a total without its breakdown — the public site
+> puts the naive figure and the honest one side by side, so you can see which
+> cohorts contradict the headline.”
 
 ## Plan 3 · 1:00 – 1:50 — la carte sur un ticket
 
@@ -96,13 +101,17 @@ prévient son pilote.
 ## Plan 6 · 3:00 – 3:25 — « Can you trust this app? »
 
 **À l'écran.** L'écran de calibration : les avis donnés, et la clôture propre
-observée ensuite, avis par avis — y compris les avis ignorés.
+observée ensuite, avis par avis — y compris les avis ignorés. Puis, sur le site
+public, le panneau **« la donnée réelle »** : les sessions d'agent réellement
+exécutées, en agrégats, marquées *real data, anonymised*.
 
 **Voix off.**
 > “Can you trust this app? It measures itself. Every recommendation is followed
 > by what actually happened, including the tickets where the team went against
 > the advice. When the app says “delegate” and the closures are not clean, you
-> see it here before you see it in production.”
+> see it here before you see it in production. And the panels you just scrolled
+> are not screenshots: the real sessions behind the last one were harvested on a
+> workstation, anonymised at the source, and published as aggregates only.”
 
 ## Plan 7 · 3:25 – 3:55 — l'essai contrôlé
 
