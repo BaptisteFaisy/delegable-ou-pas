@@ -2622,6 +2622,188 @@
         "fr": "Une décision auditable porte la version de la règle, l’empreinte des données, la graine et l’empreinte de la sortie. Rejouée à l’identique, elle rend la même empreinte ; rejouée sur des données qui ont bougé, elle dit quelle valeur a bougé."
       }
     },
+    "preuves": {
+      "genereLe": "2026-11-13T20:31:29.672Z",
+      "label": {
+        "en": "Our proofs: what the machine actually observed",
+        "fr": "Nos preuves : ce que la machine a réellement constaté"
+      },
+      "mention": {
+        "en": "measured on the machine",
+        "fr": "mesuré sur la machine"
+      },
+      "preuves": [
+        {
+          "chiffres": [
+            {
+              "nom": "taille de la base (octets)",
+              "valeur": 2349772800
+            }
+          ],
+          "libelle": {
+            "en": "The agent session database exists on the machine",
+            "fr": "La base de sessions de l’agent existe sur la machine"
+          },
+          "nom": "base-opencode",
+          "ok": true
+        },
+        {
+          "chiffres": [
+            {
+              "nom": "sessions récoltées à l’instant",
+              "valeur": 865
+            },
+            {
+              "nom": "sessions publiées",
+              "valeur": 865
+            },
+            {
+              "nom": "écart à rejouer",
+              "valeur": 0
+            }
+          ],
+          "libelle": {
+            "en": "The harvest replayed now gives at least the published sessions",
+            "fr": "La récolte rejouée à l’instant donne au moins les sessions publiées"
+          },
+          "nom": "recolte-fraiche",
+          "ok": true
+        },
+        {
+          "chiffres": [
+            {
+              "nom": "sessions",
+              "valeur": 865
+            },
+            {
+              "nom": "rattachées à un ticket",
+              "valeur": 25
+            },
+            {
+              "nom": "jetons",
+              "valeur": 250672611
+            },
+            {
+              "nom": "heures d’exécution",
+              "valeur": 837.34
+            },
+            {
+              "nom": "modèles",
+              "valeur": 20
+            }
+          ],
+          "libelle": {
+            "en": "The published dataset is large and free of personal data",
+            "fr": "Le jeu de données publié est volumineux et sans donnée personnelle"
+          },
+          "nom": "jeu-versionne",
+          "ok": true
+        },
+        {
+          "chiffres": [
+            {
+              "nom": "commits avec une clé de ticket",
+              "valeur": 5
+            },
+            {
+              "nom": "commits signés d’un agent",
+              "valeur": 5
+            }
+          ],
+          "libelle": {
+            "en": "The sandbox holds real commits signed by an agent",
+            "fr": "Le bac à sable contient de vrais commits signés d’un agent"
+          },
+          "nom": "lab-commits",
+          "ok": true
+        },
+        {
+          "chiffres": [
+            {
+              "nom": "sessions",
+              "valeur": 5
+            },
+            {
+              "nom": "commits introuvables",
+              "valeur": 0
+            },
+            {
+              "nom": "sessions sans commit",
+              "valeur": 0
+            }
+          ],
+          "libelle": {
+            "en": "The lab journal matches the real commits",
+            "fr": "Le journal du lab colle aux commits réels"
+          },
+          "nom": "lab-journal",
+          "ok": true
+        },
+        {
+          "chiffres": [
+            {
+              "nom": "sessions",
+              "valeur": 5
+            },
+            {
+              "nom": "sessions attribuées",
+              "valeur": 5
+            }
+          ],
+          "libelle": {
+            "en": "Each session is correctly attributed to its ticket",
+            "fr": "Chaque session est bien attribuée à son ticket"
+          },
+          "nom": "lab-attribution",
+          "ok": true
+        },
+        {
+          "chiffres": [
+            {
+              "nom": "sessions affichées par le site",
+              "valeur": 865
+            },
+            {
+              "nom": "tickets affichés par le site",
+              "valeur": 25
+            },
+            {
+              "nom": "sessions dans le dépôt",
+              "valeur": 865
+            },
+            {
+              "nom": "tickets dans le dépôt",
+              "valeur": 25
+            }
+          ],
+          "libelle": {
+            "en": "The public site shows the same figures as the repository",
+            "fr": "Le site public affiche les mêmes chiffres que le dépôt"
+          },
+          "nom": "coherence-site",
+          "ok": true
+        },
+        {
+          "chiffres": [
+            {
+              "nom": "tickets listés",
+              "valeur": 5
+            }
+          ],
+          "libelle": {
+            "en": "The sandbox can be replayed",
+            "fr": "Le lab se relance"
+          },
+          "nom": "lab-rejouable",
+          "ok": true
+        }
+      ],
+      "reussies": 8,
+      "summary": {
+        "en": "Eight proofs are played live against the machine's environment — the agent session database, the harvest replayed now, the sandbox and its commits, the site's agreement with the repository. 8 of 8 are green at publication time. These are measurements, not intentions: the full receipt is in the repository and the script that produces it is public.",
+        "fr": "Huit preuves sont jouées en direct contre l’environnement de la machine — la base de sessions de l’agent, la récolte rejouée à l’instant, le bac à sable et ses commits, la cohérence du site avec le dépôt. 8 sur 8 sont vertes au moment de la publication. Ce sont des mesures, pas des intentions : le reçu complet est dans le dépôt, et le script qui les produit est public."
+      }
+    },
     "priorite": {
       "explanation": "Slice: 4 ticket(s) for 4 min of session. / Tranche : 4 ticket(s) pour 4 min de session.\n1. proj-demo-001-1 (gain 2) — Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n2. proj-demo-001-10 (gain 2) — Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n3. proj-demo-001-11 (gain 2) — Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).\n4. proj-demo-001-12 (gain 2) — Cohort data-migration|billing|M: 20 ticket(s) from leaving the grey zone. This ticket fills the smaller arm (agent). / Cohorte data-migration|billing|M : 20 ticket(s) from leaving the grey zone. Ce ticket remplit le bras le plus petit (agent).",
       "label": {

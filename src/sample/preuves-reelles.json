@@ -1,0 +1,75 @@
+{
+  "genereLe": "2026-11-13T20:31:29.672Z",
+  "source": "prove-real",
+  "preuves": [
+    {
+      "nom": "base-opencode",
+      "ok": true,
+      "chiffres": {
+        "tailleOctets": 2349772800
+      }
+    },
+    {
+      "nom": "recolte-fraiche",
+      "ok": true,
+      "chiffres": {
+        "sessionsFraiches": 865,
+        "sessionsVersionnees": 865,
+        "ecart": 0
+      }
+    },
+    {
+      "nom": "jeu-versionne",
+      "ok": true,
+      "chiffres": {
+        "sessions": 865,
+        "avecTicket": 25,
+        "jetons": 250672611,
+        "heures": 837.34,
+        "modeles": 20
+      }
+    },
+    {
+      "nom": "lab-commits",
+      "ok": true,
+      "chiffres": {
+        "commitsAvecTicket": 5,
+        "commitsAvecMention": 5
+      }
+    },
+    {
+      "nom": "lab-journal",
+      "ok": true,
+      "chiffres": {
+        "sessions": 5,
+        "shaAbsents": 0,
+        "sansCommit": 0
+      }
+    },
+    {
+      "nom": "lab-attribution",
+      "ok": true,
+      "chiffres": {
+        "sessions": 5,
+        "attribuees": 5
+      }
+    },
+    {
+      "nom": "coherence-site",
+      "ok": true,
+      "chiffres": {
+        "siteSessions": 865,
+        "siteTickets": 25,
+        "depotSessions": 865,
+        "depotTickets": 25
+      }
+    },
+    {
+      "nom": "lab-rejouable",
+      "ok": true,
+      "chiffres": {
+        "tickets": 5
+      }
+    }
+  ]
+}

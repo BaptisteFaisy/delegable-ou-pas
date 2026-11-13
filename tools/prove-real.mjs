@@ -24,6 +24,7 @@
  *
  * Usage :
  *   node tools/prove-real.mjs [--out docs/PREUVES-REELLES.md] [--json]
+ *   node tools/prove-real.mjs --versionner src/sample/preuves-reelles.json
  *
  * Variables d'environnement :
  *   OPENCODE_DB   base des sessions (défaut : celle de la machine)
@@ -55,6 +56,7 @@ function args() {
   const out = {};
   for (let i = 0; i < rest.length; i += 1) {
     if (rest[i] === '--out') out.out = resolve(rest[++i] ?? '');
+    else if (rest[i] === '--versionner') out.versionner = resolve(rest[++i] ?? '');
     else if (rest[i] === '--json') out.json = true;
     else if (rest[i] === '--help') out.help = true;
   }
@@ -81,8 +83,13 @@ function resume(sessions) {
   return { sessions: sessions.length, jetons, heures: heures / 3_600_000, avecTicket, modeles: modeles.size };
 }
 
-function preuve(nom, ok, lignes) {
-  return { nom, ok, lignes };
+/**
+ * Une preuve : son nom, son verdict, ses lignes et — pour la version publiée —
+ * ses chiffres. Les chiffres sont **des nombres** : aucun chemin, aucun nom,
+ * aucune chaîne libre ne peut sortir par là.
+ */
+function preuve(nom, ok, lignes, chiffres = {}) {
+  return { nom, ok, lignes, chiffres };
 }
 
 function humainMoctets(octets) {
@@ -98,7 +105,7 @@ function preuveBase() {
     `chemin : ${BASE}`,
     `taille : ${humainMoctets(stat.size)}`,
     `modifiée : ${fraiche}`,
-  ]);
+  ], { tailleOctets: stat.size });
 }
 
 /* 2 — la récolte rejouée maintenant sur la base vivante. */
@@ -121,7 +128,7 @@ function preuveRecolte() {
       `sessions versionnées : ${versionne.length}`,
       `écart à rejouer dans le dépôt : ${ecart > 0 ? `+${ecart}` : 'aucun'}`,
       `session la plus récente : ${dernierFrais}`,
-    ]);
+    ], { sessionsFraiches: frais.length, sessionsVersionnees: versionne.length, ecart });
   } finally {
     rmSync(repli, { recursive: true, force: true });
   }
@@ -139,7 +146,7 @@ function preuveJeu() {
     `heures : ${res.heures.toFixed(2)}`,
     `modèles : ${res.modeles}`,
     `donnée personnelle : ${fuite ? 'OUI' : 'non'}`,
-  ]);
+  ], { sessions: res.sessions, avecTicket: res.avecTicket, jetons: res.jetons, heures: Math.round(res.heures * 100) / 100, modeles: res.modeles });
 }
 
 /* 4 — les commits réels du bac à sable. */
@@ -153,7 +160,7 @@ function preuveLabCommits() {
     `commits portant une clé PROJ- : ${avecTicket}`,
     `commits avec mention d'agent (Co-authored-by) : ${signes}`,
     `dernier : ${sujet[0] ?? '-'}`,
-  ]);
+  ], { commitsAvecTicket: avecTicket, commitsAvecMention: signes });
 }
 
 /* 5 — real-runs.json colle aux commits du bac à sable. */
@@ -169,7 +176,7 @@ function preuveLabJournal() {
     `sessions du journal : ${sessions.length}`,
     `sha absents de l'historique du lab : ${inconnues}`,
     `sessions sans commit (l'agent n'a rien eu à faire) : ${sansCommit}`,
-  ]);
+  ], { sessions: sessions.length, shaAbsents: inconnues, sansCommit });
 }
 
 /* 5 bis — chaque session est attribuée à son ticket, dans l'historique. */
@@ -186,7 +193,7 @@ function preuveAttribution() {
   return preuve('lab-attribution', fautifs.length === 0, [
     `sessions attribuées à leur ticket : ${sessions.length - fautifs.length}/${sessions.length}`,
     ...fautifs.map((ligne) => `attribution fautive : ${ligne}`),
-  ]);
+  ], { sessions: sessions.length, attribuees: sessions.length - fautifs.length });
 }
 
 /* 6 — le site public montre les mêmes chiffres réels. */
@@ -206,7 +213,7 @@ async function preuveSite() {
     return preuve('coherence-site', Boolean(egaux), [
       `site  : ${reel?.sessions ?? '-'} sessions, ${reel?.tickets ?? '-'} tickets, ${reel?.jetons ?? '-'} jetons`,
       `dépôt : ${versionne.sessions} sessions, ${versionne.avecTicket} tickets, ${versionne.jetons} jetons`,
-    ]);
+    ], { siteSessions: reel?.sessions ?? 0, siteTickets: reel?.tickets ?? 0, depotSessions: versionne.sessions, depotTickets: versionne.avecTicket });
   } catch (erreur) {
     return preuve('coherence-site', false, [`réseau indisponible : ${erreur.message}`]);
   }
@@ -222,7 +229,7 @@ function preuveRejouable() {
     const tickets = sortie.split('\n').filter((ligne) => MOTIF_TICKET.test(ligne.trim().split(' ')[0] ?? ''));
     return preuve('lab-rejouable', sortie.includes('PROJ-'), [
       `tickets listés : ${tickets.length}`,
-    ]);
+    ], { tickets: tickets.length });
   } catch (erreur) {
     return preuve('lab-rejouable', false, [`échec : ${erreur.message}`]);
   }
@@ -269,6 +276,20 @@ async function principal() {
   const horodatage = new Date().toISOString();
   if (options.json) {
     console.log(JSON.stringify({ horodatage, preuves }, null, 2));
+  } else if (options.versionner) {
+    // La version publiée : uniquement des nombres et des verdicts. Aucun
+    // chemin, aucun nom, aucune chaîne libre ne sort par là.
+    const versionne = {
+      genereLe: horodatage,
+      source: 'prove-real',
+      preuves: preuves.map((preuve) => ({
+        nom: preuve.nom,
+        ok: preuve.ok,
+        chiffres: preuve.chiffres,
+      })),
+    };
+    writeFileSync(options.versionner, `${JSON.stringify(versionne, null, 2)}\n`, 'utf8');
+    console.log(rendreMarkdown(preuves, horodatage));
   } else {
     const markdown = rendreMarkdown(preuves, horodatage);
     console.log(markdown);
