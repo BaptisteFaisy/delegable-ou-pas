@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-12T21:40:42Z",
+  "generatedAt": "2026-11-13T17:59:13Z",
   "source": "opencode-lab",
   "sessions": [
     {
-      "id": "oc_f02b6f3bb7595126",
+      "id": "oc_a7c15d806de33275",
       "project": "opencode-lab",
       "title": "la CLI perd le premier mot du texte",
       "agent": "build",
@@ -12,18 +12,18 @@
         "id": "agnes-3.0-flash"
       },
       "costEuros": 0.0,
-      "tokensIn": 1946,
-      "tokensOut": 630,
+      "tokensIn": 981,
+      "tokensOut": 463,
       "additions": 1,
       "deletions": 1,
       "filesTouched": 1,
-      "durationMs": 32000,
-      "startedAt": "2026-11-12T21:35:51Z",
-      "endedAt": "2026-11-12T21:36:23Z",
+      "durationMs": 21000,
+      "startedAt": "2026-11-13T17:54:29Z",
+      "endedAt": "2026-11-13T17:54:50Z",
       "issueKey": "PROJ-101",
       "ticket": "PROJ-101",
-      "session": "oc_f02b6f3bb7595126",
-      "sha": "b3ac7ba73d2904d18ed261b86e71fd391324f7f0",
+      "session": "oc_a7c15d806de33275",
+      "sha": "1bd51fd5cd2b10bc11a32399cbff3f1d55b38011",
       "author": "OpenCode Agent <agent@opencode.invalid>",
       "mentions": [
         "Co-authored-by: OpenCode <noreply@opencode.ai>"
@@ -36,7 +36,7 @@
       "timedOut": false
     },
     {
-      "id": "oc_c6af2cde15a33cd5",
+      "id": "oc_cbf4e2fdfe1dbcef",
       "project": "opencode-lab",
       "title": "ajouter truncate au module notes",
       "agent": "build",
@@ -45,23 +45,23 @@
         "id": "agnes-3.0-flash"
       },
       "costEuros": 0.0,
-      "tokensIn": 4448,
-      "tokensOut": 1550,
-      "additions": 23,
-      "deletions": 2,
+      "tokensIn": 4521,
+      "tokensOut": 1655,
+      "additions": 33,
+      "deletions": 1,
       "filesTouched": 2,
-      "durationMs": 108000,
-      "startedAt": "2026-11-12T21:36:24Z",
-      "endedAt": "2026-11-12T21:38:12Z",
+      "durationMs": 117000,
+      "startedAt": "2026-11-13T17:54:51Z",
+      "endedAt": "2026-11-13T17:56:48Z",
       "issueKey": "PROJ-102",
       "ticket": "PROJ-102",
-      "session": "oc_c6af2cde15a33cd5",
-      "sha": "7155c3fa91468613330a571a399ce652d70c1d15",
+      "session": "oc_cbf4e2fdfe1dbcef",
+      "sha": "1c08945c3608553378894b2d5e0124ee4bf1d022",
       "author": "OpenCode Agent <agent@opencode.invalid>",
       "mentions": [
         "Co-authored-by: OpenCode <noreply@opencode.ai>"
       ],
-      "messages": 15,
+      "messages": 17,
       "files": [
         "notes.py",
         "tests/test_notes.py"
@@ -70,7 +70,7 @@
       "timedOut": false
     },
     {
-      "id": "oc_658e08e71c67a5ff",
+      "id": "oc_bef75ed95ee26390",
       "project": "opencode-lab",
       "title": "couvrir les cas limites de slugify",
       "agent": "build",
@@ -79,18 +79,18 @@
         "id": "agnes-3.0-flash"
       },
       "costEuros": 0.0,
-      "tokensIn": 3525,
-      "tokensOut": 1545,
-      "additions": 19,
+      "tokensIn": 3066,
+      "tokensOut": 1354,
+      "additions": 18,
       "deletions": 1,
       "filesTouched": 1,
-      "durationMs": 29000,
-      "startedAt": "2026-11-12T21:38:14Z",
-      "endedAt": "2026-11-12T21:38:43Z",
+      "durationMs": 55000,
+      "startedAt": "2026-11-13T17:56:50Z",
+      "endedAt": "2026-11-13T17:57:45Z",
       "issueKey": "PROJ-103",
       "ticket": "PROJ-103",
-      "session": "oc_658e08e71c67a5ff",
-      "sha": "683d76428c31b9b71266c9a5c3baab1051ccc6a1",
+      "session": "oc_bef75ed95ee26390",
+      "sha": "abce112e144ebc1104f6f3431f260f7b3fcb058c",
       "author": "OpenCode Agent <agent@opencode.invalid>",
       "mentions": [
         "Co-authored-by: OpenCode <noreply@opencode.ai>"
@@ -103,7 +103,7 @@
       "timedOut": false
     },
     {
-      "id": "oc_8a206d375116ed2c",
+      "id": "oc_e8452ca456f472fe",
       "project": "opencode-lab",
       "title": "documenter la CLI et les fonctions du module",
       "agent": "build",
@@ -112,18 +112,18 @@
         "id": "agnes-3.0-flash"
       },
       "costEuros": 0.0,
-      "tokensIn": 4345,
-      "tokensOut": 1088,
-      "additions": 19,
-      "deletions": 1,
+      "tokensIn": 4378,
+      "tokensOut": 1166,
+      "additions": 20,
+      "deletions": 2,
       "filesTouched": 1,
-      "durationMs": 56000,
-      "startedAt": "2026-11-12T21:38:44Z",
-      "endedAt": "2026-11-12T21:39:40Z",
+      "durationMs": 57000,
+      "startedAt": "2026-11-13T17:57:46Z",
+      "endedAt": "2026-11-13T17:58:43Z",
       "issueKey": "PROJ-104",
       "ticket": "PROJ-104",
-      "session": "oc_8a206d375116ed2c",
-      "sha": "e97770afe2ee03def61aff0427586307432ae3ba",
+      "session": "oc_e8452ca456f472fe",
+      "sha": "7a73551e56f402bd921d5055434edd63dfc20e77",
       "author": "OpenCode Agent <agent@opencode.invalid>",
       "mentions": [
         "Co-authored-by: OpenCode <noreply@opencode.ai>"
@@ -136,7 +136,7 @@
       "timedOut": false
     },
     {
-      "id": "oc_dffb3b26121c6318",
+      "id": "oc_cb38750e654584da",
       "project": "opencode-lab",
       "title": "couper slugify sur une frontière de mot",
       "agent": "build",
@@ -145,23 +145,23 @@
         "id": "agnes-3.0-flash"
       },
       "costEuros": 0.0,
-      "tokensIn": 2618,
-      "tokensOut": 837,
-      "additions": 10,
-      "deletions": 1,
+      "tokensIn": 3031,
+      "tokensOut": 1130,
+      "additions": 14,
+      "deletions": 3,
       "filesTouched": 2,
-      "durationMs": 61000,
-      "startedAt": "2026-11-12T21:39:41Z",
-      "endedAt": "2026-11-12T21:40:42Z",
+      "durationMs": 29000,
+      "startedAt": "2026-11-13T17:58:44Z",
+      "endedAt": "2026-11-13T17:59:13Z",
       "issueKey": "PROJ-105",
       "ticket": "PROJ-105",
-      "session": "oc_dffb3b26121c6318",
-      "sha": "68373d50fc440d68e97bc5477f6fead1b46e8b6c",
+      "session": "oc_cb38750e654584da",
+      "sha": "dd9d053d81138064ec46f3e9f3e3fd9fd646749e",
       "author": "OpenCode Agent <agent@opencode.invalid>",
       "mentions": [
         "Co-authored-by: OpenCode <noreply@opencode.ai>"
       ],
-      "messages": 6,
+      "messages": 8,
       "files": [
         "notes.py",
         "tests/test_notes.py"
