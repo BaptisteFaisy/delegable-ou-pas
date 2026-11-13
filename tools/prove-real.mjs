@@ -3,7 +3,7 @@
  * prove-real.mjs — les preuves en direct : ce dépôt contre son environnement
  * réel, pas contre des fixtures.
  *
- * Sept preuves, chacune rendant un verdict OK / KO avec ses valeurs :
+ * Huit preuves, chacune rendant un verdict OK / KO avec ses valeurs :
  *
  *   1. base-opencode      la base SQLite OpenCode vivante existe et pèse ;
  *   2. recolte-fraiche    la récolte tournée À L'INSTANT sur la base vivante
@@ -15,6 +15,8 @@
  *                         d'un agent, avec une clé de ticket PROJ- ;
  *   5. lab-journal        `tools/lab/real-runs.json` colle aux commits réels
  *                         du bac à sable ;
+ *   5b. lab-attribution   chaque session du journal est bien attribuée à son
+ *                         ticket, dans l'historique du bac à sable ;
  *   6. coherence-site     le site public affiche les mêmes chiffres réels que
  *                         le jeu versionné ;
  *   7. lab-rejouable      `run-session.sh --dry-run` liste les tickets sans
@@ -113,9 +115,11 @@ function preuveRecolte() {
     const dernierFrais = frais.length
       ? new Date(Math.max(...frais.map((session) => Date.parse(session.startedAt)))).toISOString()
       : '-';
+    const ecart = frais.length - versionne.length;
     return preuve('recolte-fraiche', frais.length >= versionne.length && frais.length > 0, [
       `sessions récoltées à l'instant : ${frais.length}`,
       `sessions versionnées : ${versionne.length}`,
+      `écart à rejouer dans le dépôt : ${ecart > 0 ? `+${ecart}` : 'aucun'}`,
       `session la plus récente : ${dernierFrais}`,
     ]);
   } finally {
@@ -165,6 +169,23 @@ function preuveLabJournal() {
     `sessions du journal : ${sessions.length}`,
     `sha absents de l'historique du lab : ${inconnues}`,
     `sessions sans commit (l'agent n'a rien eu à faire) : ${sansCommit}`,
+  ]);
+}
+
+/* 5 bis — chaque session est attribuée à son ticket, dans l'historique. */
+function preuveAttribution() {
+  const chemin = join(RACINE, 'tools/lab/real-runs.json');
+  if (!existsSync(chemin)) return preuve('lab-attribution', false, [`absent : ${chemin}`]);
+  const sessions = lireJeu(chemin).sessions.filter((session) => session.sha);
+  if (sessions.length === 0) return preuve('lab-attribution', false, ['aucune session avec commit']);
+  const fautifs = [];
+  for (const session of sessions) {
+    const sujet = execGit(LAB, 'show', '-s', '--format=%s', session.sha)[0] ?? '';
+    if (!sujet.startsWith(`${session.ticket} `)) fautifs.push(`${session.ticket} → ${sujet.slice(0, 40)}`);
+  }
+  return preuve('lab-attribution', fautifs.length === 0, [
+    `sessions attribuées à leur ticket : ${sessions.length - fautifs.length}/${sessions.length}`,
+    ...fautifs.map((ligne) => `attribution fautive : ${ligne}`),
   ]);
 }
 
@@ -241,6 +262,7 @@ async function principal() {
     preuveJeu(),
     preuveLabCommits(),
     preuveLabJournal(),
+    preuveAttribution(),
     await preuveSite(),
     preuveRejouable(),
   ];

@@ -43,9 +43,44 @@ lieu d'une vraie codebase) est simulé.
 | `tools/lab/run-session.sh` | lance le vrai OpenCode sur un ticket, journalise la session |
 | `tools/lab/collect.sh` | journal + git + API → `real-runs.json`, anonymisé et trié |
 | `tools/lab/real-runs.json` | la télémétrie réelle, versionnée (identifiants hachés) |
+| `tools/prove-real.mjs` | les sept preuves en direct : dépôt contre environnement réel |
 
 `tools/lab/journal.jsonl` est le journal brut (`sessionId` en clair) : il
 n'est **pas** versionné (voir `.gitignore`), le dépôt est public.
+
+## Les preuves en direct
+
+Le lab et la récolte produisent de la donnée réelle ; encore faut-il **le
+prouver**, sinon « réel » n'est qu'une intention. Deux mécanique :
+
+- **`tools/prove-real.mjs`** — sept preuves rendues **en direct**, contre
+  l'environnement de la machine : la base OpenCode vivante existe, la récolte
+  rejouée à l'instant y donne au moins les sessions du jeu versionné, le jeu
+  versionné est volumineux et sans donnée personnelle, le bac à sable contient
+  de vrais commits signés d'un agent avec une clé `PROJ-`, le journal colle aux
+  commits réels, le **site public affiche les mêmes chiffres** que le dépôt, et
+  le lab se relance (`--dry-run`). Le reçu est écrit dans
+  `docs/PREUVES-REELLES.md` ; le code de sortie vaut 1 si une preuve est KO.
+
+  ```bash
+  node tools/prove-real.mjs --out docs/PREUVES-RELLES.md
+  ```
+
+- **`tests/collect/opencode-real.test.ts`** — la suite vérifie le **jeu réel
+  versionné** (`src/sample/opencode-real.json` : 854 sessions récoltées) à
+  travers les vrais modules : implication, durée, coût, résumé. C'est ce qui
+  empêche une récolte périmée ou mal anonymisée de passer en silence — le trou
+  du 12 novembre était exactement là : le fichier produit était bien formé,
+  juste vieux de trois semaines.
+
+Ce qui reste **simulé**, et pourquoi : le jeu de démonstration Jira (2 939
+tickets) est **fictif, et affiché comme tel** dans l'interface et le site.
+C'est une exigence du cahier des charges (DP-20) et une question d'honnêteté :
+un faux jeu de données Jira présenté comme réel serait exactement le mensonge
+que l'app prétend éviter. La dimension **implication, coût et durée** — elle —
+vient de la télémétrie OpenCode réelle ; la dimension **cohortes et
+recommandations** se calcule sur le jeu de démonstration, parce qu'un graphe
+Atlassian réel n'existe pas pour ce projet.
 
 ## Relancer le lab
 
