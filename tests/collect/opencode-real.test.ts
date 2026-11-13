@@ -27,7 +27,7 @@ import type { OpenCodeSession } from '../../src/collect/opencode.js';
 const JEU = fileURLToPath(new URL('../../src/sample/opencode-real.json', import.meta.url));
 const MOTIF_TICKET = /^PROJ-\d+$/;
 
-function jeuReel(): OpenCodeSession[] {
+function jeuReel(): readonly OpenCodeSession[] {
   const brut = readFileSync(JEU, 'utf8');
   return parseDataset(JSON.parse(brut)).sessions;
 }
