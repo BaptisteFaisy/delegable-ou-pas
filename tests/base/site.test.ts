@@ -4,7 +4,7 @@
  * Covers: DP-20, DP-24.
  *
  * The committed `site/demo-data.json` is regenerated from the base and covers
- * the 24 panels (8 screens + 16 features); its figures are the base's, and the
+ * the 35 panels (8 screens + 27 features); its figures are the base's, and the
  * data is marked as a demonstration.
  */
 import { describe, expect, it } from 'vitest';
@@ -24,10 +24,10 @@ function demonstration(): Demonstration {
 }
 
 describe('le site public sur la base', () => {
-  it('couvre les 24 panneaux : 8 écrans et 16 fonctionnalités', () => {
+  it('couvre les 35 panneaux : 8 écrans et 27 fonctionnalités', () => {
     const donnee = demonstration();
     expect(Object.keys(donnee.ecrans)).toHaveLength(8);
-    expect(Object.keys(donnee.features)).toHaveLength(16);
+    expect(Object.keys(donnee.features)).toHaveLength(27);
     expect(donnee.mcp).toBeTruthy();
   });
 
