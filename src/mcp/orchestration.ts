@@ -145,7 +145,7 @@ export function toolsForStep(step: CycleStep): readonly OrchestrationTool[] {
  * tool it claims to use. It uses only published tools and only `fetch`.
  */
 export function kitExample(): string {
-  return `import { checkCompatibility, type McpEnvelope } from '@baptistefaisy/delegable-ou-pas/mcp';
+  return `import { checkCompatibility, type McpEnvelope } from '@tradoooo/delegable-ou-pas/mcp';
 
 // Un seul point d’entrée : l’enveloppe porte la version, la date et
 // l’empreinte des données — une réponse se rejoue, un désaccord se tranche.

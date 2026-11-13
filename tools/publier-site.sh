@@ -15,7 +15,7 @@
 set -euo pipefail
 export LC_ALL=C
 
-DEPOT="${DEPOT:-BaptisteFaisy/delegable-ou-pas}"
+DEPOT="${DEPOT:-Tradoooo/delegable-ou-pas}"
 RACINE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SITE="$RACINE/site"
 ICONE="$RACINE/static/icon.svg"

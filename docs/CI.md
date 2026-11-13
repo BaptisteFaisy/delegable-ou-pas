@@ -1,6 +1,6 @@
 # CI — « Délégable ou pas ? »
 
-> **État réel et vérifié le 11 novembre 2026** sur `BaptisteFaisy/delegable-ou-pas`
+> **État réel et vérifié le 11 novembre 2026** sur `Tradoooo/delegable-ou-pas`
 > (commandes `gh api` bornées, sorties recopiées). Ce document décrit la chaîne
 > telle qu'elle tourne, pas une intention. Les règles de code qu'elle fait
 > respecter sont dans [CONVENTIONS.md](CONVENTIONS.md).
@@ -51,7 +51,7 @@ commit de `main`, où `ci-budget` est le seul des trois checks présent.
 
 ## 3. Le ruleset de `main`
 
-Vérifié par `gh api repos/BaptisteFaisy/delegable-ou-pas/rulesets/27036463` :
+Vérifié par `gh api repos/Tradoooo/delegable-ou-pas/rulesets/27036463` :
 
 - identifiant **27036463**, nom « main — PR obligatoire, checks requis
   (ci, ci-budget, couche0) », cible `branch`, `enforcement: active`, porté sur
@@ -191,7 +191,7 @@ rend compte en commentaire — sans intervention humaine. Codes de sortie :
 - Étiquettes : `hold` et `intervention-humaine` interdisent toute saisine ;
   un succès pose `agent-conflit`. Le modèle ne voit que les bords du conflit.
 - Recette à blanc : `python3 conflict_agent.py resolve --dry-run --repo
-  BaptisteFaisy/delegable-ou-pas --pr N` affiche les prompts sans rien appeler.
+  Tradoooo/delegable-ou-pas --pr N` affiche les prompts sans rien appeler.
 
 ## 8. Les autres workflows
 
@@ -242,18 +242,18 @@ n'est écrite dans un fichier du dépôt.
 ## 11. Ajouter un runner
 
 1. Sur r630, récupérer le jeton d'enregistrement du dépôt :
-   `gh api -X POST repos/BaptisteFaisy/delegable-ou-pas/actions/runners/registration-token --jq .token`.
+   `gh api -X POST repos/Tradoooo/delegable-ou-pas/actions/runners/registration-token --jq .token`.
 2. **Réutiliser un dossier d'agent existant** s'il y en a un (pas de
    re-téléchargement du paquet) ; sinon décompresser l'archive `actions-runner`
    dans `~/actions-runner-delegable-ou-pas-0N`.
 3. Vider le workspace `_work` de l'agent (les restes d'un run précédent faussent
    le sanity docs) — **dans le dossier de l'agent uniquement**, jamais au-dessus.
 4. Enregistrer avec les **cinq étiquettes** des runners existants :
-   `./config.sh --url https://github.com/BaptisteFaisy/delegable-ou-pas --token <jeton> --name r630-delegable-ou-pas-0N --labels self-hosted,Linux,X64,delegable-ou-pas-worker,ci-node --unattended`.
+   `./config.sh --url https://github.com/Tradoooo/delegable-ou-pas --token <jeton> --name r630-delegable-ou-pas-0N --labels self-hosted,Linux,X64,delegable-ou-pas-worker,ci-node --unattended`.
 5. Installer en **service systemd utilisateur** puis le démarrer :
    `./svc.sh install && ./svc.sh start` (`./svc.sh status` pour vérifier).
 6. Vérifier l'enregistrement, borné :
-   `timeout 60 gh api repos/BaptisteFaisy/delegable-ou-pas/actions/runners --jq '.runners[]|"\(.name) \(.status)"'`
+   `timeout 60 gh api repos/Tradoooo/delegable-ou-pas/actions/runners --jq '.runners[]|"\(.name) \(.status)"'`
    — le nouveau doit être `online`.
 7. Ne pas toucher aux sélecteurs des workflows : `[self-hosted, linux, x64,
    delegable-ou-pas-worker]` ramasse déjà la nouvelle machine.
@@ -261,7 +261,7 @@ n'est écrite dans un fichier du dépôt.
 ## 12. Diagnostiquer une PR rouge
 
 1. **Lire le verdict** :
-   `timeout 120 gh pr checks <n> --repo BaptisteFaisy/delegable-ou-pas` puis
+   `timeout 120 gh pr checks <n> --repo Tradoooo/delegable-ou-pas` puis
    `timeout 120 gh run view --log-failed` sur le run en échec (les lignes
    `::error::` nomment le fichier ou le contrôle fautif).
 2. **`couche0` rouge** → le plus souvent le périmètre : comparer les fichiers du
@@ -279,7 +279,7 @@ n'est écrite dans un fichier du dépôt.
    au-delà, c'est un échec réel.
 5. **PR `DIRTY`** → ne rien forcer : l'agent de conflit (§7) la résout et pousse.
    Vérifier l'état avec
-   `timeout 60 gh pr view <n> --repo BaptisteFaisy/delegable-ou-pas --json state,mergeable,mergeStateStatus`.
+   `timeout 60 gh pr view <n> --repo Tradoooo/delegable-ou-pas --json state,mergeable,mergeStateStatus`.
 6. **PR verte qui ne merge pas** → regarder la file : conditions non satisfaites
    (`-draft`, `base ≠ main`), étiquette `hold`, ou lot déjà pris dans un groupe.
    Le commentaire d'empreinte du balayeur dit lequel.
