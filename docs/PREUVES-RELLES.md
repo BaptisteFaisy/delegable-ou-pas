@@ -1,6 +1,6 @@
 # Preuves réelles — « Délégable ou pas ? »
 
-Généré le 2026-11-13T18:16:24.208Z par `tools/prove-real.mjs`.
+Généré le 2026-11-13T19:11:36.216Z par `tools/prove-real.mjs`.
 
 | preuve | verdict |
 |---|---|
@@ -10,14 +10,14 @@ Généré le 2026-11-13T18:16:24.208Z par `tools/prove-real.mjs`.
 | lab-commits | ✅ OK |
 | lab-journal | ✅ OK |
 | lab-attribution | ✅ OK |
-| coherence-site | ❌ KO |
+| coherence-site | ✅ OK |
 | lab-rejouable | ✅ OK |
 
 ## base-opencode
 
 - chemin : /home/baptiste/.local/share/opencode/opencode.db
 - taille : 2241 Mo
-- modifiée : 2026-11-13T17:58:14.551Z
+- modifiée : 2026-11-13T18:36:06.391Z
 
 ## recolte-fraiche
 
@@ -53,7 +53,7 @@ Généré le 2026-11-13T18:16:24.208Z par `tools/prove-real.mjs`.
 
 ## coherence-site
 
-- site  : 854 sessions, 14 tickets, 250513633 jetons
+- site  : 865 sessions, 25 tickets, 250672611 jetons
 - dépôt : 865 sessions, 25 tickets, 250672611 jetons
 
 ## lab-rejouable
