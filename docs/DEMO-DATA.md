@@ -241,17 +241,17 @@ ce que le domaine calcule (`src/collect/opencode.ts`, `summarise`).
 
 | Agrégat | Valeur | Ce qu'il dit |
 |---|---|---|
-| Sessions | 681 | le volume réel de travail d'agent observé |
+| Sessions | 854 | le volume réel de travail d'agent observé |
 | Coût | 0 € | les modèles utilisés étaient gratuits : la base locale n'enregistre aucun coût |
-| Jetons | 228 749 390 | le volume de tokens réellement brûlés |
-| Heures | 768,09 h | la durée cumulée des sessions |
-| Modèles | 12 | la répartition par modèle est affichée avec sa part |
-| Sessions rattachées à un ticket | 0 | aucune session ne porte de clé de ticket : le chiffre reste nul, et le dit |
+| Jetons | 250 513 633 | le volume de tokens réellement brûlés |
+| Heures | 837,05 h | la durée cumulée des sessions |
+| Modèles | 19 | la répartition par modèle est affichée avec sa part |
+| Sessions rattachées à un ticket | 14 | les sessions du bac à sable OpenCode, où un agent a réellement travaillé sur les tickets `PROJ-101` à `PROJ-105` |
 
 Deux règles tiennent ici comme partout ailleurs (DP-17, SPEC §20) : **aucune
 donnée par personne**, et **une donnée absente reste absente** — le chiffre des
-sessions rattachées à un ticket est nul parce que la récolte n'en a trouvé
-aucune, pas parce qu'on l'a mis à zéro.
+sessions rattachées à un ticket compte celles que la récolte a vraiment
+retrouvées, ni plus ni moins.
 
 ## 8. Les panneaux du site public
 

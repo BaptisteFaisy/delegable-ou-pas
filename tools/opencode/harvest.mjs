@@ -21,10 +21,11 @@
  *                                  [--dry-run]
  */
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs';
 import { homedir, tmpdir } from 'node:os';
 import { basename, dirname, isAbsolute, relative, resolve, sep } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
+import { lireJson, lireSessions } from './source-db.mjs';
 
 const RACINE = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SORTIE_DEFAUT = resolve(RACINE, 'src', 'sample', 'opencode-real.json');
@@ -211,17 +212,6 @@ function extraireTicket(textes) {
   return null;
 }
 
-/** Extraits de texte d'une partie de message qui portent une clé de ticket. */
-function extraitsTicket(data) {
-  try {
-    const partie = JSON.parse(String(data));
-    if (partie && partie.type === 'text' && typeof partie.text === 'string') return [partie.text];
-  } catch {
-    return [];
-  }
-  return [];
-}
-
 /* -------------------------------------------------------------- construction */
 
 /** Une session publique, prête à écrire. */
@@ -277,52 +267,10 @@ function transformer(brutes, maison) {
 
 /* ------------------------------------------------------------------ lecture */
 
-/** Ouvre la base en lecture seule : elle n'est jamais écrite. */
-async function ouvrirBase(chemin) {
-  const { DatabaseSync } = await import('node:sqlite');
-  return new DatabaseSync(`${pathToFileURL(chemin).href}?mode=ro`, { readOnly: true });
-}
-
-/** Sessions brutes de la base + les extraits de message qui portent un ticket. */
-async function lireBase(cheminBase) {
-  const db = await ouvrirBase(cheminBase);
-  try {
-    const lignes = db
-      .prepare(
-        `SELECT id, directory, title, agent, model, cost, tokens_input, tokens_output,
-                summary_additions, summary_deletions, summary_files, time_created, time_updated
-           FROM session`,
-      )
-      .all();
-    const tickets = lireTickets(db, lignes.map((ligne) => String(ligne.id)));
-    return lignes.map((ligne) => ({ ...ligne, texts: tickets.get(String(ligne.id)) ?? [] }));
-  } finally {
-    db.close();
-  }
-}
-
-/** Clés de ticket trouvées dans les parties de message des sessions données. */
-function lireTickets(db, ids) {
-  const parSession = new Map();
-  if (ids.length === 0) return parSession;
-  const trous = ids.map(() => '?').join(',');
-  const lignes = db.prepare(`SELECT session_id, data FROM part WHERE data LIKE ? AND session_id IN (${trous})`).all('%PROJ-%', ...ids);
-  for (const ligne of lignes) {
-    const extraits = extraitsTicket(ligne.data);
-    if (extraits.length === 0) continue;
-    const liste = parSession.get(ligne.session_id) ?? [];
-    liste.push(...extraits);
-    parSession.set(ligne.session_id, liste);
-  }
-  return parSession;
-}
-
-/** Sessions brutes depuis un fichier JSON (jeu de test, inspection). */
-function lireJson(chemin) {
-  const brut = JSON.parse(readFileSync(chemin, 'utf8'));
-  const sessions = Array.isArray(brut) ? brut : brut.sessions;
-  if (!Array.isArray(sessions)) throw new Error('JSON de sessions invalide : tableau attendu');
-  return sessions;
+/** Sessions brutes depuis la base (schéma détecté) ou depuis un fichier JSON. */
+async function lireSource(cheminBase, cheminJson) {
+  if (cheminJson) return lireJson(cheminJson);
+  return lireSessions(cheminBase);
 }
 
 /* ------------------------------------------------------------------ résumé */
@@ -435,9 +383,7 @@ async function main() {
     console.log(usage());
     return;
   }
-  const brutes = options.entree
-    ? lireJson(options.entree)
-    : await lireBase(options.base);
+  const brutes = await lireSource(options.base, options.entree);
   const { dataset, exclus } = transformer(brutes, options.maison);
   if (options.simulation) {
     afficherResume(dataset, exclus, false);

@@ -69,12 +69,12 @@ export function panneauDonneesReelles(): Panel {
     modeles,
     tickets: resume.withTicket,
     note: {
-      fr: 'Les sessions récoltées ne portent pas de clé de ticket : le relevé ne rattache une '
-        + 'session à un ticket que si son titre en porte une. Le chiffre affiché est donc nul, '
-        + 'et il le reste tant que la récolte n’en trouve pas.',
-      en: 'The harvested sessions carry no ticket key: the harvest only attaches a session to a '
-        + 'ticket when its title carries one. The figure shown is therefore zero, and it stays '
-        + 'zero as long as the harvest finds none.',
+      fr: 'Une session n’est rattachée à un ticket que si son titre ou ses messages portent une clé '
+        + 'PROJ- : le chiffre affiché est donc le nombre réel de sessions rattachées, et il rend '
+        + 'compte des tickets traités par un agent dans le bac à sable réel.',
+      en: 'A session is attached to a ticket only when its title or its messages carry a PROJ- key: '
+        + 'the figure shown is therefore the real number of attached sessions, and it accounts for '
+        + 'the tickets worked on by an agent in the real sandbox.',
     },
   };
 }
