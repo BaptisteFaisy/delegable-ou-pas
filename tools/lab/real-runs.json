@@ -1,0 +1,173 @@
+{
+  "generatedAt": "2026-11-12T21:40:42Z",
+  "source": "opencode-lab",
+  "sessions": [
+    {
+      "id": "oc_f02b6f3bb7595126",
+      "project": "opencode-lab",
+      "title": "la CLI perd le premier mot du texte",
+      "agent": "build",
+      "model": {
+        "provider": "agnes",
+        "id": "agnes-3.0-flash"
+      },
+      "costEuros": 0.0,
+      "tokensIn": 1946,
+      "tokensOut": 630,
+      "additions": 1,
+      "deletions": 1,
+      "filesTouched": 1,
+      "durationMs": 32000,
+      "startedAt": "2026-11-12T21:35:51Z",
+      "endedAt": "2026-11-12T21:36:23Z",
+      "issueKey": "PROJ-101",
+      "ticket": "PROJ-101",
+      "session": "oc_f02b6f3bb7595126",
+      "sha": "b3ac7ba73d2904d18ed261b86e71fd391324f7f0",
+      "author": "OpenCode Agent <agent@opencode.invalid>",
+      "mentions": [
+        "Co-authored-by: OpenCode <noreply@opencode.ai>"
+      ],
+      "messages": 6,
+      "files": [
+        "cli.py"
+      ],
+      "exitCode": 0,
+      "timedOut": false
+    },
+    {
+      "id": "oc_c6af2cde15a33cd5",
+      "project": "opencode-lab",
+      "title": "ajouter truncate au module notes",
+      "agent": "build",
+      "model": {
+        "provider": "agnes",
+        "id": "agnes-3.0-flash"
+      },
+      "costEuros": 0.0,
+      "tokensIn": 4448,
+      "tokensOut": 1550,
+      "additions": 23,
+      "deletions": 2,
+      "filesTouched": 2,
+      "durationMs": 108000,
+      "startedAt": "2026-11-12T21:36:24Z",
+      "endedAt": "2026-11-12T21:38:12Z",
+      "issueKey": "PROJ-102",
+      "ticket": "PROJ-102",
+      "session": "oc_c6af2cde15a33cd5",
+      "sha": "7155c3fa91468613330a571a399ce652d70c1d15",
+      "author": "OpenCode Agent <agent@opencode.invalid>",
+      "mentions": [
+        "Co-authored-by: OpenCode <noreply@opencode.ai>"
+      ],
+      "messages": 15,
+      "files": [
+        "notes.py",
+        "tests/test_notes.py"
+      ],
+      "exitCode": 0,
+      "timedOut": false
+    },
+    {
+      "id": "oc_658e08e71c67a5ff",
+      "project": "opencode-lab",
+      "title": "couvrir les cas limites de slugify",
+      "agent": "build",
+      "model": {
+        "provider": "agnes",
+        "id": "agnes-3.0-flash"
+      },
+      "costEuros": 0.0,
+      "tokensIn": 3525,
+      "tokensOut": 1545,
+      "additions": 19,
+      "deletions": 1,
+      "filesTouched": 1,
+      "durationMs": 29000,
+      "startedAt": "2026-11-12T21:38:14Z",
+      "endedAt": "2026-11-12T21:38:43Z",
+      "issueKey": "PROJ-103",
+      "ticket": "PROJ-103",
+      "session": "oc_658e08e71c67a5ff",
+      "sha": "683d76428c31b9b71266c9a5c3baab1051ccc6a1",
+      "author": "OpenCode Agent <agent@opencode.invalid>",
+      "mentions": [
+        "Co-authored-by: OpenCode <noreply@opencode.ai>"
+      ],
+      "messages": 9,
+      "files": [
+        "tests/test_notes.py"
+      ],
+      "exitCode": 0,
+      "timedOut": false
+    },
+    {
+      "id": "oc_8a206d375116ed2c",
+      "project": "opencode-lab",
+      "title": "documenter la CLI et les fonctions du module",
+      "agent": "build",
+      "model": {
+        "provider": "agnes",
+        "id": "agnes-3.0-flash"
+      },
+      "costEuros": 0.0,
+      "tokensIn": 4345,
+      "tokensOut": 1088,
+      "additions": 19,
+      "deletions": 1,
+      "filesTouched": 1,
+      "durationMs": 56000,
+      "startedAt": "2026-11-12T21:38:44Z",
+      "endedAt": "2026-11-12T21:39:40Z",
+      "issueKey": "PROJ-104",
+      "ticket": "PROJ-104",
+      "session": "oc_8a206d375116ed2c",
+      "sha": "e97770afe2ee03def61aff0427586307432ae3ba",
+      "author": "OpenCode Agent <agent@opencode.invalid>",
+      "mentions": [
+        "Co-authored-by: OpenCode <noreply@opencode.ai>"
+      ],
+      "messages": 9,
+      "files": [
+        "README.md"
+      ],
+      "exitCode": 0,
+      "timedOut": false
+    },
+    {
+      "id": "oc_dffb3b26121c6318",
+      "project": "opencode-lab",
+      "title": "couper slugify sur une frontière de mot",
+      "agent": "build",
+      "model": {
+        "provider": "agnes",
+        "id": "agnes-3.0-flash"
+      },
+      "costEuros": 0.0,
+      "tokensIn": 2618,
+      "tokensOut": 837,
+      "additions": 10,
+      "deletions": 1,
+      "filesTouched": 2,
+      "durationMs": 61000,
+      "startedAt": "2026-11-12T21:39:41Z",
+      "endedAt": "2026-11-12T21:40:42Z",
+      "issueKey": "PROJ-105",
+      "ticket": "PROJ-105",
+      "session": "oc_dffb3b26121c6318",
+      "sha": "68373d50fc440d68e97bc5477f6fead1b46e8b6c",
+      "author": "OpenCode Agent <agent@opencode.invalid>",
+      "mentions": [
+        "Co-authored-by: OpenCode <noreply@opencode.ai>"
+      ],
+      "messages": 6,
+      "files": [
+        "notes.py",
+        "tests/test_notes.py"
+      ],
+      "exitCode": 0,
+      "timedOut": false
+    }
+  ]
+}
