@@ -27,7 +27,7 @@ permissions:
 jobs:
   ci:
     name: ci
-    runs-on: [self-hosted, linux, x64, delegable-ou-pas-worker]
+    runs-on: [self-hosted, delegable-ou-pas-worker]
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
