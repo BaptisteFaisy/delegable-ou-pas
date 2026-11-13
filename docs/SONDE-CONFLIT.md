@@ -19,3 +19,11 @@ intentions contraires, pousser la résolution et laisser la file merger seule.
 
 La sonde B est relancée après la réinscription des runners du dépôt : elle
 doit être réconciliée par l'agent de conflit, sans intervention humaine.
+
+---
+
+# Sonde Mergify 2026-11-13
+
+Vérification du produit **Workflow Automation** sur l'organisation `Tradoooo`,
+après le transfert : la commande `@mergifyio rebase` et la forme `/queue`
+répondent-elles, ou refusent-elles le produit ?
