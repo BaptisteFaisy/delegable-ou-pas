@@ -6,3 +6,10 @@ réel sur le même fichier et la même ligne, et prouver que l'agent de conflit 
 la file (`pr-auto-merge` + `conflict_agent.py`, branché sur le routeur InferHub)
 résout et pousse la PR : elle passe de DIRTY à mergée sans qu'un humain
 n'écrive une ligne.
+
+---
+
+# Sonde 2026-11-13 — variante A
+
+Cette ligne vient de la branche A. Elle affirme qu'aucune automatisation ne peut
+réconcilier deux intentions contraires : un humain doit toujours trancher.
