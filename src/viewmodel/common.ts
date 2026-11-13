@@ -33,6 +33,12 @@ import { percent, percentCeil, percentFloor } from '../domain/stats.js';
 import { gapEstablished } from '../domain/conclusion.js';
 import type { Translate } from '../i18n/index.js';
 
+/** A visible sentence, in the two languages of the app (SPEC §20). */
+export interface Bilingual {
+  readonly fr: string;
+  readonly en: string;
+}
+
 /** A rate as a screen shows it: the three parts of recipe 10, never split. */
 export interface RateLine {
   /** The rate alone, e.g. "83 %" (SPEC §7 rule 3). */
