@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+node_modules/
+node_modules
+
+dist/
+.npm-state/
+coverage/
+*.tsbuildinfo
+.DS_Store

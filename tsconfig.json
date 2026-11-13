@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitOverride": true,
+    "exactOptionalPropertyTypes": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    // Compilation incrémentale : le fichier d'état vit dans `.npm-state/`,
+    // conservé d'un run à l'autre sur les runners auto-hébergés (le nettoyage
+    // de la CI l'exclut). Sans ça, chaque PR retype tout le dépôt à froid et
+    // le budget de 5 minutes finit par sauter — on optimise, on n'allonge
+    // jamais un timeout (règle CI de fin octobre 2026).
+    "incremental": true,
+    "tsBuildInfoFile": ".npm-state/tsconfig.tsbuildinfo",
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}
