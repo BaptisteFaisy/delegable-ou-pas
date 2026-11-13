@@ -202,7 +202,6 @@ npx vitest run tests/sample
   recalculée depuis le jeu.
 
 ## 6. Divergences assumées entre le SPEC et le domaine mergé
-
 Le jeu reste fidèle au **domaine mergé** : il n'invente pas un avis que l'app ne
 donnerait pas. Deux écarts avec la prose du SPEC sont signalés ici et dans la
 PR (ils relèvent d'une PR `CONTRACT-CHANGE`, pas de ce lot) :
@@ -228,3 +227,54 @@ PR (ils relèvent d'une PR `CONTRACT-CHANGE`, pas de ce lot) :
    ceux du brief, au chiffre près ; c'est la règle d'arbitrage du domaine
    (SPEC §7 règle 4) qui décide de la couleur. `CONTRACT-NEEDED:
    src/domain/recommendation.ts` — même cause que la divergence 1.
+
+## 7. La télémétrie réelle : les sessions OpenCode récoltées
+
+À côté du jeu d'exemple, le dépôt versionne une **récolte réelle** : les
+sessions d'agent de code qu'un poste de travail a réellement exécutées
+(`src/sample/opencode-real.json`, produit par le lot O1). Le site public la
+publie sous la mention **« données réelles, anonymisées »**.
+
+Ce qui est publié : des **agrégats seulement**. La récolte a déjà effacé le
+titre, le chemin et l'identifiant de chaque session ; le panneau ne publie que
+ce que le domaine calcule (`src/collect/opencode.ts`, `summarise`).
+
+| Agrégat | Valeur | Ce qu'il dit |
+|---|---|---|
+| Sessions | 681 | le volume réel de travail d'agent observé |
+| Coût | 0 € | les modèles utilisés étaient gratuits : la base locale n'enregistre aucun coût |
+| Jetons | 228 749 390 | le volume de tokens réellement brûlés |
+| Heures | 768,09 h | la durée cumulée des sessions |
+| Modèles | 12 | la répartition par modèle est affichée avec sa part |
+| Sessions rattachées à un ticket | 0 | aucune session ne porte de clé de ticket : le chiffre reste nul, et le dit |
+
+Deux règles tiennent ici comme partout ailleurs (DP-17, SPEC §20) : **aucune
+donnée par personne**, et **une donnée absente reste absente** — le chiffre des
+sessions rattachées à un ticket est nul parce que la récolte n'en a trouvé
+aucune, pas parce qu'on l'a mis à zéro.
+
+## 8. Les panneaux du site public
+
+Le site public (`site/`) rend le jeu ci-dessus : huit écrans et vingt-sept
+panneaux de fonctionnalités. Tous sont produits par le **vrai domaine** appelé
+sur le jeu d'exemple — aucun chiffre n'est écrit à la main — et
+`site/demo-data.json` est régénéré par `MAJ_DEMO=1 npx vitest run tests/site`,
+puis vérifié frais par un second passage.
+
+Les dix panneaux ajoutés par le lot E11b, un par module du domaine :
+
+| Panneau | Module appelé | Ce qu'il montre |
+|---|---|---|
+| `simulation` | `src/domain/simulation.ts` | la règle rejouée sous une autre variante, cohorte par cohorte, et le balayage des seuils |
+| `inferenceCausale` | `src/domain/causal.ts` | l'E-value de l'écart observé, la borne de Rosenbaum de l'appariement, et la readiness qui dit toujours « pas causal » |
+| `pooling` | `src/domain/pooling.ts` | chaque cohorte rapprochée du prior de sa nature, avec la force empruntée |
+| `incertitude` | `src/domain/uncertainty.ts` | l'implication inconnue mesurée en bits, le nombre de tickets à lever, la probabilité de bascule |
+| `preuve` | `src/domain/proof.ts` | les empreintes d'une décision, et le rejeu qui dit quelle valeur a bougé |
+| `cout` | `src/domain/cost.ts` | le coût des deux options par cohorte, sur le modèle d'hypothèses affiché |
+| `fraicheur` | `src/domain/freshness.ts` | l'âge de chaque lecture, son état, et ce que la prochaine collecte prend d'abord |
+| `signauxFaibles` | `src/domain/signals.ts` | la précision de chaque signal mesurée sur les tickets étiquetés, et le plan de collecte |
+| `coordinateur` | `src/domain/coordinator.ts` | la file de nuit (ce qui part, ce qui reste, et pourquoi) et le bilan du matin |
+| `apiKit` | `src/mcp/schema.ts` | la version du schéma, les versions encore supportées, le verdict de compatibilité |
+
+Le onzième panneau, `donneesReelles`, lit la récolte du §7 et affiche la
+mention « données réelles, anonymisées ».
