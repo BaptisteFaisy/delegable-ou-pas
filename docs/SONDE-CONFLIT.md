@@ -16,3 +16,6 @@ réconcilier deux intentions contraires : un humain doit toujours trancher.
 
 Cette ligne vient de la branche B. Elle affirme qu'un agent peut réconcilier deux
 intentions contraires, pousser la résolution et laisser la file merger seule.
+
+La sonde B est relancée après la réinscription des runners du dépôt : elle
+doit être réconciliée par l'agent de conflit, sans intervention humaine.
