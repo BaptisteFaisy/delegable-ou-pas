@@ -69,29 +69,42 @@ Vérifié par `gh api repos/Tradoooo/delegable-ou-pas/rulesets/27036463` :
 
 ## 4. Les quatre runners auto-hébergés
 
-Vérifié par `gh api …/actions/runners` le 11 novembre 2026 :
+Ils sont **au niveau du dépôt**, pas au niveau de l'organisation : c'est la
+condition qui tient la CI debout depuis le transfert vers `Tradoooo`.
 
-```text
-r630-delegable-ou-pas-01 online self-hosted,Linux,X64,delegable-ou-pas-worker,ci-node
-r630-delegable-ou-pas-02 online self-hosted,Linux,X64,delegable-ou-pas-worker,ci-node
-r630-delegable-ou-pas-03 online self-hosted,Linux,X64,delegable-ou-pas-worker,ci-node
-r630-delegable-ou-pas-04 online self-hosted,Linux,X64,delegable-ou-pas-worker,ci-node
-```
-
-- Les quatre tournent sur le serveur **r630** et portent les mêmes cinq
-  étiquettes. Les workflows sélectionnent sur `[self-hosted, linux, x64,
-  delegable-ou-pas-worker]` (`ci`, `couche0`, `triage-rouge`, `pr-auto-merge`) ou
-  `[self-hosted, delegable-ou-pas-worker]` (`ci-budget`, `stale-base-guard`) ;
-  l'étiquette `ci-node` n'est pas encore demandée par un sélecteur — elle marque
-  la capacité Node des quatre machines pour les jobs applicatifs à venir.
-- **Déplacés le 11 novembre 2026 depuis le dépôt `bipeur`**, dont les runners
-  r630 dormaient : dossiers d'agent **réutilisés** (pas de re-téléchargement du
-  paquet runner), `_work` vidé, enregistrement sous **unités systemd
-  utilisateur**, et état `online` vérifié après bascule. Le dépôt `bipeur` ne
-  liste plus aucun runner `r630-*` le même jour — il ne lui reste que
-  `pc-bipeur-03..06` (2 `online`, 2 `offline`).
+- Le dépôt est **public**, et le groupe de runners de l'organisation
+  (`Default`) porte `allows_public_repositories = false` : ses runners
+  (`r630-ci-01..06`, qui ont bien l'étiquette `delegable-ou-pas-worker`) ne
+  peuvent **pas** servir ce dépôt. Les jobs resteraient `queued` indéfiniment,
+  sans erreur visible.
+- Les quatre runners sont donc enregistrés sur le dépôt lui-même :
+  `r630-delegable-ou-pas-01..04`, étiquette `delegable-ou-pas-worker`,
+  répertoires `~/actions-runner-delegable-ou-pas-0N` sur le serveur **r630**.
+- GitHub **désinscrit** un runner qui ne se connecte plus : le registre peut
+  être vide alors que les dossiers existent encore. D'où le script
+  `~/bin/start-delegable-runner` sur le r630, appelé par les unités systemd
+  utilisateur `actions-runner-delegable-ou-pas-0N.service` : si `run.sh` meurt
+  autrement que sur un `SIGTERM` demandé, il ré-inscrit le runner puis
+  repart. `Restart=always` couvre le reste.
+- Les workflows sélectionnent sur `[self-hosted, linux, x64,
+  delegable-ou-pas-worker]` (`ci`, `couche0`, `triage-rouge`,
+  `pr-auto-merge`) ou `[self-hosted, delegable-ou-pas-worker]`
+  (`ci-budget`, `stale-base-guard`). La casse ne compte pas : `linux` et
+  `Linux` désignent la même étiquette.
 - Runners persistants : `node_modules` et le cache npm survivent d'un run à
   l'autre, d'où le budget de 5 minutes (§9) sans réinstallation à chaque PR.
+
+**Le symptôme à reconnaître** : des checks qui restent `queued` alors que le
+dépôt a des commits récents et que la CI a déjà tourné. Ce n'est pas la
+machine, c'est le registre :
+
+```bash
+timeout 30 gh api repos/Tradoooo/delegable-ou-pas/actions/runners \
+  --jq '.total_count, (.runners[] | "\(.name) \(.status) busy=\(.busy)")'
+```
+
+Un `total_count` à `0`, ou des runners `offline`, se répare en ré-inscrivant
+(§11) puis en relançant l'unité systemd.
 
 ## 5. La file Mergify
 
@@ -248,10 +261,13 @@ n'est écrite dans un fichier du dépôt.
    dans `~/actions-runner-delegable-ou-pas-0N`.
 3. Vider le workspace `_work` de l'agent (les restes d'un run précédent faussent
    le sanity docs) — **dans le dossier de l'agent uniquement**, jamais au-dessus.
-4. Enregistrer avec les **cinq étiquettes** des runners existants :
-   `./config.sh --url https://github.com/Tradoooo/delegable-ou-pas --token <jeton> --name r630-delegable-ou-pas-0N --labels self-hosted,Linux,X64,delegable-ou-pas-worker,ci-node --unattended`.
-5. Installer en **service systemd utilisateur** puis le démarrer :
-   `./svc.sh install && ./svc.sh start` (`./svc.sh status` pour vérifier).
+4. Enregistrer avec les **étiquettes** des runners existants :
+   `./config.sh --url https://github.com/Tradoooo/delegable-ou-pas --token <jeton> --name r630-delegable-ou-pas-0N --labels self-hosted,linux,x64,delegable-ou-pas-worker --work _work --unattended --disableupdate --replace`.
+5. Installer l'unité systemd utilisateur qui appelle le script de
+   ré-inscription (`~/bin/start-delegable-runner N`, cf. §4), puis la démarrer :
+   `systemctl --user enable --now actions-runner-delegable-ou-pas-0N.service`.
+   Pas de `./svc.sh` : le service systemd ne sait pas ré-inscrire un runner
+   désinscrit, et c'est précisément le panne que l'on a rencontrée.
 6. Vérifier l'enregistrement, borné :
    `timeout 60 gh api repos/Tradoooo/delegable-ou-pas/actions/runners --jq '.runners[]|"\(.name) \(.status)"'`
    — le nouveau doit être `online`.
