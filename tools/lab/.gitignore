@@ -1,0 +1,3 @@
+# Journal du lab : il porte les identifiants de session opencode en clair
+# (le dépôt est public). La version anonymisée est tools/lab/real-runs.json.
+journal.jsonl
