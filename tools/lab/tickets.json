@@ -1,0 +1,47 @@
+{
+  "lab": "opencode-lab",
+  "description": "Tickets du bac à sable OpenCode : chacun demande une modification de quelques lignes dans ~/Bureau/opencode-lab, signée par un commit qui porte une mention d'agent.",
+  "commitRule": "Termine toujours par un commit unique dont la dernière ligne est exactement la mention d'agent. N'utilise aucune autre identité d'auteur.",
+  "tickets": [
+    {
+      "key": "PROJ-101",
+      "title": "la CLI perd le premier mot du texte",
+      "type": "correctif",
+      "zone": "cli.py",
+      "size": "S",
+      "instruction": "Dans `cli.py`, la fonction `main` prend le texte dans `argv[3:]` au lieu de `argv[2:]` : le premier mot de la commande est donc perdu. Corrige l'index pour que les commandes `slug` et `count` traitent la totalité du texte passé en argument. Ne modifie aucun autre fichier. Vérifie à la main que `python3 cli.py slug bonjour le monde` affiche `bonjour-le-monde`."
+    },
+    {
+      "key": "PROJ-102",
+      "title": "ajouter truncate au module notes",
+      "type": "évolution",
+      "zone": "notes.py",
+      "size": "M",
+      "instruction": "Dans `notes.py`, ajoute une fonction `truncate(text: str, max_len: int) -> str` qui coupe le texte sans laisser un mot coupé en plein milieu et qui ajoute `…` à la fin quand le texte a été tronqué. Si `max_len` vaut 0 ou moins, la fonction renvoie une chaîne vide. Ajoute aussi les tests de cette fonction dans `tests/test_notes.py` : texte plus court que la limite (renvoyé tel quel), texte coupé (un mot entier à la fin et `…`), limite nulle ou négative (chaîne vide). Ne modifie pas le comportement de `slugify`, `word_count` et `summarize`."
+    },
+    {
+      "key": "PROJ-103",
+      "title": "couvrir les cas limites de slugify",
+      "type": "test",
+      "zone": "tests/test_notes.py",
+      "size": "M",
+      "instruction": "Les tests de `slugify` ne couvrent que le cas nominal. Dans `tests/test_notes.py`, ajoute des tests pour : un texte avec plusieurs espaces (le résultat ne doit pas contenir deux tirets à la suite), un texte avec des chiffres et des tirets, un texte avec des caractères accentués (les caractères non ASCII sont remplacés par un tiret), un texte vide (résultat vide) et un texte plus long que `MAX_SLUG` (le résultat ne dépasse pas `MAX_SLUG`). Les tests doivent passer avec le code actuel : s'ils échouent, corrige le test, pas le code."
+    },
+    {
+      "key": "PROJ-104",
+      "title": "documenter la CLI et les fonctions du module",
+      "type": "documentation",
+      "zone": "README.md",
+      "size": "S",
+      "instruction": "Dans le `README.md` du dépôt, ajoute une section « Utilisation » qui montre les deux commandes de la CLI (`slug` et `count`) avec un exemple de sortie pour chacune, et une section « Fonctions » qui décrit en une phrase le rôle de `slugify`, `word_count` et `summarize`. Mets à jour le tableau des fichiers si le contenu du dépôt a changé. Ne modifie aucun code."
+    },
+    {
+      "key": "PROJ-105",
+      "title": "couper slugify sur une frontière de mot",
+      "type": "évolution",
+      "zone": "notes.py",
+      "size": "S",
+      "instruction": "Dans `notes.py`, `slugify` coupe le texte à `MAX_SLUG` caractères sans se soucier des mots : il peut laisser un dernier mot tronqué en plein milieu. Modifie `slugify` pour que la coupure tombe sur une frontière de mot (le dernier mot complet avant la limite ; le résultat peut donc être plus court que `MAX_SLUG`). Si le texte ne contient aucun caractère alphanumérique, la fonction renvoie une chaîne vide. Ajoute un test pour ce dernier cas dans `tests/test_notes.py`. Ne modifie ni `word_count` ni `summarize`."
+    }
+  ]
+}
