@@ -32,8 +32,15 @@ Les tables utilisées :
 
 | Table | Ce qu'on y prend |
 |---|---|
-| `session` | `id`, `directory`, `title`, `agent`, `model`, `cost`, `tokens_input`, `tokens_output`, `summary_additions`, `summary_deletions`, `summary_files`, `time_created`, `time_updated` |
-| `part` | les textes des messages, pour retrouver une clé de ticket (`PROJ-<n>`) |
+| `session_v2` | `id`, `directory`, `title`, `agent`, `model`, `cost`, `tokens_input`, `tokens_output`, `summary_additions`, `summary_deletions`, `summary_files`, `time_created`, `time_updated` |
+| `session_message` | les textes des messages, pour retrouver une clé de ticket (`PROJ-<n>`), et l'agent et le modèle quand la session ne les porte pas |
+
+OpenCode a coexistence deux générations de tables. La ** courante** est
+`session_v2` + `session_message` ; l'**ancienne** est `session` + `part`. La
+récolte détecte ce qui existe et lit la génération courante quand elle est là
+(`tools/opencode/source-db.mjs`), sinon l'ancienne : sans cela, une base
+passée au schéma actuel ne livre que les sessions **antérieures** à la
+migration, et la « donnée réelle » se fige sans qu'on s'en aperçoive.
 
 `time_created` / `time_updated` sont en **millisecondes** : la durée réelle
 d'une session est `time_updated - time_created`.
@@ -44,13 +51,14 @@ d'une session est `time_updated - time_created`.
 terrain ; `src/collect/opencode.ts` (domaine pur) transforme le résultat en
 faits. Le script :
 
-1. lit la base en lecture seule ;
+1. lit la base en lecture seule, dans le schéma détecté (courant de préférence) ;
 2. **retient** les sessions dont le répertoire de travail existe encore et
    se trouve dans l'espace de travail (le `--home`, par défaut la maison) —
    les répertoires d'essai (`/tmp`) et les répertoires disparus sont écartés,
    avec la raison affichée dans le résumé ;
 3. lit le modèle, le coût, les jetons, les lignes ajoutées/supprimées, les
-   fichiers touchés, les horodatages ;
+   fichiers touchés, les horodatages ; l'agent et le modèle **rétablis** depuis
+   le tour assistant qui les déclare quand la ligne de session ne les porte pas ;
 4. retrouve, quand elle existe, la **clé de ticket** (`PROJ-<n>`) dans le
    titre ou dans les messages de la session ;
 5. **anonymise** et **trie**, puis écrit `src/sample/opencode-real.json`.
@@ -107,20 +115,21 @@ sûre qu'un nom d'auteur lu dans un commit.
 
 Le jeu de données versionné a été récolté sur les sessions de la machine :
 
-- **681 sessions** retenues (sur 691 dans la base) ;
+- **854 sessions** retenues (sur 945 dans la base) ;
 - **coût total : 0 €** — toutes les sessions retenues ont tourné sur des
-  modèles gratuits ; les deux sessions payantes vivaient dans des
+  modèles gratuits ou à coût nul ; les deux sessions payantes vivaient dans des
   répertoires d'essai, écartés du jeu public ;
-- **228 749 390 jetons** (entrée + sortie) ;
-- **768,09 heures** de travail réel ;
-- **0 session** rattachée à une clé de ticket (aucun `PROJ-<n>` dans les
-  titres ni dans les messages de la machine) ;
+- **250 513 633 jetons** (entrée + sortie) ;
+- **837,05 heures** de travail réel ;
+- **14 sessions** rattachées à une clé de ticket (`PROJ-101` à `PROJ-105`) :
+  ce sont les sessions du bac à sable OpenCode, où un agent a réellement
+  travaillé sur de vrais tickets ;
 - répartition par modèle : `opencode/space-bunny-free` (366),
   `opencode/muse-spark-1.3-contributor-free` (254),
-  `opencode/deepseek-v4.1-flash-free` (24),
-  `openrouter/dots-studio/dots-3-note-preview:free` (11),
-  `openrouter/inclusionai/ling-3.1-flash` (8), puis des modèles à une
-  session ou trois.
+  `inferhub/combo/cheap` (55),
+  `opencode/deepseek-v4.1-flash-free` (37),
+  `opencode/glm-5.3-flash-free` (14),
+  `agnes/agnes-3.0-flash` (12), puis des modèles à une session ou trois.
 
 ## Régénérer
 
